@@ -11,6 +11,3 @@ jobs:
     - run: npm install
     - run: npm build
     - run: npm test
-    - uses: ./
-      with: 
-        milliseconds: 1000
