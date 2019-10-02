@@ -3,13 +3,14 @@
     // enabling the VSCode build tasks "tsc: build" and "tsc: watch".
     "compilerOptions": {
       "target": "es5",            // Compatible with older browsers
-      "module": "umd",            // Compatible with both Node.js and browser
+      "module": "amd",            // Compatible with both Node.js and browser
+      "declaration": true,        // We build a package after all.
       "moduleResolution": "node", // Tell tsc to look in node_modules for modules
-      "outDir": "dist",
+      "outFile": "./lib/qowaiv.js",
       "sourceMap": true,          // Creates *.js.map files
       "strict": false,            // Strict types, eg. prohibits `var x=0; x=null`
       "alwaysStrict": true        // Enable JavaScript's "use strict" mode
     },
-    "include": ["**/*.ts"],
+    "include": ["src/**/*.ts"],
     "exclude": ["node_modules"]
   }
