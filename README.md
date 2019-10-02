@@ -20,6 +20,13 @@ A Value Object that can be represented by a single scalar.
 ## Qowaiv types
 
 ### Guid
+information in computer systems. 
+
+``` TypeScript
+let empty = Guid.Empty();  // 00000000-0000-0000-0000-000000000000
+let next = Guid.newGuid(); // 123E4567-E89B-12D3-A456-426655440000
+let str = next.format("B"); // {123E4567-E89B-12D3-A456-426655440000}
+```
 
 ## Qowaiv Interfaces
 
