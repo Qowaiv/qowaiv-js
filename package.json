@@ -1,7 +1,22 @@
 {
-    "name": "Qowaiv.js",
+    "name": "qowaiv.js",
     "version": "0.0.1",
     "description": "Qowaiv implements common, universal domain objects. These types form the base of your domain model.",
     "author": "Qowaiv Community",
-    "license": "MIT"
-  }
+    "license": "MIT",
+    "devDependencies": {
+        "jasmine": "^3.5.0",
+        "prettier": "^1.18.2",
+        "tslint": "^5.20.0",
+        "tslint-config-prettier": "^1.18.0",
+        "typescript": "^3.6.3"
+    },
+    "scripts": {
+        "build": "tsc",
+        "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+        "lint": "tslint -p tsconfig.json"
+    },
+    "files": [
+        "lib/**/*"
+    ]
+}
