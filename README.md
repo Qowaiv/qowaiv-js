@@ -32,15 +32,15 @@ let str = next.format("B"); // {123E4567-E89B-12D3-A456-426655440000}
 Represents a postal code. It supports validation for all countries.
 
 ``` TypeScript
-let empty = PostalCode.Empty();  // ''
+let empty = PostalCode.empty();  // ''
 
-let dutch = PostalCode.Parse('2624DP');
-dutch.IsValid('NL'); // true
-dutch.IsValid('BE'); // false
+let dutch = PostalCode.parse('2624DP');
+dutch.isValid('NL'); // true
+dutch.isValid('BE'); // false
 
 let argentina = PostalCode.Parse('Z1230ABC');
-argentina.ToString('AR'); // Z 1230 ABC
-argentina.ToString('NL'); // Z1230ABC
+argentina.format('AR'); // Z 1230 ABC
+argentina.format('NL'); // Z1230ABC
 ```
 
 ## Qowaiv Interfaces
