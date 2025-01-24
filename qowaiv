@@ -1,0 +1,38 @@
+#!/usr/bin/env nu
+
+def main [] {
+    ./qowaiv --help    
+}
+
+# build qowaiv package
+def "main build" [] {
+    npm run build
+}
+
+# Test the qowaiv package
+def "main test" [] {
+    npm run test
+}
+
+def "main publish" [
+    tag: string # The tag of the image (e.g., 0.0.1)!
+] {
+    open package.json | update version $tag | save package.json -f
+
+    if 'GITHUB_TOKEN' not-in $env {
+        $env.GITHUB_TOKEN = (gh auth token)
+    }
+
+    (
+        "//npm.pkg.github.com/:_authToken=" + $env.GITHUB_TOKEN |
+        save .npmrc -f
+    )
+
+    (
+        npm login 
+            --scope=@qowaiv 
+            --auth-type=legacy 
+            --registry=https://npm.pkg.github.com
+    )
+    # npm publish
+}

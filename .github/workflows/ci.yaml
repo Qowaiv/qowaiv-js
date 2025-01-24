@@ -1,0 +1,27 @@
+name: ci
+run-name: ci
+on:
+  push:
+    branches:
+      - main
+jobs:
+  all:
+    runs-on: ubuntu-latest
+    env:
+      TAG: 0.0.${{ github.run_number }}
+      GITHUB_TOKEN: {{ github.token }}
+      FORCE_COLOR: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Install devbox
+        uses: jetify-com/devbox-install-action@v0.11.0
+        with:
+          project-path: devbox.json
+      - name: All
+        run: |
+          devbox run -- ./qowaiv publish $TAG
+        env:
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}

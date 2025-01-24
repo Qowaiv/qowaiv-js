@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.13.7/.schema/devbox.schema.json",
+  "packages": [
+    "nodejs@latest",
+    "nodePackages.ts-node@latest",
+    "nushell@latest",
+    "gh@latest"
+  ],
+  "shell": {
+    "init_hook": [
+      "chmod +x qowaiv",
+      "export PATH=$PATH:$PWD",
+      "npm install"
+    ],
+    "scripts": {
+      "run_test": [
+        "npm run test"
+      ]
+    }
+  }
+}
