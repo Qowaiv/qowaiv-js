@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TAG: 0.0.${{ github.run_number }}
-      GITHUB_TOKEN: {{ github.token }}
+      GITHUB_TOKEN: ${{ github.token }}
       FORCE_COLOR: 1
     steps:
       - name: Checkout
