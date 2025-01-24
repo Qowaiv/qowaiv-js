@@ -64,9 +64,9 @@
         /**
           * Creates a GUID from a JSON string.
           * @param {string} s A JSON string representing the GUID.
-          * @returns {Guid} A GUID if valid, otherwise null.
+          * @returns {Guid} A GUID if valid, otherwise undefined.
           */
-        public static fromJSON(s: string): Guid {
+        public static fromJSON(s: string): Guid | undefined {
             return Guid.parse(s);
         }
 
@@ -85,10 +85,10 @@
          * @param {string} s A string containing GUID to convert or a number.
          * @returns {Guid} A GUID if valid, otherwise null.
          */
-        public static parse(s: string): Guid {
+        public static parse(s: string): Guid | undefined {
 
             // an empty string should equal Guid.Empty.
-            if (s === '') { return new Guid(); }
+            if (s === '' || s === null) { return Guid.empty(); }
 
             s = Guid.strip(s).toUpperCase();
 
@@ -122,7 +122,7 @@
 
         /**
          * Creates a GUID.
-         * @param {Guid} An optional seed.
+         * @param {Guid} seed An optional seed.
          * @returns {Guid} A random GUID.
          */
         public static newGuid(seed?: Guid): Guid {
