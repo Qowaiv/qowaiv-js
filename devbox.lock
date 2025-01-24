@@ -1,7 +1,7 @@
 {
   "lockfile_version": "1",
   "packages": {
-    "gh@latest": {
+    "gh@2.65.0": {
       "last_modified": "2025-01-07T09:15:50Z",
       "resolved": "github:NixOS/nixpkgs/8c9fd3e564728e90829ee7dbac6edc972971cd0f#gh",
       "source": "devbox-search",
@@ -49,7 +49,7 @@
         }
       }
     },
-    "nodePackages.ts-node@latest": {
+    "nodePackages.ts-node@10.9.2": {
       "last_modified": "2025-01-19T08:16:51Z",
       "resolved": "github:NixOS/nixpkgs/50165c4f7eb48ce82bd063e1fb8047a0f515f8ce#nodePackages.ts-node",
       "source": "devbox-search",
@@ -97,7 +97,7 @@
         }
       }
     },
-    "nodejs@latest": {
+    "nodejs@23.5.0": {
       "last_modified": "2025-01-19T08:16:51Z",
       "plugin_version": "0.0.2",
       "resolved": "github:NixOS/nixpkgs/50165c4f7eb48ce82bd063e1fb8047a0f515f8ce#nodejs_23",
@@ -162,7 +162,7 @@
         }
       }
     },
-    "nushell@latest": {
+    "nushell@0.101.0": {
       "last_modified": "2024-12-26T01:25:00Z",
       "resolved": "github:NixOS/nixpkgs/16e046229f3b4f53257973a5532bcbb72457d2f2#nushell",
       "source": "devbox-search",
