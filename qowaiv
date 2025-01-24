@@ -19,6 +19,9 @@ def "main publish" [
 ] {
     open package.json | update version $tag | save package.json -f
 
+    main build
+    main test
+
     if 'GITHUB_TOKEN' not-in $env {
         $env.GITHUB_TOKEN = (gh auth token)
     }
@@ -27,6 +30,6 @@ def "main publish" [
         "//npm.pkg.github.com/:_authToken=" + $env.GITHUB_TOKEN + "\n\r"
              | save --append .npmrc -f
     )
-
+           
     npm publish
 }
