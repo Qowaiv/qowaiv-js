@@ -5,3 +5,4 @@ launchSettings.json
 node_modules
 dist
 .env
+.npmrc
