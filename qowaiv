@@ -24,15 +24,9 @@ def "main publish" [
     }
 
     (
-        "//npm.pkg.github.com/:_authToken=" + $env.GITHUB_TOKEN |
-        save .npmrc -f
+        "//npm.pkg.github.com/:_authToken=" + $env.GITHUB_TOKEN + "\n\r"
+             | save --append .npmrc -f
     )
 
-    (
-        npm login 
-            --scope=@qowaiv 
-            --auth-type=legacy 
-            --registry=https://npm.pkg.github.com
-    )
-    # npm publish
+    npm publish
 }
