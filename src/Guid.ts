@@ -123,7 +123,7 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * @param {Guid} An optional seed.
      * @returns {Guid} A random GUID.
      */
-    public static newGuid(seed?: Guid): Guid {
+    public static newGuid(seed?: Guid | null): Guid {
 
         let guid = new Guid();
         guid.v = Guid.unstrip(Guid.rnd());
