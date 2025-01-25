@@ -1,5 +1,5 @@
 ﻿import { describe, it, expect } from 'vitest';
-import { Guid } from '../src/index'
+import { Guid } from '../src'
 
 /// <reference path="../src/Interfaces/IEquatable.ts"/>
 /// <reference path="../src/Interfaces/IFormattable.ts"/>
