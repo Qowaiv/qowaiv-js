@@ -1,4 +1,4 @@
-﻿/**
+/**
  * To support JSON.stringify()
  */
 interface IJsonStringifyable {

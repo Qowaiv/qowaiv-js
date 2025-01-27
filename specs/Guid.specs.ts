@@ -1,4 +1,4 @@
-﻿/// <reference path="Jasmine.d.ts"/>
+/// <reference path="Jasmine.d.ts"/>
 /// <reference path="../src/Qowaiv/IEquatable.ts"/>
 /// <reference path="../src/Qowaiv/IFormattable.ts"/>
 /// <reference path="../src/Qowaiv/IJsonStringifyable.ts"/>
