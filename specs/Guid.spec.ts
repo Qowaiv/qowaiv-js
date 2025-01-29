@@ -1,4 +1,4 @@
-import { describe, expect, beforeEach, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { Guid } from '../src';
 
 describe("GUID: ", () => {
@@ -6,32 +6,32 @@ describe("GUID: ", () => {
     it("The version of newGuid() should be valid", () => {
 
         var guid = Guid.newGuid();
-        expect(Guid.isValid(guid.toString())).toBeTruthy();
+        expect(Guid.parse(guid.toString())).toBeDefined();
     });
 
     it("The version of newGuid(seed) should be valid", () => {
 
         var seed = Guid.parse("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189");
         var guid = Guid.newGuid(seed);
-        expect(Guid.isValid(guid.toString())).toBeTruthy();
+        expect(Guid.parse(guid.toString())).toBeDefined();
     });
 
     it("The version of newGuid() should be 4", () => {
 
         var guid = Guid.newGuid();
-        expect(guid.version()).toBe(4);
+        expect(guid.version).toBe(4);
     });
 
     it("The version of some random guid should be 4", () => {
 
         var guid = Guid.parse("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189");
-        expect(guid.version()).toBe(4);
+        expect(guid.version).toBe(4);
     });
 
     it("The version of empty() should be 0", () => {
 
         var guid = Guid.empty();
-        expect(guid.version()).toBe(0);
+        expect(guid.version).toBe(0);
     });
 
 
@@ -59,7 +59,7 @@ describe("GUID: ", () => {
         expect(guid.format("s")).toBe("dc7fba65df6f4cb98faa6c7b5654f189");
     });
 
-    it("Parse('{DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189}') should be parseable.", () => {
+    it("parse('{DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189}') should be parseable.", () => {
 
         var guid = Guid.parse("{DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189}");
         expect(guid.format("U")).toBe("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189");
