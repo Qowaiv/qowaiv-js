@@ -20,12 +20,22 @@ A Value Object that can be represented by a single scalar.
 ## Qowaiv types
 
 ### Guid
-information in computer systems. 
+Represents a Globally Unique Identifier (GUID). 
 
 ``` TypeScript
-let empty = Guid.Empty();  // 00000000-0000-0000-0000-000000000000
-let next = Guid.newGuid(); // 123E4567-E89B-12D3-A456-426655440000
-let str = next.format("B"); // {123E4567-E89B-12D3-A456-426655440000}
+const empty = Guid.Empty();  // 00000000-0000-0000-0000-000000000000
+const next = Guid.newGuid(); // 123E4567-E89B-12D3-A456-426655440000
+const str = next.format("B"); // {123E4567-E89B-12D3-A456-426655440000}
+```
+
+### InternationBankAccountNumber
+Represnts a IBAN.
+
+``` TypeScript
+const iban = InternationBankAccountNumber.parse('NL20INGB0001234567');
+const country = iban.country; // 'NL';
+const formatted = iban.format(); // 'NL20 INGB 0001 2345 67' with nbsp.
+const lower = iban.format('h');  // 'nl20 ingb 0001 2345 67' with nbsp.
 ```
 
 ### PostalCode
@@ -47,14 +57,13 @@ argentina.format('NL'); // Z1230ABC
 
 ### IFormattable
 As JavaScript does not support method overloading, this interface makes explicit
-by including `toString()` and `format(f: string)` that the `format` method
+by including `toString()` and `format(f?: string)` that the `format` method
 should be the overloaded version of `toString`.
 
 ``` TypeScript
-interface IFormattable
-{
+interface IFormattable {
     toString(): string;
-    format(f: string): string;
+    format(f?: string): string;
 }
 ```
 
@@ -63,8 +72,7 @@ As JavaScript does not have a way to support equals overloading as a lot of
 other languages do, but it gives something.
 
 ``` TypeScript
-interface IEquatable
-{
+interface IEquatable {
     equals(other: any): boolean;
 }
 ```
