@@ -6,12 +6,14 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      * @remarks It is the default constructor, for creating an actual IBAN
      *          you will normally use InternationalBankAccountNumber.parse(string).
      */
-    private constructor() { }
+    private constructor(v: string) {
+        this.v = v;
+    }
 
     /**
      * The underlying value.
      */
-    private v = '';
+    private readonly v;
 
     public get country() {
         return this.v.substring(0, 2);
@@ -41,14 +43,14 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
         switch (f) {
             case 'u': case 'm': return this.v.toLowerCase();
             case 'U': case 'M': return this.v;
-            case 'f': return this.humanReadable(' ').toLowerCase();        
-            case 'F': return this.humanReadable(' ');        
-            case 'h': return this.humanReadable(' ').toLowerCase();        
-            case 'H': default: return this.humanReadable(' ');        
+            case 'f': return this.humanReadable(' ').toLowerCase();
+            case 'F': return this.humanReadable(' ');
+            case 'h': return this.humanReadable(' ').toLowerCase();
+            case 'H': default: return this.humanReadable(' ');
         }
     }
 
-    private humanReadable(ch: string): string{
+    private humanReadable(ch: string): string {
         return this.v.replace(/.{4}(?!$)/g, '$&' + ch);
     }
 
@@ -72,7 +74,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
     * Returns a new empty IBAN.
     */
     public static empty(): InternationalBankAccountNumber {
-        return new InternationalBankAccountNumber();
+        return new InternationalBankAccountNumber('');
     }
 
     /**
@@ -113,16 +115,13 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
         const pattern = InternationalBankAccountNumber.Bbans.get(s.substring(0, 2))
             ?? /^[A-Z0-9]{10,34}$/;
 
-        if (pattern.test(s.substring(2)) &&
-            InternationalBankAccountNumber.Mod97(s)) {
-            let iban = new InternationalBankAccountNumber();
-            iban.v = s;
-            return iban;
-        }
-        return undefined;
+        return pattern.test(s.substring(2)) &&
+            InternationalBankAccountNumber.mod97(s)
+            ? new InternationalBankAccountNumber(s)
+            : undefined;
     }
 
-    private static Mod97(iban: string): boolean {
+    private static mod97(iban: string): boolean {
         let mod = 0;
         for (let i = 0; i < iban.length; i++) {
             const digit = iban[(i + 4) % iban.length]; // Calculate the first 4 characters (country and checksum) last
