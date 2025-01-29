@@ -150,7 +150,9 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
 	 * otherwise Math.Random().
 	 */
 	private static rnd(): string {
-		if (typeof window.crypto.getRandomValues === "function") {
+		if (typeof window !== "undefined" &&
+			typeof window.crypto.getRandomValues === "function") {
+
 			let bytes = new Uint32Array(4);
 			window.crypto.getRandomValues(bytes);
 			return bytes[0].toString(16) +

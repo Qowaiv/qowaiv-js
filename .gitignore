@@ -1,4 +1,4 @@
-﻿# TypeScript (only needed for debugging)
+# TypeScript (only needed for debugging)
 *.js.map
 launchSettings.json
 
