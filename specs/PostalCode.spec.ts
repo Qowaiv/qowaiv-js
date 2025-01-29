@@ -21,12 +21,12 @@ describe('PostalCode', () => {
 
   it('should return null when input is more than 10 characters', () => {
     const postalCode = PostalCode.parse('INVALIDINVALID');
-    expect(postalCode).toBeNull();
+    expect(postalCode).toBeUndefined();
   });
 
   it('should return null when input is less than 2 characters', () => {
     const postalCode = PostalCode.parse('I');
-    expect(postalCode).toBeNull();
+    expect(postalCode).toBeUndefined();
   });
 
   it('should correctly compare two postal codes for equality', () => {
