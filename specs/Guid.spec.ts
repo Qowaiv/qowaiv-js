@@ -68,6 +68,6 @@ describe("GUID: ", () => {
     it("Parse('Nonsense') should not be parseable.", () => {
 
         var guid = Guid.parse("Nonsense");
-        expect(guid).toBe(null);
+        expect(guid).toBeUndefined();
     }); 
 });

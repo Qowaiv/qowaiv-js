@@ -299,7 +299,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
 	}
 
 	private static strip(s: string): string {
-		return s.replace(/[_- \.]/g, '');
+		return s.replace(/[_\- \.]/g, '');
 	}
 
 	private static Infos = new PostalCodeInfos();
