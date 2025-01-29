@@ -106,7 +106,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
     }
 
     private static Mod97(iban: string): boolean {
-        var mod = 0;
+        let mod = 0;
         for (var i = 0; i < iban.length; i++) {
             var digit = iban[(i + 4) % iban.length]; // Calculate the first 4 characters (country and checksum) last
             var index = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(digit);
