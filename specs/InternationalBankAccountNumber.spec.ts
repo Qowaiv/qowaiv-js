@@ -127,6 +127,11 @@ describe('IBAN', () => {
         expect(iban).toBeUndefined();
     });
 
+    it('contains the country linked', ()=>{
+        const iban = InternationalBankAccountNumber.tryParse('NL20INGB0001234567');
+        expect(iban?.country).toBe('NL');
+    })
+
     it('formats to human readable with F', () => {
         const iban1 = InternationalBankAccountNumber.parse('CH3608387000001080173');
         const iban2 = InternationalBankAccountNumber.parse('NL20INGB0001234567');

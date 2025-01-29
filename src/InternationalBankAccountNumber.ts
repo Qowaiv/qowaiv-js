@@ -13,6 +13,10 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      */
     private v = '';
 
+    public get country() {
+        return this.v.substring(0, 2);
+    }
+
     /** 
     * Returns a string that represents the current IBAN.
     */
