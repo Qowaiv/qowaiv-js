@@ -46,8 +46,8 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
     /**
      * Returns the version of the GUID.
      */
-    public version(): number {
-        return parseInt(this.v.substr(14, 1));
+    public get version(): number {
+        return parseInt(this.v.substring(14, 15));
     }
 
     /**
@@ -71,46 +71,46 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
     }
 
     /**
-	 * Parses a GUID string.
-	 * @param {string} s A string containing GUID to convert.
-	 * @returns {Guid} A GUID if valid, otherwise trhows.
-	 */
-	public static parse(s: string): Guid {
-		const guid = Guid.tryParse(s);
+     * Parses a GUID string.
+     * @param {string} s A string containing GUID to convert.
+     * @returns {Guid} A GUID if valid, otherwise trhows.
+     */
+    public static parse(s: string): Guid {
+        const svo = Guid.tryParse(s);
 
-		if (guid === undefined) {
-			throw new Unparsable('Not a valid GUID', s);
-		}
-		return guid;
-	}
+        if (svo === undefined) {
+            throw new Unparsable('Not a valid GUID', s);
+        }
+        return svo;
+    }
 
-	/**
-	 * Tries to parse a GUID string.
-	 * @param {string} s A string containing GUID to convert.
-	 * @returns {Guid} A GUID if valid, otherwise undefined.
-	 */
-	public static tryParse(s: string): Guid | undefined {
+    /**
+     * Tries to parse a GUID string.
+     * @param {string} s A string containing GUID to convert.
+     * @returns {Guid} A GUID if valid, otherwise undefined.
+     */
+    public static tryParse(s: string): Guid | undefined {
 
-		// an empty string should equal Guid.Empty.
-		if (s === '' || s === null) { return Guid.empty(); }
+        // an empty string should equal Guid.Empty.
+        if (s === '' || s === null) { return Guid.empty(); }
 
-		s = Guid.unify(s);
+        s = Guid.unify(s);
 
-		// if the value parameter is valid
-		if (/^[0-9A-F]{32}$/.test(s)) {
-			const guid = new Guid();
-			guid.v = Guid.unstrip(s);
-			return guid;
-		}
-		// return undefined if creation failed.
-		return undefined;
-	}
+        // if the value parameter is valid
+        if (/^[0-9ABCDEF]{32}$/.test(s)) {
+            const svo = new Guid();
+            svo.v = Guid.unstrip(s);
+            return svo;
+        }
+        // return undefined if creation failed.
+        return undefined;
+    }
 
 
     private static unify(s: string): string {
         s = s.replace(/-/g, '').trim().toUpperCase();
-        return s.length > 2 && s[0] == '{' && s[s.length -1] == '}'
-            ? s.substring(1, s.length -2)
+        return s.length > 2 && s[0] == '{' && s[s.length - 1] == '}'
+            ? s.substring(1, s.length - 1)
             : s;
     }
     private static unstrip(s: string): string {
@@ -131,21 +131,21 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      */
     public static newGuid(seed?: Guid): Guid {
 
-        const guid = new Guid();
-        guid.v = Guid.unstrip(Guid.rnd());
+        const svo = new Guid();
+        svo.v = Guid.unstrip(Guid.rnd());
 
         if (seed !== null && seed instanceof (Guid)) {
             let merged = '';
             for (let i = 0; i < 36; i++) {
                 const l = '0123456789ABCDEF'.indexOf(seed.v.charAt(i));
-                const r = '0123456789ABCDEF'.indexOf(guid.v.charAt(i));
-                merged += l === -1 || r === -1 ? guid.v.charAt(i) : '0123456789ABCDEF'.charAt(l ^ r);
+                const r = '0123456789ABCDEF'.indexOf(svo.v.charAt(i));
+                merged += l === -1 || r === -1 ? svo.v.charAt(i) : '0123456789ABCDEF'.charAt(l ^ r);
             }
-            guid.v = merged;
+            svo.v = merged;
         }
         // set version to 4 (Random).
-        guid.v = guid.v.substring(0, 14) + '4' + guid.v.substring(15);
-        return guid;
+        svo.v = svo.v.substring(0, 14) + '4' + svo.v.substring(15);
+        return svo;
     }
 
     /**
@@ -164,17 +164,17 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
                 bytes[2].toString(16) +
                 bytes[3].toString(16);
         }
-        return Guid.rndGuid() +
-            Guid.rndGuid() +
-            Guid.rndGuid() +
-            Guid.rndGuid();
+        return Guid.rndBlock() +
+            Guid.rndBlock() +
+            Guid.rndBlock() +
+            Guid.rndBlock();
     }
 
     /**
      * Creates random GUID blocks.
      * @remarks called 4 times by Guid.newGuid().
      */
-    private static rndGuid(): string {
-        return (Math.random().toString(16) + '000000000').substr(2, 8);
+    private static rndBlock(): string {
+        return (Math.random().toString(16) + '000000000').substring(2, 10);
     }
 }

@@ -19,19 +19,19 @@ describe("GUID: ", () => {
     it("The version of newGuid() should be 4", () => {
 
         var guid = Guid.newGuid();
-        expect(guid.version()).toBe(4);
+        expect(guid.version).toBe(4);
     });
 
     it("The version of some random guid should be 4", () => {
 
         var guid = Guid.parse("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189");
-        expect(guid.version()).toBe(4);
+        expect(guid.version).toBe(4);
     });
 
     it("The version of empty() should be 0", () => {
 
         var guid = Guid.empty();
-        expect(guid.version()).toBe(0);
+        expect(guid.version).toBe(0);
     });
 
 
