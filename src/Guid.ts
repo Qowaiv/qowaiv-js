@@ -71,16 +71,6 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
     }
 
     /**
-     * Returns true if the val represents valid GUID, otherwise false.
-     * @param {string} s A string containing GUID.
-     * @remarks This method calls create(). It's of no use, to call isValid(),
-     *          to avoid a create() call.
-     */
-    public static isValid(s: string): boolean {
-        return /^[0-9ABCDEF]{32}$/i.test(Guid.strip(s));
-    }
-
-    /**
 	 * Parses a GUID string.
 	 * @param {string} s A string containing GUID to convert.
 	 * @returns {Guid} A GUID if valid, otherwise trhows.
@@ -104,11 +94,11 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
 		// an empty string should equal Guid.Empty.
 		if (s === '' || s === null) { return Guid.empty(); }
 
-		s = Guid.strip(s).toUpperCase();
+		s = Guid.unify(s);
 
 		// if the value parameter is valid
-		if (Guid.isValid(s)) {
-			let guid = new Guid();
+		if (/^[0-9A-F]{32}$/.test(s)) {
+			const guid = new Guid();
 			guid.v = Guid.unstrip(s);
 			return guid;
 		}
@@ -116,12 +106,12 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
 		return undefined;
 	}
 
-    private static strip(s: string): string {
-        let replace = s.replace(/-/g, '');
-        if (replace.indexOf('{') == 0 && replace.lastIndexOf('}') == replace.length - 1) {
-            return replace.substring(1, replace.length - 2);
-        }
-        return replace;
+
+    private static unify(s: string): string {
+        s = s.replace(/-/g, '').trim().toUpperCase();
+        return s.length > 2 && s[0] == '{' && s[s.length -1] == '}'
+            ? s.substring(1, s.length -2)
+            : s;
     }
     private static unstrip(s: string): string {
         return s.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5').toUpperCase();
@@ -141,22 +131,20 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      */
     public static newGuid(seed?: Guid): Guid {
 
-        let guid = new Guid();
+        const guid = new Guid();
         guid.v = Guid.unstrip(Guid.rnd());
 
         if (seed !== null && seed instanceof (Guid)) {
-            let lookup = '0123456789ABCDEF';
-            var merged = '';
-            for (var i = 0; i < 36; i++) {
-                let l = lookup.indexOf(seed.v.charAt(i));
-                let r = lookup.indexOf(guid.v.charAt(i));
-                merged += l === -1 || r === -1 ? guid.v.charAt(i) : lookup.charAt(l ^ r);
+            let merged = '';
+            for (let i = 0; i < 36; i++) {
+                const l = '0123456789ABCDEF'.indexOf(seed.v.charAt(i));
+                const r = '0123456789ABCDEF'.indexOf(guid.v.charAt(i));
+                merged += l === -1 || r === -1 ? guid.v.charAt(i) : '0123456789ABCDEF'.charAt(l ^ r);
             }
             guid.v = merged;
         }
         // set version to 4 (Random).
-        guid.v = guid.v.substr(0, 14) + '4' + guid.v.substr(15);
-
+        guid.v = guid.v.substring(0, 14) + '4' + guid.v.substring(15);
         return guid;
     }
 
@@ -169,7 +157,7 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
         if (typeof window !== "undefined" &&
             typeof window.crypto.getRandomValues === "function") {
 
-            let bytes = new Uint32Array(4);
+            const bytes = new Uint32Array(4);
             window.crypto.getRandomValues(bytes);
             return bytes[0].toString(16) +
                 bytes[1].toString(16) +
