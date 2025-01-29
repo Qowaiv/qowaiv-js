@@ -9,3 +9,7 @@ charset = utf-8
 [*.{cs,cshtml,ts}]
 indent_style = space
 indent_size = 4
+
+[*.json]
+indent_style = space
+indent_size = 2

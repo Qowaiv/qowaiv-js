@@ -1,8 +1,7 @@
 /**
  * Provides functionality to format the value of an object into a string representation.
  */
-interface IFormattable
-{
+interface IFormattable {
     /**
      * Returns a string that represents the object.
      * @returns string.
