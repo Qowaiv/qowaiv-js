@@ -94,7 +94,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
         s = InternationalBankAccountNumber.strip(s);
 
         const pattern = InternationalBankAccountNumber.Bbans.get(s.substring(0, 2))
-            ?? /^[A-Z0-9]{10,24}$/;
+            ?? /^[A-Z0-9]{10,34}$/;
 
         if (pattern.test(s.substring(2)) &&
             InternationalBankAccountNumber.Mod97(s)) {
