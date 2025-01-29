@@ -1,3 +1,5 @@
+import { Unparsable } from '../src';
+
 class PostalCodeInfos {
 
     public Get(country: string): PostalCodeInfo | undefined {
@@ -283,20 +285,39 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
         return PostalCode.parse(s);
     }
 
-    public static parse(s: string): PostalCode | undefined {
+    /**
+	 * Parses a postal code string.
+	 * @param {string} s A string containing postal code to convert.
+	 * @returns {Guid} A postal code if valid, otherwise trhows.
+	 */
+	public static parse(s: string): PostalCode {
+		const guid = PostalCode.tryParse(s);
 
-        // an empty string should equal Guid.Empty.
-        if (s === '' || s === null) { return PostalCode.empty(); }
+        if (guid === undefined) {
+			throw new Unparsable('Not a valid postal code', s);
+		}
+		return guid;
+	}
 
-        s = PostalCode.strip(s).toUpperCase();
-        if (s.length >= 2 && s.length <= 10) {
-            let code = new PostalCode();
-            code.v = s;
-            return code;
-        }
+	/**
+	 * Tries to parse a postal code string.
+	 * @param {string} s A string containing postal code to convert.
+	 * @returns {Guid} A postal code if valid, otherwise undefined.
+	 */
+	public static tryParse(s: string): PostalCode | undefined {
 
-        return undefined
-    }
+		// an empty string should equal Guid.Empty.
+		if (s === '' || s === null) { return PostalCode.empty(); }
+
+		s = PostalCode.strip(s).toUpperCase();
+		if (s.length >= 2 && s.length <= 10) {
+			let code = new PostalCode();
+			code.v = s;
+			return code;
+		}
+
+		return undefined;
+	}
 
     private static strip(s: string): string {
         return s.replace(/[_\- \.]/g, '');

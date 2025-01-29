@@ -1,3 +1,5 @@
+import { Unparsable } from '../src';
+
 /**
  * Represents a Globally unique identifier (GUID).
  */
@@ -79,31 +81,45 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
     }
 
     /**
-     * Creates a GUID.
-     * @param {string} s A string containing GUID to convert or a number.
-     * @returns {Guid} A GUID if valid, otherwise null.
-     */
-    public static parse(s: string): Guid | undefined {
+	 * Parses a GUID string.
+	 * @param {string} s A string containing GUID to convert.
+	 * @returns {Guid} A GUID if valid, otherwise trhows.
+	 */
+	public static parse(s: string): Guid {
+		const guid = Guid.tryParse(s);
 
-        // an empty string should equal Guid.Empty.
-        if (s === '' || s === null) { return Guid.empty(); }
+		if (guid === undefined) {
+			throw new Unparsable('Not a valid GUID', s);
+		}
+		return guid;
+	}
 
-        s = Guid.strip(s).toUpperCase();
+	/**
+	 * Tries to parse a GUID string.
+	 * @param {string} s A string containing GUID to convert.
+	 * @returns {Guid} A GUID if valid, otherwise undefined.
+	 */
+	public static tryParse(s: string): Guid | undefined {
 
-        // if the value parameter is valid
-        if (Guid.isValid(s)) {
-            let guid = new Guid();
-            guid.v = Guid.unstrip(s);
-            return guid;
-        }
-        // return undefined if creation failed.
-        return undefined;
-    }
+		// an empty string should equal Guid.Empty.
+		if (s === '' || s === null) { return Guid.empty(); }
+
+		s = Guid.strip(s).toUpperCase();
+
+		// if the value parameter is valid
+		if (Guid.isValid(s)) {
+			let guid = new Guid();
+			guid.v = Guid.unstrip(s);
+			return guid;
+		}
+		// return undefined if creation failed.
+		return undefined;
+	}
 
     private static strip(s: string): string {
         let replace = s.replace(/-/g, '');
         if (replace.indexOf('{') == 0 && replace.lastIndexOf('}') == replace.length - 1) {
-            return replace.substr(1, replace.length - 2);
+            return replace.substring(1, replace.length - 2);
         }
         return replace;
     }

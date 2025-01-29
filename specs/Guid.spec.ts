@@ -67,7 +67,15 @@ describe("GUID: ", () => {
 
     it("Parse('Nonsense') should not be parseable.", () => {
 
-        var guid = Guid.parse("Nonsense");
+        var guid = Guid.tryParse("Nonsense");
         expect(guid).toBeUndefined();
+    });
+
+    it('throws for invalid input on parse', () => {
+
+        expect(() => Guid.parse('Nonsense')).toThrowError(expect.objectContaining({
+            message: 'Not a valid GUID',
+            attemptedValue: 'Nonsense',
+        }));
     });
 });
