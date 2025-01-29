@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Provides functionality to format the value of an object into a string representation.
  */
 interface IFormattable

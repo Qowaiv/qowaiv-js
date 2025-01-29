@@ -1,3 +1,4 @@
+<<<<<<<< HEAD:tests/Guid.test.ts
 ﻿import { describe, it, expect } from 'vitest';
 import { Guid } from '../src'
 
@@ -5,6 +6,10 @@ import { Guid } from '../src'
 /// <reference path="../src/Interfaces/IFormattable.ts"/>
 /// <reference path="../src/Interfaces/IJsonStringifyable.ts"/>
 /// <reference path="../src/Guid.ts" />
+========
+import { describe, expect, beforeEach, it } from 'vitest';
+import { Guid } from '../src';
+>>>>>>>> origin/main:specs/Guid.specs.ts
 
 describe("GUID: ", () => {
 
@@ -30,8 +35,12 @@ describe("GUID: ", () => {
     it("The version of some random guid should be 4", () => {
 
         var guid = Guid.parse("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189");
+<<<<<<<< HEAD:tests/Guid.test.ts
 
         expect(guid!.version()).toBe(4);
+========
+        expect(guid.version()).toBe(4);
+>>>>>>>> origin/main:specs/Guid.specs.ts
     });    
 
     it("The version of empty() should be 0", () => {
@@ -43,32 +52,52 @@ describe("GUID: ", () => {
 
     it("format('B') should have brackets.", () => {
 
+<<<<<<<< HEAD:tests/Guid.test.ts
         var guid = Guid.parse("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189")!;
+========
+        var guid = Guid.parse("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189");
+>>>>>>>> origin/main:specs/Guid.specs.ts
         expect(guid.format("B")).toBe("{DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189}");
     }); 
 
     it("format('b') should have brackets and be lowercase.", () => {
 
+<<<<<<<< HEAD:tests/Guid.test.ts
         var guid = Guid.parse("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189")!;
+========
+        var guid = Guid.parse("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189");
+>>>>>>>> origin/main:specs/Guid.specs.ts
         expect(guid.format("b")).toBe("{dc7fba65-df6f-4cb9-8faa-6c7b5654f189}");
     }); 
 
     it("format('S') should have no dashes.", () => {
 
+<<<<<<<< HEAD:tests/Guid.test.ts
         var guid = Guid.parse("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189")!;
+========
+        var guid = Guid.parse("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189");
+>>>>>>>> origin/main:specs/Guid.specs.ts
         expect(guid.format("S")).toBe("DC7FBA65DF6F4CB98FAA6C7B5654F189");
     }); 
 
     it("format('s') should have no dashed and be lowercase.", () => {
 
+<<<<<<<< HEAD:tests/Guid.test.ts
         var guid = Guid.parse("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189")!;
+========
+        var guid = Guid.parse("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189");
+>>>>>>>> origin/main:specs/Guid.specs.ts
         expect(guid.format("s")).toBe("dc7fba65df6f4cb98faa6c7b5654f189");
     }); 
 
     it("Parse('{DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189}') should be parseable.", () => {
 
+<<<<<<<< HEAD:tests/Guid.test.ts
         var guid = Guid.parse("{DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189}")!;
         
+========
+        var guid = Guid.parse("{DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189}");
+>>>>>>>> origin/main:specs/Guid.specs.ts
         expect(guid.format("U")).toBe("DC7FBA65-DF6F-4CB9-8FAA-6C7B5654F189");
     }); 
 

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Defines a generalized method that for determining equality of instances.
  */
 interface IEquatable
