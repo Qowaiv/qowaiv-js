@@ -108,7 +108,7 @@ describe('IBAN', () => {
         'NE58NE0380100100130305000268',
         'SN05TI8008354151588139598706',
         'TD8960002000010271091600153',
-        'TG53TG0090604310346500400070'])('parses %s0', (s) =>{ 
+        'TG53TG0090604310346500400070'])('parses %s', (s) =>{ 
             const iban = InternationalBankAccountNumber.parse(s);
             expect(iban.toString()).toBe(s);
         });
