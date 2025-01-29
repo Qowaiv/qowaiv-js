@@ -1,4 +1,5 @@
 ﻿# TypeScript (only needed for debugging)
 *.js.map
 launchSettings.json
+dist/
 node_modules/
