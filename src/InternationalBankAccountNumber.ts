@@ -1,4 +1,4 @@
-import { Unparsable } from '../src';
+import { Svo, Unparsable } from '../src';
 
 export class InternationalBankAccountNumber implements IEquatable, IFormattable, IJsonStringifyable {
     /**
@@ -22,17 +22,30 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
 
     /** 
     * Returns a string that represents the current IBAN.
+    * @param {string} f the format to apply.
+    * @remarks The formats:
+    * m: as machine readable lowercase.
+    * M: as machine readable.
+    * u: as unformatted lowercase (equal to machine readable lowercase).
+    * U: as unformatted uppercase  (equal to machine readable).
+    * h: as human readable lowercase (with non-breaking spaces).
+    * H: as human readable (with non-breaking spaces).
+    * f: as formatted lowercase.
+    * F: as formatted uppercase.
     */
-    public format(f: string): string {
-        // TODO: use right implementation
+    public format(f?: string): string {
         switch (f) {
-            case 'B': return '{' + this.v + '}';
-            case 'b': return '{' + this.v.toLowerCase() + '}';
-            case 'S': return this.v.replace(/-/g, '');
-            case 's': return this.v.replace(/-/g, '').toLowerCase();
-            case 'l': return this.v.toLowerCase();
-            case 'U': case 'u': default: return this.v;
+            case 'u': case 'm': return this.v.toLowerCase();
+            case 'U': case 'M': return this.v;
+            case 'f': return this.humanReadable(' ').toLowerCase();        
+            case 'F': return this.humanReadable(' ');        
+            case 'h': return this.humanReadable(' ').toLowerCase();        
+            case 'H': default: return this.humanReadable(' ');        
         }
+    }
+
+    private humanReadable(ch: string): string{
+        return this.v.replace(/.{4}(?!$)/g, '$&' + ch);
     }
 
     /**
@@ -91,7 +104,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
         // an empty string should equal IBAN.Empty.
         if (s === '' || s === null) { return InternationalBankAccountNumber.empty(); }
 
-        s = InternationalBankAccountNumber.strip(s);
+        s = Svo.unify(s);
 
         const pattern = InternationalBankAccountNumber.Bbans.get(s.substring(0, 2))
             ?? /^[A-Z0-9]{10,34}$/;
@@ -115,10 +128,6 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
             mod %= 97;
         }
         return mod == 1;
-    }
-
-    private static strip(s: string): string {
-        return s.replace(/[_\-  \.]/g, '');
     }
 
     private static Bbans = new Map<string, RegExp>([
