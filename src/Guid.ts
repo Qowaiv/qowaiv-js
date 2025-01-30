@@ -10,12 +10,14 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * @remarks It is the default constructor, for creating an actual GUID
      *          you will normally use Guid.newGuid() or Guid.parse(string).
      */
-    private constructor() { }
+    private constructor(v: string) {
+        this.v = v;
+    }
 
     /**
      * The underlying value.
      */
-    private v = '00000000-0000-0000-0000-000000000000';
+    private readonly v: string; //= ;
 
     /** 
      * Returns a string that represents the current GUID.
@@ -97,15 +99,10 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
         s = Guid.unify(s);
 
         // if the value parameter is valid
-        if (/^[0-9ABCDEF]{32}$/.test(s)) {
-            const svo = new Guid();
-            svo.v = Guid.unstrip(s);
-            return svo;
-        }
-        // return undefined if creation failed.
-        return undefined;
+        return /^[0-9ABCDEF]{32}$/.test(s)
+            ? new Guid(Guid.unstrip(s))
+            : undefined;
     }
-
 
     private static unify(s: string): string {
         s = s.replace(/-/g, '').trim().toUpperCase();
@@ -121,7 +118,7 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * Returns a new empty GUID.
      */
     public static empty(): Guid {
-        return new Guid();
+        return new Guid('00000000-0000-0000-0000-000000000000');
     }
 
     /**
@@ -130,22 +127,20 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * @returns {Guid} A random GUID.
      */
     public static newGuid(seed?: Guid): Guid {
-
-        const svo = new Guid();
-        svo.v = Guid.unstrip(Guid.rnd());
+        let v = Guid.unstrip(Guid.rnd());
 
         if (seed !== null && seed instanceof (Guid)) {
             let merged = '';
             for (let i = 0; i < 36; i++) {
                 const l = '0123456789ABCDEF'.indexOf(seed.v.charAt(i));
-                const r = '0123456789ABCDEF'.indexOf(svo.v.charAt(i));
-                merged += l === -1 || r === -1 ? svo.v.charAt(i) : '0123456789ABCDEF'.charAt(l ^ r);
+                const r = '0123456789ABCDEF'.indexOf(v.charAt(i));
+                merged += l === -1 || r === -1 ? v.charAt(i) : '0123456789ABCDEF'.charAt(l ^ r);
             }
-            svo.v = merged;
+            v = merged;
         }
         // set version to 4 (Random).
-        svo.v = svo.v.substring(0, 14) + '4' + svo.v.substring(15);
-        return svo;
+        v = v.substring(0, 14) + '4' + v.substring(15);
+        return new Guid(v);
     }
 
     /**
