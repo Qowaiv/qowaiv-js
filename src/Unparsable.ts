@@ -8,5 +8,5 @@ export class Unparsable extends Error {
         this.attemptedValue = attemptedValue;
     }
 
-    public attemptedValue: any;
+    public readonly attemptedValue: any;
 }

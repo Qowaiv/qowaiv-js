@@ -1,4 +1,4 @@
-import { Unparsable } from '../src';
+import { Svo, Unparsable } from '../src';
 
 class PostalCodeInfo {
     public constructor(pattern: RegExp, search?: RegExp | undefined, replace?: string | undefined) {
@@ -32,20 +32,20 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     * @remarks It is the default constructor, for creating an actual
     *          PostalCode use PostalCode.parse(string).
     */
-    private constructor(v: string) {
-        this.v = v;
+    private constructor(value: string) {
+        this.value = value;
      }
 
     /**
      * The underlying value.
      */
-    private readonly v: string;
+    private readonly value: string;
 
     /** 
     * Returns a string that represents the current postal code.
     */
     toString(): string {
-        return this.v;
+        return this.value;
     }
 
     /** 
@@ -54,16 +54,16 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     format(f: string): string {
         const info = PostalCode.Infos.get(f);
 
-        return info && info.isValid(this.v)
-            ? info.format(this.v)
-            : this.v;
+        return info && info.isValid(this.value)
+            ? info.format(this.value)
+            : this.value;
     }
 
     /** 
      * Returns a JSON representation of the postal code.
      */
     public toJSON(): string {
-        return this.v;
+        return this.value;
     }
 
     /**
@@ -72,7 +72,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      */
     public equals(other: any): boolean {
         return other instanceof (PostalCode) 
-            && other.v === this.v;
+            && other.value === this.value;
     }
 
     /**
@@ -83,8 +83,8 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     public isValid(country: string): boolean {
         const info = PostalCode.Infos.get(country);
         return info === undefined
-            ? this.v === ''
-            : info.isValid(this.v);
+            ? this.value === ''
+            : info.isValid(this.value);
     }
 
     /**
@@ -126,15 +126,11 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
 		// an empty string should equal PostalCode.Empty.
 		if (s === '' || s === null) { return PostalCode.empty(); }
 
-		s = PostalCode.strip(s).toUpperCase();
+		s = Svo.unify(s);
 		return s.length >= 2 && s.length <= 10
             ? new PostalCode(s)
             : undefined;
 	}
-
-    private static strip(s: string): string {
-        return s.replace(/[_\- \.]/g, '');
-    }
 
     private static Infos = new Map<string, PostalCodeInfo>([
         ['AD', new PostalCodeInfo(/^(AD)?[1-7][0-9]{2}$/, /^(AD)?(...)$/, 'AD-$2')],

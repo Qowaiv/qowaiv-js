@@ -6,24 +6,24 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      * @remarks It is the default constructor, for creating an actual IBAN
      *          you will normally use InternationalBankAccountNumber.parse(string).
      */
-    private constructor(v: string) {
-        this.v = v;
+    private constructor(value: string) {
+        this.value = value;
     }
 
     /**
      * The underlying value.
      */
-    private readonly v;
+    private readonly value;
 
     public get country() {
-        return this.v.substring(0, 2);
+        return this.value.substring(0, 2);
     }
 
     /** 
     * Returns a string that represents the current IBAN.
     */
     public toString(): string {
-        return this.v;
+        return this.value;
     }
 
     /** 
@@ -41,8 +41,8 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
     */
     public format(f?: string): string {
         switch (f) {
-            case 'u': case 'm': return this.v.toLowerCase();
-            case 'U': case 'M': return this.v;
+            case 'u': case 'm': return this.value.toLowerCase();
+            case 'U': case 'M': return this.value;
             case 'f': return this.humanReadable(' ').toLowerCase();
             case 'F': return this.humanReadable(' ');
             case 'h': return this.humanReadable(' ').toLowerCase();
@@ -51,7 +51,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
     }
 
     private humanReadable(ch: string): string {
-        return this.v.replace(/.{4}(?!$)/g, '$&' + ch);
+        return this.value.replace(/.{4}(?!$)/g, '$&' + ch);
     }
 
     /**
@@ -60,14 +60,14 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      */
     public equals(other: any): boolean {
         return other instanceof (InternationalBankAccountNumber)
-            && other.v === this.v;
+            && other.value === this.value;
     }
 
     /** 
      * Returns a JSON representation of the IBAN.
      */
     public toJSON(): string {
-        return this.v;
+        return this.value;
     }
 
     /**
