@@ -10,46 +10,46 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * @remarks It is the default constructor, for creating an actual GUID
      *          you will normally use Guid.newGuid() or Guid.parse(string).
      */
-    private constructor(v: string) {
-        this.v = v;
+    private constructor(value: string) {
+        this.value = value;
     }
 
     /**
      * The underlying value.
      */
-    private readonly v: string; //= ;
+    private readonly value: string;
 
     /** 
      * Returns a string that represents the current GUID.
      */
     public toString(): string {
-        return this.v;
+        return this.value;
     }
     /** 
      * Returns a string that represents the current GUID.
      */
     public format(f?: string): string {
         switch (f) {
-            case 'B': return '{' + this.v + '}';
-            case 'b': return '{' + this.v.toLowerCase() + '}';
-            case 'S': return this.v.replace(/-/g, '');
-            case 's': return this.v.replace(/-/g, '').toLowerCase();
-            case 'l': return this.v.toLowerCase();
-            case 'U': case 'u': default: return this.v;
+            case 'B': return '{' + this.value + '}';
+            case 'b': return '{' + this.value.toLowerCase() + '}';
+            case 'S': return this.value.replace(/-/g, '');
+            case 's': return this.value.replace(/-/g, '').toLowerCase();
+            case 'l': return this.value.toLowerCase();
+            case 'U': case 'u': default: return this.value;
         }
     }
     /** 
      * Returns a JSON representation of the GUID.
      */
     public toJSON(): string {
-        return this.v;
+        return this.value;
     }
 
     /**
      * Returns the version of the GUID.
      */
     public get version(): number {
-        return parseInt(this.v.substring(14, 15));
+        return parseInt(this.value.substring(14, 15));
     }
 
     /**
@@ -57,10 +57,8 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * representing the same value, otherwise false.
      */
     public equals(other: any): boolean {
-        return other !== null &&
-            other !== undefined &&
-            other instanceof (Guid) &&
-            other.v === this.v;
+        return other instanceof (Guid) 
+            && other.value === this.value;
     }
 
     /**
@@ -132,7 +130,7 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
         if (seed !== null && seed instanceof (Guid)) {
             let merged = '';
             for (let i = 0; i < 36; i++) {
-                const l = '0123456789ABCDEF'.indexOf(seed.v.charAt(i));
+                const l = '0123456789ABCDEF'.indexOf(seed.value.charAt(i));
                 const r = '0123456789ABCDEF'.indexOf(v.charAt(i));
                 merged += l === -1 || r === -1 ? v.charAt(i) : '0123456789ABCDEF'.charAt(l ^ r);
             }

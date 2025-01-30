@@ -128,7 +128,7 @@ describe('IBAN', () => {
         "(iban) ",
         "iban:",
         "IBAN: "])('we prefxi %s can be parsed', (s) => {
-            const iban = InternationalBankAccountNumber.parse(s+'NL20INGB0001234567');
+            const iban = InternationalBankAccountNumber.parse(s + 'NL20INGB0001234567');
             expect(iban.toString()).toBe('NL20INGB0001234567');
         });
 
