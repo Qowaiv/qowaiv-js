@@ -110,6 +110,9 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
         // an empty string should equal IBAN.Empty.
         if (s === '' || s === null) { return InternationalBankAccountNumber.empty(); }
 
+        // trim '(IBAN)', 'IBAN ', and 'IBAN:'.
+        s = s.replace(/\s*(IBAN\s+|IBAN\:|\(IBAN\))\s*/i, '');
+
         s = Svo.unify(s);
 
         const pattern = InternationalBankAccountNumber.Bbans.get(s.substring(0, 2))

@@ -114,20 +114,31 @@ describe('IBAN', () => {
         });
 
 
-        test.each([
-            "US70 ABCD 1234",
-            "US41 1234 5678 90AB CDEF GHIJ KLMN OPQR",
-            "US19 T3NB 32YP 2588 8395 8870 7523 1343 8517"])('%s for countries without IBAN', (s) =>{
-                const iban = InternationalBankAccountNumber.parse(s);
-                expect(iban.format('F')).toBe(s);
-            });
+    test.each([
+        "US70 ABCD 1234",
+        "US41 1234 5678 90AB CDEF GHIJ KLMN OPQR",
+        "US19 T3NB 32YP 2588 8395 8870 7523 1343 8517"])('%s for countries without IBAN', (s) => {
+            const iban = InternationalBankAccountNumber.parse(s);
+            expect(iban.format('F')).toBe(s);
+        });
+
+    test.each([
+        "(IBAN)",
+        "(iban)",
+        "(iban) ",
+        "iban:",
+        "IBAN: "])('we prefxi %s can be parsed', (s) => {
+            const iban = InternationalBankAccountNumber.parse(s+'NL20INGB0001234567');
+            expect(iban.toString()).toBe('NL20INGB0001234567');
+        });
+
 
     it('Does not parse IBAN with invalid checksum', () => {
         const iban = InternationalBankAccountNumber.tryParse('NL21INGB0001234567');
         expect(iban).toBeUndefined();
     });
 
-    it('contains the country linked', ()=>{
+    it('contains the country linked', () => {
         const iban = InternationalBankAccountNumber.tryParse('NL20INGB0001234567');
         expect(iban?.country).toBe('NL');
     })
