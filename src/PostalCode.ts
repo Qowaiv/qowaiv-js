@@ -32,12 +32,14 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     * @remarks It is the default constructor, for creating an actual
     *          PostalCode use PostalCode.parse(string).
     */
-    private constructor() { }
+    private constructor(v: string) {
+        this.v = v;
+     }
 
     /**
      * The underlying value.
      */
-    private v = '';
+    private readonly v: string;
 
     /** 
     * Returns a string that represents the current postal code.
@@ -52,9 +54,9 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     format(f: string): string {
         const info = PostalCode.Infos.get(f);
 
-        return info === undefined
-            ? this.v
-            : info.format(this.v);
+        return info && info.isValid(this.v)
+            ? info.format(this.v)
+            : this.v;
     }
 
     /** 
@@ -89,7 +91,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     * Returns a new empty postal code.
     */
     public static empty(): PostalCode {
-        return new PostalCode();
+        return new PostalCode('');
     }
 
     /**
@@ -125,13 +127,9 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
 		if (s === '' || s === null) { return PostalCode.empty(); }
 
 		s = PostalCode.strip(s).toUpperCase();
-		if (s.length >= 2 && s.length <= 10) {
-			let svo = new PostalCode();
-			svo.v = s;
-			return svo;
-		}
-
-		return undefined;
+		return s.length >= 2 && s.length <= 10
+            ? new PostalCode(s)
+            : undefined;
 	}
 
     private static strip(s: string): string {

@@ -13,6 +13,12 @@ describe('PostalCode', () => {
         expect(postalCode.format('AD')).toBe('AD-700');
     });
 
+    it('does not format a postal code that is not valid for a country', () => {
+        const postalCode = PostalCode.parse('123456');
+        expect(postalCode.toString()).toBe('123456');
+        expect(postalCode.format('NL')).toBe('123456');
+    });
+
     it('should validate a postal code for a specific country', () => {
         const postalCode = PostalCode.parse('AD700');
         expect(postalCode.isValid('AD')).toBe(true);
