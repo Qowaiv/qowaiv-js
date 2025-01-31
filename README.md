@@ -17,13 +17,21 @@ As developement tool, we addopted [TypeScript](http://typescriptlang.org/).
 # Single Value Object
 A Value Object that can be represented by a single scalar.
 
+## Empty state
+In Qowaiv.NET - for non continuous - SVO's there is a not-null state: The
+default state of the `struct`. Such concept does not exist in JavaScript. As a
+result, for empty states, `null` is used. So for example:
+
+``` TypeScript
+const svo = PostalCode.parse(''); // null.
+```
+
 ## Qowaiv types
 
 ### Guid
 Represents a Globally Unique Identifier (GUID). 
 
 ``` TypeScript
-const empty = Guid.Empty();  // 00000000-0000-0000-0000-000000000000
 const next = Guid.newGuid(); // 123E4567-E89B-12D3-A456-426655440000
 const str = next.format("B"); // {123E4567-E89B-12D3-A456-426655440000}
 ```
@@ -42,13 +50,11 @@ const lower = iban.format('h');  // 'nl20 ingb 0001 2345 67' with nbsp.
 Represents a postal code. It supports validation for all countries.
 
 ``` TypeScript
-let empty = PostalCode.empty();  // ''
-
-let dutch = PostalCode.parse('2624DP');
+const dutch = PostalCode.parse('2624DP');
 dutch.isValid('NL'); // true
 dutch.isValid('BE'); // false
 
-let argentina = PostalCode.Parse('Z1230ABC');
+const argentina = PostalCode.Parse('Z1230ABC');
 argentina.format('AR'); // Z 1230 ABC
 argentina.format('NL'); // Z1230ABC
 ```

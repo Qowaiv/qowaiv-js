@@ -1,7 +1,16 @@
-import { describe, expect, beforeEach, it, test } from 'vitest';
+import { describe, expect, it, test } from 'vitest';
 import { InternationalBankAccountNumber } from '../src';
 
 describe('IBAN', () => {
+     test.each([
+            '',
+            null,
+            undefined,
+        ])('parses %s as null', (s) => {
+            const svo = InternationalBankAccountNumber.parse(s!);
+            expect(svo).toBeNull();
+        });
+
     test.each([
         'AD1200012030200359100100',
         'AE950210000000693123456',
@@ -110,7 +119,7 @@ describe('IBAN', () => {
         'TD8960002000010271091600153',
         'TG53TG0090604310346500400070'])('parses %s', (s) => {
             const iban = InternationalBankAccountNumber.parse(s);
-            expect(iban.toString()).toBe(s);
+            expect(iban!.toString()).toBe(s);
         });
 
 
@@ -119,7 +128,7 @@ describe('IBAN', () => {
         "US41 1234 5678 90AB CDEF GHIJ KLMN OPQR",
         "US19 T3NB 32YP 2588 8395 8870 7523 1343 8517"])('%s for countries without IBAN', (s) => {
             const iban = InternationalBankAccountNumber.parse(s);
-            expect(iban.format('F')).toBe(s);
+            expect(iban!.format('F')).toBe(s);
         });
 
     test.each([
@@ -129,7 +138,7 @@ describe('IBAN', () => {
         "iban:",
         "IBAN: "])('we prefxi %s can be parsed', (s) => {
             const iban = InternationalBankAccountNumber.parse(s + 'NL20INGB0001234567');
-            expect(iban.toString()).toBe('NL20INGB0001234567');
+            expect(iban!.toString()).toBe('NL20INGB0001234567');
         });
 
 
@@ -149,40 +158,40 @@ describe('IBAN', () => {
         const iban3 = InternationalBankAccountNumber.parse('CG3930011000101013451300019');
         const iban4 = InternationalBankAccountNumber.parse('CI15QO4875019424693110901733');
 
-        expect(iban1.format('F')).toBe('CH36 0838 7000 0010 8017 3');
-        expect(iban2.format('F')).toBe('NL20 INGB 0001 2345 67');
-        expect(iban3.format('F')).toBe('CG39 3001 1000 1010 1345 1300 019');
-        expect(iban4.format('F')).toBe('CI15 QO48 7501 9424 6931 1090 1733');
+        expect(iban1!.format('F')).toBe('CH36 0838 7000 0010 8017 3');
+        expect(iban2!.format('F')).toBe('NL20 INGB 0001 2345 67');
+        expect(iban3!.format('F')).toBe('CG39 3001 1000 1010 1345 1300 019');
+        expect(iban4!.format('F')).toBe('CI15 QO48 7501 9424 6931 1090 1733');
     });
 
     it('formats to human readable with f', () => {
         const iban = InternationalBankAccountNumber.parse('NL20INGB0001234567');
-        expect(iban.format('f')).toBe('nl20 ingb 0001 2345 67');
+        expect(iban!.format('f')).toBe('nl20 ingb 0001 2345 67');
     });
 
     it('formats to human readable with H using nbsp', () => {
         const iban = InternationalBankAccountNumber.parse('NL20INGB0001234567');
-        expect(iban.format('H')).toBe('NL20 INGB 0001 2345 67');
+        expect(iban!.format('H')).toBe('NL20 INGB 0001 2345 67');
     });
 
     it('formats to human readable with h using nbsp', () => {
         const iban = InternationalBankAccountNumber.parse('NL20INGB0001234567');
-        expect(iban.format('h')).toBe('nl20 ingb 0001 2345 67');
+        expect(iban!.format('h')).toBe('nl20 ingb 0001 2345 67');
     });
 
     it('formats to human readable with using nbsp, by default', () => {
         const iban = InternationalBankAccountNumber.parse('NL20INGB0001234567');
-        expect(iban.format()).toBe('NL20 INGB 0001 2345 67');
+        expect(iban!.format()).toBe('NL20 INGB 0001 2345 67');
     });
 
     test.each(['M', 'U'])('format(%s) returns machine-readable/unformatted', (f) => {
         const iban = InternationalBankAccountNumber.parse('NL20INGB0001234567');
-        expect(iban.format(f)).toBe('NL20INGB0001234567');
+        expect(iban!.format(f)).toBe('NL20INGB0001234567');
     });
 
     test.each(['m', 'u'])('format(%s) returns machine-readable/unformatted lowercased', (f) => {
         const iban = InternationalBankAccountNumber.parse('NL20INGB0001234567');
-        expect(iban.format(f)).toBe('nl20ingb0001234567');
+        expect(iban!.format(f)).toBe('nl20ingb0001234567');
     });
 
     it('should return undefined when input is more than 10 characters', () => {
@@ -202,7 +211,7 @@ describe('IBAN', () => {
         const iban1 = InternationalBankAccountNumber.parse('NL20INGB0001234567');
         const iban2 = InternationalBankAccountNumber.parse('NL20INGB0001234567');
         const iban3 = InternationalBankAccountNumber.parse('CH3608387000001080173');
-        expect(iban1.equals(iban2)).toBe(true);
-        expect(iban1.equals(iban3)).toBe(false);
+        expect(iban1!.equals(iban2)).toBe(true);
+        expect(iban1!.equals(iban3)).toBe(false);
     });
 });
