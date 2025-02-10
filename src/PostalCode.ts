@@ -82,16 +82,8 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      */
     public isValid(country: string): boolean {
         const info = PostalCode.Infos.get(country);
-        return info === undefined
-            ? this.value === ''
-            : info.isValid(this.value);
-    }
-
-    /**
-    * Returns a new empty postal code.
-    */
-    public static empty(): PostalCode {
-        return new PostalCode('');
+        return info !== undefined
+            && info.isValid(this.value);
     }
 
     /**
@@ -99,7 +91,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      * @param {string} s A JSON string representing the postal code.
      * @returns {PostalCode} A postal code if valid, otherwise undefined.
      */
-    public static fromJSON(s: string): PostalCode | undefined {
+    public static fromJSON(s: string): PostalCode | null {
         return PostalCode.parse(s);
     }
 
@@ -108,7 +100,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
 	 * @param {string} s A string containing postal code to convert.
 	 * @returns {PostalCode} A postal code if valid, otherwise trhows.
 	 */
-	public static parse(s: string): PostalCode {
+	public static parse(s: string): PostalCode | null {
 		const svo = PostalCode.tryParse(s);
 
         if (svo === undefined) {
@@ -122,9 +114,9 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
 	 * @param {string} s A string containing postal code to convert.
 	 * @returns {PostalCode} A postal code if valid, otherwise undefined.
 	 */
-	public static tryParse(s: string): PostalCode | undefined {
-		// an empty string should equal PostalCode.Empty.
-		if (s === '' || s === null) { return PostalCode.empty(); }
+	public static tryParse(s: string): PostalCode | null | undefined {
+
+        if (Svo.isEmpty(s)) { return null; }
 
 		s = Svo.unify(s);
 		return s.length >= 2 && s.length <= 10

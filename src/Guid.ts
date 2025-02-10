@@ -1,4 +1,4 @@
-import { Unparsable } from '../src';
+import { Svo, Unparsable } from '../src';
 
 /**
  * Represents a Globally unique identifier (GUID).
@@ -75,7 +75,7 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * @param {string} s A string containing GUID to convert.
      * @returns {Guid} A GUID if valid, otherwise trhows.
      */
-    public static parse(s: string): Guid {
+    public static parse(s: string): Guid | null {
         const svo = Guid.tryParse(s);
 
         if (svo === undefined) {
@@ -89,12 +89,13 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * @param {string} s A string containing GUID to convert.
      * @returns {Guid} A GUID if valid, otherwise undefined.
      */
-    public static tryParse(s: string): Guid | undefined {
+    public static tryParse(s: string): Guid | null | undefined {
 
-        // an empty string should equal Guid.Empty.
-        if (s === '' || s === null) { return Guid.empty(); }
-
+        if(Svo.isEmpty(s)) {return null;}
+        
         s = Guid.unify(s);
+
+        if( s=== '00000000-0000-0000-0000-000000000000') {return null;}
 
         // if the value parameter is valid
         return /^[0-9ABCDEF]{32}$/.test(s)
@@ -103,20 +104,14 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
     }
 
     private static unify(s: string): string {
-        s = s.replace(/-/g, '').trim().toUpperCase();
+        s = Svo.unify(s);
         return s.length > 2 && s[0] == '{' && s[s.length - 1] == '}'
             ? s.substring(1, s.length - 1)
             : s;
     }
+    
     private static unstrip(s: string): string {
         return s.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5').toUpperCase();
-    }
-
-    /**
-     * Returns a new empty GUID.
-     */
-    public static empty(): Guid {
-        return new Guid('00000000-0000-0000-0000-000000000000');
     }
 
     /**
