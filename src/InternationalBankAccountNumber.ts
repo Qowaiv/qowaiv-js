@@ -71,17 +71,10 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
     }
 
     /**
-    * Returns a new empty IBAN.
-    */
-    public static empty(): InternationalBankAccountNumber {
-        return new InternationalBankAccountNumber('');
-    }
-
-    /**
-         * Creates a IBAN from a JSON string.
-         * @param {string} s A JSON string representing the IBAN.
-         * @returns {InternationalBankAccountNumber} A IBAN if valid, otherwise undefined.
-         */
+     * Creates a IBAN from a JSON string.
+     * @param {string} s A JSON string representing the IBAN.
+     * @returns {InternationalBankAccountNumber} A IBAN if valid, otherwise undefined.
+     */
     public static fromJSON(s: string): InternationalBankAccountNumber | null {
         return InternationalBankAccountNumber.parse(s);
     }
