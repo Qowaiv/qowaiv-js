@@ -66,7 +66,7 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
       * @param {string} s A JSON string representing the GUID.
       * @returns {Guid} A GUID if valid, otherwise undefined.
       */
-    public static fromJSON(s: string): Guid | undefined {
+    public static fromJSON(s: string): Guid | null {
         return Guid.parse(s);
     }
 

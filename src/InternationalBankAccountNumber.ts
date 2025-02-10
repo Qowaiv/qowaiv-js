@@ -82,7 +82,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
          * @param {string} s A JSON string representing the IBAN.
          * @returns {InternationalBankAccountNumber} A IBAN if valid, otherwise undefined.
          */
-    public static fromJSON(s: string): InternationalBankAccountNumber | undefined {
+    public static fromJSON(s: string): InternationalBankAccountNumber | null {
         return InternationalBankAccountNumber.parse(s);
     }
 
