@@ -282,6 +282,22 @@ describe('Email address', () => {
             const non = EmailAddress.tryParse('info@qowaiv.org');
             expect(non!.isIPBased).toBe(false);
         });
+
+        test.each([
+            'user@[IPv6:2001:db8:1ff::a0b:dbd0]',
+            'valid.ipv6.addr@[IPv6:0::1]',
+            'valid.IPV6.addr@[IPV6:0::1]',
+            'valid.ipv6.addr@[ipv6:0::1]',
+            'valid.ipv6.addr@[IPv6:2607:f0d0:1002:51::4]',
+            'valid.ipv6.addr@[IPv6:fe80::230:48ff:fe33:bc33]',
+            'valid.ipv6.addr@[IPv6:fe80:0000:0000:0000:0202:b3ff:fe1e:8329]',
+            'valid.ipv6v4.addr@[IPv6:aaaa:aaaa:aaaa:aaaa:aaaa:aaaa:127.0.0.1]',
+            'valid.ipv6.without-brackets@[2607:f0d0:1002:51::4]',
+            'valid.ipv6.without-brackets@2607:f0d0:1002:51::4',
+        ])
+        ('%s supports IPv6', (s) => {
+
+        });
     });
 
     test.each([
@@ -372,6 +388,18 @@ describe('Email address', () => {
             'email@[123.123.123].123',
             'email@123.123.123.123]',
             'email@123.123.[123.123]',
+
+            // IPv6
+            'IP-and-port@127.0.0.1:25',
+            'another-invalid-ip@127.0.0.256',
+            'invalid-ip@127.0.0.1.26',
+            'ipv4.with.ipv6prefix.addr@[IPv6:123.1.72.10]',
+            'ab@988.120.150.10',
+            'ab@120.256.256.120',
+            'ab@120.25.1111.120',
+            'ab@[188.120.150.10',
+            'ab@188.120.150.10]',
+            'ab@[188.120.150.10].com',
         ])
         ('can not parse %s', (s) => {
             const svo = EmailAddress.tryParse(s);

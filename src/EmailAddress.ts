@@ -29,8 +29,19 @@ class Is {
             && parts[1] >= 0 && parts[1] <= 255
             && parts[2] >= 0 && parts[2] <= 255
             && parts[3] >= 0 && parts[3] <= 255
-            ? '[' + parts[0] + '.'+ parts[1] + '.'+ parts[2] + '.'+ parts[3] + ']'
+            ? `[${parts[0]}.${parts[1]}.${parts[2]}.${parts[3]}]`
             : undefined;
+    }
+
+    public static ipV6(domain: string): string | undefined {
+        domain = domain.toLowerCase();
+        domain = domain.startsWith('ivp6:')
+            ? domain.slice(5)
+            : domain;
+
+            return /^(?:[a-f0-9]{1,4}:){7}[a-f0-9]{1,4}$/.test(domain)
+                ? `[IPv6:${domain}]`
+                : undefined;
     }
 }
 
@@ -87,7 +98,7 @@ class Parser {
     }
 
     private mailto(): Parser {
-        return this.input.substring(0, 7).toUpperCase()  === 'MAILTO:'
+        return this.input.toUpperCase().startsWith('MAILTO:')
             ? new Parser(this.input.slice(7))
             : this;
     }
@@ -199,10 +210,10 @@ class Parser {
             ? this.input.slice(1, this.input.length - 1)
             : this.input;
 
-        const ipv4 = Is.ipV4(domain);
+        const ip = Is.ipV4(domain) ?? Is.ipV6(domain);
 
-        if (ipv4) {
-            return new Parser('', this.result + ipv4);
+        if (ip) {
+            return new Parser('', this.result + ip);
         }
 
         return undefined;
