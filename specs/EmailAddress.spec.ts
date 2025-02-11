@@ -3,11 +3,6 @@ import { EmailAddress } from '../src';
 
 describe('Email address', () => {
 
-    it('debugs', () => {
-
-        const svo = EmailAddress.parse('"Joe Smith" info@qowaiv.org');
-    });
-
     describe('length', () => {
         test.each(
             [
@@ -15,7 +10,7 @@ describe('Email address', () => {
                 'i234567890_234567890_234567890_234567890_234567890_234567890_234@long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long',
                 'Display name is ignored <i234567890(comments are ignored)_234567890_234567890_234567890_234567890_234567890_234@long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long>',
             ])
-            ('not more then 254 (%s)', (s) => {
+            ('not more than 254 (%s)', (s) => {
 
                 const svo = EmailAddress.tryParse(s);
                 expect(svo?.length).toBe(254);
@@ -53,7 +48,7 @@ describe('Email address', () => {
 
                 const s = '"' + Create.string('a', len) + '"@qowaiv.org';
                 const svo = EmailAddress.tryParse(s);
-                expect(svo).toBeDefined();
+                expect(svo?.toString).toBe(s);
             });
 
             it('dot can separate parts', () => {
@@ -75,7 +70,7 @@ describe('Email address', () => {
     describe('domain part', () =>{
 
         test.each([1, 2, 17, 63])
-        ('part can has  length %s', (len) =>{
+        ('part can have length %s', (len) =>{
 
             const s = 'info@' + Create.string('a', len) + '.org';
             const svo = EmailAddress.tryParse(s);
@@ -83,7 +78,7 @@ describe('Email address', () => {
         });
 
         test.each([2, 17, 63])
-        ('top domain part can has length %s', (len) =>{
+        ('top domain part can have length %s', (len) =>{
 
             const s = 'info@' + Create.string('a', len);
             const svo = EmailAddress.tryParse(s);
@@ -269,7 +264,7 @@ describe('Email address', () => {
             expect(svo?.toString()).toBe('valid.ipv4.addr@[123.1.72.10]');
         });
 
-        it('Trims nonleading zeros', () => {
+        it('Trims leading zeros', () => {
             const svo = EmailAddress.tryParse('valid.ipv4.addr@123.001.072.10');
             expect(svo?.toString()).toBe('valid.ipv4.addr@[123.1.72.10]');
         });
@@ -408,7 +403,6 @@ describe('Email address', () => {
 });
 
 class Create {
-
     public static string(ch: string, len: number) : string {
         let str = '';
         for(let i = 0; i<len; i++){
