@@ -65,6 +65,11 @@ describe('Email address', () => {
                 const svo = EmailAddress.tryParse(s);
                 expect(svo?.toString()).toBe(s);
             });
+
+            it('may contain emojis', () => {
+                const svo = EmailAddress.tryParse('❤️@qowaiv.org');
+                expect(svo?.toString()).toBe('❤️@qowaiv.org');
+            } )
     });
 
     describe('domain part', () =>{
