@@ -273,6 +273,15 @@ describe('Email address', () => {
             const svo = EmailAddress.tryParse('valid.ipv4.addr@123.001.072.10');
             expect(svo?.toString()).toBe('valid.ipv4.addr@[123.1.72.10]');
         });
+
+        it('indicates an email address to be IP-based', () =>{
+
+            const ip = EmailAddress.tryParse('valid.ipv4.addr@123.001.072.10');
+            expect(ip!.isIPBased).toBe(true);
+
+            const non = EmailAddress.tryParse('info@qowaiv.org');
+            expect(non!.isIPBased).toBe(false);
+        });
     });
 
     test.each([

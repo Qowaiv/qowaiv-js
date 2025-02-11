@@ -265,6 +265,13 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
         return this.value.length;
     }
 
+    /**
+     * Indicates if the email address is IP-based.
+     */
+    public get isIPBased(): boolean {
+        return this.value.endsWith(']');
+    }
+
     /** 
     * Returns a string that represents the current email address.
     */
