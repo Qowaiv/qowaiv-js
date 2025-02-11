@@ -48,7 +48,7 @@ describe('Email address', () => {
 
                 const s = '"' + Create.string('a', len) + '"@qowaiv.org';
                 const svo = EmailAddress.tryParse(s);
-                expect(svo?.toString).toBe(s);
+                expect(svo?.toString()).toBe(s);
             });
 
             it('dot can separate parts', () => {

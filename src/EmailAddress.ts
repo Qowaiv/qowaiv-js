@@ -16,12 +16,13 @@ class Is {
     }
 
     public static topDomain(part: string): boolean {
-        return /^([^\x00-\x7F]|[A-Z])+$/i.test(part);
+        return /^([^\x00-\x7F]|[a-z])+$/.test(part);
     }
 
     public static punycode(part: string): boolean {
-        return /^xn\-\-[A-Z0-9\-]{2,}$/i.test(part);
+        return /^xn\-\-[a-z0-9\-]{2,}$/.test(part);
     }
+
     public static ipV4(domain: string): string | undefined {
         const parts = domain.split('.').map(Number);
         return parts.length === 4
@@ -122,7 +123,7 @@ class Parser {
             else if (ch === '@') {
                 return buffer.length > 0
                     && !buffer.endsWith('.')
-                    ? new Parser(this.input.substring(i + 1), buffer + '@')
+                    ? new Parser(this.input.slice(i + 1), buffer + '@')
                     : undefined;
             }
             else if (buffer.length < 64 && Is.local(ch)) {
@@ -195,7 +196,6 @@ class Parser {
 
         return email.length <= 254
             && domain.length > 1
-            && (buffer.length > 0 || part.length > 0)
             && prev !== '-'
             && prev !== '.'
             && part.length <= 63
