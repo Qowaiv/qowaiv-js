@@ -12,6 +12,11 @@ describe('PostalCode', () => {
         expect(svo).toBeNull();
     });
 
+    it('has an accessble length', () => {
+        const svo = PostalCode.parse('4590 ZC');
+        expect(svo!.length).toBe(6);
+    });
+
     it('parses and format a postal code', () => {
         const postalCode = PostalCode.parse(' AD700 ');
         expect(postalCode!.toString()).toBe('AD700');
