@@ -255,11 +255,12 @@ class Parser {
 }
 
 export class EmailAddress implements IEquatable, IJsonStringifyable {
+    
     /**
-    * @constructor
-    * @remarks It is the default constructor, for creating an actual email address
-    *          you will normally use EmailAddress.parse(string).
-    */
+     * @constructor
+     * @remarks This is the default constructor, for creating an actual email address
+     *          you will normally use EmailAddress.parse(string) or EmailAddress.tryParse(string).
+     */
     private constructor(value: string) {
         this.value = value;
     }
@@ -307,7 +308,7 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
     }
 
     /**
-         * Creates a email address from a JSON string.
+         * Creates an email address from a JSON string.
          * @param {string} s A JSON string representing the email address.
          * @returns {EmailAddress} A email address if valid, otherwise undefined.
          */
@@ -316,7 +317,7 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
     }
 
     /**
-     * Parses a email address string.
+     * Parses an email address string.
      * @param {string} s A string containing email address to convert.
      * @returns {EmailAddress} email address if valid, otherwise throws.
      */
