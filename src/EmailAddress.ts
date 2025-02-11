@@ -11,8 +11,8 @@ class Is {
             || '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz'.indexOf(ch) >= 0;
     }
 
-    public static whitespace(ch: string) :boolean{
-        return  /\s/.test(ch);
+    public static whitespace(ch: string): boolean {
+        return /\s/.test(ch);
     }
 
     public static topDomain(part: string): boolean {
@@ -39,9 +39,9 @@ class Is {
             ? domain.slice(5)
             : domain;
 
-            return /^(?:[a-f0-9]{1,4}:){7}[a-f0-9]{1,4}$/.test(domain)
-                ? `[IPv6:${domain}]`
-                : undefined;
+        return /^(?:[a-f0-9]{1,4}:){7}[a-f0-9]{1,4}$/.test(domain)
+            ? `[IPv6:${domain}]`
+            : undefined;
     }
 }
 
@@ -67,7 +67,7 @@ class Parser {
     }
 
     private displayName(): Parser | undefined {
-        if(this.input.startsWith('"')) {
+        if (this.input.startsWith('"')) {
             const quote = this.quoted();
             if (quote) {
                 return Is.whitespace(this.input[quote.length])
@@ -84,11 +84,11 @@ class Parser {
                 ? new Parser(this.input.slice(lt + 1, this.input.length - 1))
                 : undefined;
         }
-        
+
         else if (this.input.endsWith(')')) {
             const start = this.input.lastIndexOf('(');
             return start !== -1
-                && this.input.slice(start, this.input.length -1).indexOf(')') === -1
+                && this.input.slice(start, this.input.length - 1).indexOf(')') === -1
                 ? new Parser(this.input.slice(0, start).trim())
                 : undefined;
         }
@@ -147,7 +147,7 @@ class Parser {
             : undefined;
     }
 
-    private domain(): Parser | undefined{
+    private domain(): Parser | undefined {
         return this.regularDomain()
             ?? this.ipDomain();
     }
@@ -203,9 +203,9 @@ class Parser {
             ? new Parser('', email)
             : undefined;
     }
-    
+
     private ipDomain(): Parser | undefined {
-        
+
         var domain = this.input.startsWith('[') && this.input.endsWith(']')
             ? this.input.slice(1, this.input.length - 1)
             : this.input;
@@ -255,7 +255,7 @@ class Parser {
 }
 
 export class EmailAddress implements IEquatable, IJsonStringifyable {
-    
+
     /**
      * @constructor
      * @remarks This is the default constructor, for creating an actual email address
@@ -308,10 +308,10 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
     }
 
     /**
-         * Creates an email address from a JSON string.
-         * @param {string} s A JSON string representing the email address.
-         * @returns {EmailAddress} A email address if valid, otherwise undefined.
-         */
+     * Creates an email address from a JSON string.
+     * @param {string} s A JSON string representing the email address.
+     * @returns {EmailAddress} A email address if valid, otherwise undefined.
+     */
     public static fromJSON(s: string): EmailAddress | null {
         return EmailAddress.parse(s);
     }
