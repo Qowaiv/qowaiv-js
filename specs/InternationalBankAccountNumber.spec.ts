@@ -2,7 +2,13 @@ import { describe, expect, it, test } from 'vitest';
 import { InternationalBankAccountNumber } from '../src';
 
 describe('IBAN', () => {
-     test.each([
+    
+    it('has an accessble length', () => {
+            const svo = InternationalBankAccountNumber.parse('US70 ABCD 1234');
+            expect(svo!.length).toBe(12);
+        });
+    
+    test.each([
             '',
             null,
             undefined,

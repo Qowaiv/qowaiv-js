@@ -34,23 +34,30 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     */
     private constructor(value: string) {
         this.value = value;
-     }
+    }
 
     /**
      * The underlying value.
      */
     private readonly value: string;
 
+    /**
+     * Gets the length of the postal code.
+     */
+    public get length() {
+        return this.value.length;
+    }
+
     /** 
-    * Returns a string that represents the current postal code.
-    */
+     * Returns a string that represents the current postal code.
+     */
     toString(): string {
         return this.value;
     }
 
     /** 
-    * Returns a string that represents the current postal code.
-    */
+     * Returns a string that represents the current postal code.
+     */
     format(f: string): string {
         const info = PostalCode.Infos.get(f);
 
@@ -71,7 +78,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      * representing the same value, otherwise false.
      */
     public equals(other: any): boolean {
-        return other instanceof (PostalCode) 
+        return other instanceof (PostalCode)
             && other.value === this.value;
     }
 
@@ -96,33 +103,33 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     }
 
     /**
-	 * Parses a postal code string.
-	 * @param {string} s A string containing postal code to convert.
-	 * @returns {PostalCode} A postal code if valid, otherwise trhows.
-	 */
-	public static parse(s: string): PostalCode | null {
-		const svo = PostalCode.tryParse(s);
+     * Parses a postal code string.
+     * @param {string} s A string containing postal code to convert.
+     * @returns {PostalCode} A postal code if valid, otherwise trhows.
+     */
+    public static parse(s: string): PostalCode | null {
+        const svo = PostalCode.tryParse(s);
 
         if (svo === undefined) {
-			throw new Unparsable('Not a valid postal code', s);
-		}
-		return svo;
-	}
+            throw new Unparsable('Not a valid postal code', s);
+        }
+        return svo;
+    }
 
-	/**
-	 * Tries to parse a postal code string.
-	 * @param {string} s A string containing postal code to convert.
-	 * @returns {PostalCode} A postal code if valid, otherwise undefined.
-	 */
-	public static tryParse(s: string): PostalCode | null | undefined {
+    /**
+     * Tries to parse a postal code string.
+     * @param {string} s A string containing postal code to convert.
+     * @returns {PostalCode} A postal code if valid, otherwise undefined.
+     */
+    public static tryParse(s: string): PostalCode | null | undefined {
 
         if (Svo.isEmpty(s)) { return null; }
 
-		s = Svo.unify(s);
-		return s.length >= 2 && s.length <= 10
+        s = Svo.unify(s);
+        return s.length >= 2 && s.length <= 10
             ? new PostalCode(s)
             : undefined;
-	}
+    }
 
     private static Infos = new Map<string, PostalCodeInfo>([
         ['AD', new PostalCodeInfo(/^(AD)?[1-7][0-9]{2}$/, /^(AD)?(...)$/, 'AD-$2')],

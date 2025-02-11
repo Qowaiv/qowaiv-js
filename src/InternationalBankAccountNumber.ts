@@ -15,8 +15,18 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      */
     private readonly value;
 
+    /**
+     * Gets the country of the IBAN.
+     */
     public get country() {
         return this.value.substring(0, 2);
+    }
+
+    /**
+     * Gets the length of the IBAN.
+     */
+    public get length() {
+        return this.value.length;
     }
 
     /** 
