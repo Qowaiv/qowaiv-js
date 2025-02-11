@@ -7,7 +7,7 @@ export class Svo {
      * Returns true if the string is empty, null, or undefined.
      * @param {string} s the input to verify.
      */
-    public static isEmpty(s: string) : boolean {
+    public static isEmpty(s: unknown) : boolean {
         return s === ''
             || s === null
             || s === undefined;
