@@ -105,7 +105,7 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
 
     private static unify(s: string): string {
         s = Svo.unify(s);
-        return s.length > 2 && s[0] == '{' && s[s.length - 1] == '}'
+        return s.length > 2 && s.startsWith('{') && s.endsWith('}')
             ? s.substring(1, s.length - 1)
             : s;
     }
