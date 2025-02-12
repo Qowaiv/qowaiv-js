@@ -77,7 +77,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      * Returns true if other is not null or undefined and a PostalCode
      * representing the same value, otherwise false.
      */
-    public equals(other: any): boolean {
+    public equals(other: unknown): boolean {
         return other instanceof (PostalCode)
             && other.value === this.value;
     }
@@ -106,7 +106,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      * @param {string} s A string containing postal code to convert.
      * @returns {PostalCode} A postal code if valid, otherwise trhows.
      */
-    public static parse(s: string): PostalCode | null {
+    public static parse(s: string | null | undefined): PostalCode | null {
         const svo = PostalCode.tryParse(s);
 
         if (svo === undefined) {
@@ -120,11 +120,11 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      * @param {string} s A string containing postal code to convert.
      * @returns {PostalCode} A postal code if valid, otherwise undefined.
      */
-    public static tryParse(s: string): PostalCode | null | undefined {
+    public static tryParse(s: string | null | undefined): PostalCode | null | undefined {
 
         if (Svo.isEmpty(s)) { return null; }
 
-        s = Svo.unify(s);
+        s = Svo.unify(s!);
         return s.length >= 2 && s.length <= 10
             ? new PostalCode(s)
             : undefined;

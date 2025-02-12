@@ -56,8 +56,8 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * Returns true if other is not null or undefined and a GUID
      * representing the same value, otherwise false.
      */
-    public equals(other: any): boolean {
-        return other instanceof (Guid) 
+    public equals(other: unknown): boolean {
+        return other instanceof (Guid)
             && other.value === this.value;
     }
 
@@ -75,7 +75,7 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * @param {string} s A string containing GUID to convert.
      * @returns {Guid} A GUID if valid, otherwise trhows.
      */
-    public static parse(s: string): Guid | null {
+    public static parse(s: string | null | undefined): Guid | null {
         const svo = Guid.tryParse(s);
 
         if (svo === undefined) {
@@ -89,13 +89,13 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * @param {string} s A string containing GUID to convert.
      * @returns {Guid} A GUID if valid, otherwise undefined.
      */
-    public static tryParse(s: string): Guid | null | undefined {
+    public static tryParse(s: string | null | undefined): Guid | null | undefined {
 
-        if(Svo.isEmpty(s)) {return null;}
-        
-        s = Guid.unify(s);
+        if (Svo.isEmpty(s)) { return null; }
 
-        if( s=== '00000000-0000-0000-0000-000000000000') {return null;}
+        s = Guid.unify(s!);
+
+        if (s === '00000000-0000-0000-0000-000000000000') { return null; }
 
         // if the value parameter is valid
         return /^[0-9ABCDEF]{32}$/.test(s)
@@ -106,10 +106,10 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
     private static unify(s: string): string {
         s = Svo.unify(s);
         return s.length > 2 && s.startsWith('{') && s.endsWith('}')
-            ? s.substring(1, s.length - 1)
+            ? s.slice(1, -1)
             : s;
     }
-    
+
     private static unstrip(s: string): string {
         return s.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5').toUpperCase();
     }

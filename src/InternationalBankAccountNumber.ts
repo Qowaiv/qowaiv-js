@@ -68,7 +68,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      * Returns true if other is an IBAN
      * representing the same value, otherwise false.
      */
-    public equals(other: any): boolean {
+    public equals(other: unknown): boolean {
         return other instanceof (InternationalBankAccountNumber)
             && other.value === this.value;
     }
@@ -94,7 +94,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      * @param {string} s A string containing IBAN to convert.
      * @returns {InternationalBankAccountNumber} IBAN if valid, otherwise throws.
      */
-    public static parse(s: string): InternationalBankAccountNumber | null {
+    public static parse(s: string | null | undefined): InternationalBankAccountNumber | null {
         const svo = InternationalBankAccountNumber.tryParse(s);
 
         if (svo === undefined) {
@@ -108,12 +108,12 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      * @param {string} s A string containing IBAN to convert.
      * @returns {InternationalBankAccountNumber} A IBAN if valid, otherwise undefined.
      */
-    public static tryParse(s: string): InternationalBankAccountNumber | null | undefined {
+    public static tryParse(s: string | null | undefined): InternationalBankAccountNumber | null | undefined {
 
         if (Svo.isEmpty(s)) { return null; }
 
         // trim '(IBAN)', 'IBAN ', and 'IBAN:'.
-        s = s.replace(/\s*(IBAN\s+|IBAN\:|\(IBAN\))\s*/i, '');
+        s = s!.replace(/\s*(IBAN\s+|IBAN:|\(IBAN\))\s*/i, '');
 
         s = Svo.unify(s);
 

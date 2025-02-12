@@ -294,7 +294,7 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
      * Returns true if other is an email address
      * representing the same value, otherwise false.
      */
-    public equals(other: any): boolean {
+    public equals(other: unknown): boolean {
         return other instanceof (EmailAddress)
             && other.value === this.value;
     }

@@ -4,6 +4,8 @@ import { Guid } from '../src';
 describe("GUID: ", () => {
 
     test.each([
+        ' ',
+        '\t',
         '',
         null,
         undefined,
