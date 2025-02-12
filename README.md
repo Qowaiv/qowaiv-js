@@ -36,6 +36,26 @@ const next = Guid.newGuid(); // 123E4567-E89B-12D3-A456-426655440000
 const str = next.format("B"); // {123E4567-E89B-12D3-A456-426655440000}
 ```
 
+### Email address
+Represents an email address. It supports
+* local part with quotes (`"Can contain anything"@qowaiv.org`)
+* comments (`in(some comment)fo@qowaiv.org`)
+* Display Names
+  - `John Smith <info@qowaiv.org>`
+  - `"John Smith" info@qowaiv.org`
+  - `info@qowaiv.org (John Smith)`
+* Mailto prefix (`mailto:info@qowaiv.org`)
+* IP-based domins (`info@[127.0.0.1]`)
+
+Comments, display names, and the mailto prefix are stripped.
+
+``` TypeScript
+const email = Email.parse('info@qowaiv.org');
+const ip = Email.parse('info@[127.0.0.1]');
+
+const isIP = ip.isIpBased; // true
+```
+
 ### InternationBankAccountNumber
 Represnts a IBAN.
 
