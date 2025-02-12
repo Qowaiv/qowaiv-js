@@ -16,7 +16,7 @@ class Is {
     }
 
     public static topDomain(part: string): boolean {
-        return /^([^\x01-\x7F]|[a-z])+$/.test(part);
+        return /^([^\x00-\x7F]|[a-z])+$/.test(part);
     }
 
     public static punycode(part: string): boolean {
