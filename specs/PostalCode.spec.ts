@@ -4,6 +4,8 @@ import { PostalCode } from '../src';
 describe('PostalCode', () => {
 
     test.each([
+        ' ',
+        '\t',
         '',
         null,
         undefined,

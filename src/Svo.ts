@@ -10,7 +10,8 @@ export class Svo {
     public static isEmpty(s: unknown) : boolean {
         return s === ''
             || s === null
-            || s === undefined;
+            || s === undefined
+            || (s instanceof(String) && s.trim() === '');
     }
 
     /**

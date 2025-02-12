@@ -9,6 +9,8 @@ describe('IBAN', () => {
     });
 
     test.each([
+        ' ',
+        '\t',
         '',
         null,
         undefined,

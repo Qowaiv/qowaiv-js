@@ -3,6 +3,17 @@ import { EmailAddress } from '../src';
 
 describe('Email address', () => {
 
+    test.each([
+        ' ',
+        '\t',
+        '',
+        null,
+        undefined,
+    ])('parses %s as null', (s) => {
+        const svo = EmailAddress.parse(s!);
+        expect(svo).toBeNull();
+    });
+
     describe('length', () => {
         test.each(
             [
@@ -35,7 +46,7 @@ describe('Email address', () => {
                 expect(svo?.toString()).toBe(s);
             });
 
-            test.each([1, 2, 17, 64])
+        test.each([1, 2, 17, 64])
             ('local with length %s', (len) => {
 
                 const s = Create.string('a', len) + '@qowaiv.org';
@@ -43,7 +54,7 @@ describe('Email address', () => {
                 expect(svo).toBeDefined();
             });
 
-            test.each([1, 2, 17, 62])
+        test.each([1, 2, 17, 62])
             ('quoted local with length %s', (len) => {
 
                 const s = '"' + Create.string('a', len) + '"@qowaiv.org';
@@ -51,44 +62,44 @@ describe('Email address', () => {
                 expect(svo?.toString()).toBe(s);
             });
 
-            it('dot can separate parts', () => {
-                const svo = EmailAddress.parse('zero.one.two.three.four.five.6.7.8.9@qowaiv.org');
-                expect(svo?.toString()).toBe('zero.one.two.three.four.five.6.7.8.9@qowaiv.org');
-            });
+        it('dot can separate parts', () => {
+            const svo = EmailAddress.parse('zero.one.two.three.four.five.6.7.8.9@qowaiv.org');
+            expect(svo?.toString()).toBe('zero.one.two.three.four.five.6.7.8.9@qowaiv.org');
+        });
 
-            test.each([
-                '" "@qowaiv.org',
-                '"info@qowaiv.org"@qowaiv.org',
-                '"i n f o"@qowaiv.org',
-            ])
-            ('Qouted %s allows everything', (s) =>{
+        test.each([
+            '" "@qowaiv.org',
+            '"info@qowaiv.org"@qowaiv.org',
+            '"i n f o"@qowaiv.org',
+        ])
+            ('Qouted %s allows everything', (s) => {
                 const svo = EmailAddress.tryParse(s);
                 expect(svo?.toString()).toBe(s);
             });
 
-            it('may contain emojis', () => {
-                const svo = EmailAddress.tryParse('❤️@qowaiv.org');
-                expect(svo?.toString()).toBe('❤️@qowaiv.org');
-            } )
+        it('may contain emojis', () => {
+            const svo = EmailAddress.tryParse('❤️@qowaiv.org');
+            expect(svo?.toString()).toBe('❤️@qowaiv.org');
+        })
     });
 
-    describe('domain part', () =>{
+    describe('domain part', () => {
 
         test.each([1, 2, 17, 63])
-        ('part can have length %s', (len) =>{
+            ('part can have length %s', (len) => {
 
-            const s = 'info@' + Create.string('a', len) + '.org';
-            const svo = EmailAddress.tryParse(s);
-            expect(svo?.toString()).toBe(s);
-        });
+                const s = 'info@' + Create.string('a', len) + '.org';
+                const svo = EmailAddress.tryParse(s);
+                expect(svo?.toString()).toBe(s);
+            });
 
         test.each([2, 17, 63])
-        ('top domain part can have length %s', (len) =>{
+            ('top domain part can have length %s', (len) => {
 
-            const s = 'info@' + Create.string('a', len);
-            const svo = EmailAddress.tryParse(s);
-            expect(svo?.toString()).toBe(s);
-        });
+                const s = 'info@' + Create.string('a', len);
+                const svo = EmailAddress.tryParse(s);
+                expect(svo?.toString()).toBe(s);
+            });
 
         it('is lowercased', () => {
             const svo = EmailAddress.parse('INFO@qoWAIV.Org');
@@ -96,11 +107,11 @@ describe('Email address', () => {
         });
 
         test.each(Array.from("!#$%&'*+/=?^`{}|~"))
-        ('%s is not allowed', (ch)=>{
+            ('%s is not allowed', (ch) => {
 
-            const svo = EmailAddress.tryParse(`info@${ch}.org`);
-            expect(svo).toBeUndefined();
-        });
+                const svo = EmailAddress.tryParse(`info@${ch}.org`);
+                expect(svo).toBeUndefined();
+            });
 
         test.each([
             'org',
@@ -108,11 +119,11 @@ describe('Email address', () => {
             'museum',
             'topleveldomain',
             'co.jp'])
-        ('topdomain %s can contain any letter', (top) =>{
-            const s = `info@qowaiv.${top}`;
-            const svo = EmailAddress.tryParse(s);
-            expect(svo?.toString()).toBe(s);
-        });
+            ('topdomain %s can contain any letter', (top) => {
+                const s = `info@qowaiv.${top}`;
+                const svo = EmailAddress.tryParse(s);
+                expect(svo?.toString()).toBe(s);
+            });
 
         test.each(
             [
@@ -120,26 +131,26 @@ describe('Email address', () => {
                 "xn--eckwd4c7cu47r2wf", "xn--3e0b707e"
             ])
             ('topdomain % can be punycode', (punycode) => {
-    
+
                 const s = `info@${punycode}`;
                 const svo = EmailAddress.parse(s);
                 expect(svo?.toString()).toBe(s);
             });
 
-            it('dot can separate parts', () => {
-                const svo = EmailAddress.parse('info@one.two.three.4.5.qowaiv.org');
-                expect(svo?.toString()).toBe('info@one.two.three.4.5.qowaiv.org');
-            });
+        it('dot can separate parts', () => {
+            const svo = EmailAddress.parse('info@one.two.three.4.5.qowaiv.org');
+            expect(svo?.toString()).toBe('info@one.two.three.4.5.qowaiv.org');
+        });
 
-            it('dot is optional', () => {
-                const svo = EmailAddress.parse('info@qowaiv');
-                expect(svo?.toString()).toBe('info@qowaiv');
-            });
+        it('dot is optional', () => {
+            const svo = EmailAddress.parse('info@qowaiv');
+            expect(svo?.toString()).toBe('info@qowaiv');
+        });
 
-            it('dash can separate parts', () => {
-                const svo = EmailAddress.parse('info@one-two-three-4-5-qowaiv.org');
-                expect(svo?.toString()).toBe('info@one-two-three-4-5-qowaiv.org');
-            });
+        it('dash can separate parts', () => {
+            const svo = EmailAddress.parse('info@one-two-three-4-5-qowaiv.org');
+            expect(svo?.toString()).toBe('info@one-two-three-4-5-qowaiv.org');
+        });
     });
 
     describe('display name', () => {
@@ -172,10 +183,10 @@ describe('Email address', () => {
             'info@qowaiv.org\t(Joe Smith)',
             'info@qowaiv.org  (Joe Smith)',
         ])
-        ('supports %s with comments afterwards', (s) => {
-            const svo = EmailAddress.tryParse(s);
-            expect(svo?.toString()).toBe('info@qowaiv.org');
-        });
+            ('supports %s with comments afterwards', (s) => {
+                const svo = EmailAddress.tryParse(s);
+                expect(svo?.toString()).toBe('info@qowaiv.org');
+            });
     });
 
     describe('comments', () => {
@@ -225,7 +236,7 @@ describe('Email address', () => {
         });
     });
 
-    describe('escaping', () =>{
+    describe('escaping', () => {
 
         test.each([
             '" "@qowaiv.org',
@@ -235,10 +246,10 @@ describe('Email address', () => {
             '"()<>[]:,;@\\\\\\"!#$%&\'*+-/=?^_`{}| ~.a"@qowaiv.org',
             '"\\e\\s\\c\\a\\p\\e\\d"@qowaiv.org',
         ])
-        ('escapes %s', (s) => {
-            const svo = EmailAddress.tryParse(s);
-            expect(svo).toBeDefined();
-        });
+            ('escapes %s', (s) => {
+                const svo = EmailAddress.tryParse(s);
+                expect(svo).toBeDefined();
+            });
     });
 
     describe('Different alphabets', () => {
@@ -275,7 +286,7 @@ describe('Email address', () => {
             expect(svo?.toString()).toBe('valid.ipv4.addr@[123.1.72.10]');
         });
 
-        it('indicates an email address to be IP-based', () =>{
+        it('indicates an email address to be IP-based', () => {
 
             const ip = EmailAddress.tryParse('valid.ipv4.addr@123.001.072.10');
             expect(ip!.isIPBased).toBe(true);
@@ -296,113 +307,113 @@ describe('Email address', () => {
             'valid.ipv6.without-brackets@[2607:f0d0:1002:51::4]',
             'valid.ipv6.without-brackets@2607:f0d0:1002:51::4',
         ])
-        ('%s supports IPv6', (s) => {
+            ('%s supports IPv6', (s) => {
 
-        });
+            });
     });
 
     test.each([
-            // no local
-            '@qowaiv.org',
-            '""@qowaiv.org',
+        // no local
+        '@qowaiv.org',
+        '""@qowaiv.org',
 
-            // too long local
-            '12345678901234567890123456789012345678901234567890123456789012345@qowaiv.org',
-            '"123456789012345678901234567890123456789012345678901234567890123"@qowaiv.org',
+        // too long local
+        '12345678901234567890123456789012345678901234567890123456789012345@qowaiv.org',
+        '"123456789012345678901234567890123456789012345678901234567890123"@qowaiv.org',
 
-            // invalid ASCII in local
-            'info\t@qowaiv.org',
+        // invalid ASCII in local
+        'info\t@qowaiv.org',
 
-            // too long domain part
-            'info@1234567890123456789012345678901234567890123456789012345678901234',
-            'info@1234567890123456789012345678901234567890123456789012345678901234.org',
+        // too long domain part
+        'info@1234567890123456789012345678901234567890123456789012345678901234',
+        'info@1234567890123456789012345678901234567890123456789012345678901234.org',
 
-            // wrong dots
-            '.info@qowaiv.org',
-            'info.@qowaiv.org',
-            'info..other@qowaiv.org',
-            'info.other@qowaiv.org.',
+        // wrong dots
+        '.info@qowaiv.org',
+        'info.@qowaiv.org',
+        'info..other@qowaiv.org',
+        'info.other@qowaiv.org.',
 
-            // wrong dashes
-            'info@-qowaiv.org',
-            'info@qowaiv.org-',
-            'info@qowaiv-.org',
-            'info@qowaiv.-org',
+        // wrong dashes
+        'info@-qowaiv.org',
+        'info@qowaiv.org-',
+        'info@qowaiv-.org',
+        'info@qowaiv.-org',
 
-            // invalid punycodes
-            '"info@qowaiv@xn-bcher-kva8445foa',
-            '"info@qowaiv@xn--e',
-            '"info@qowaiv@xn--',
+        // invalid punycodes
+        '"info@qowaiv@xn-bcher-kva8445foa',
+        '"info@qowaiv@xn--e',
+        '"info@qowaiv@xn--',
 
-            // invalid domains
-            'info@',
-            'info@q',
+        // invalid domains
+        'info@',
+        'info@q',
 
-            // exactly one @
-            'info_at_qowaiv.org',
-            'info@qowaiv@org',
-            'info(@)qowaiv.org',
+        // exactly one @
+        'info_at_qowaiv.org',
+        'info@qowaiv@org',
+        'info(@)qowaiv.org',
 
-            // invalid display names
-            'Display Name info@qowaiv.org>',
-            'Display Name <info@qowaiv.org>>',
-            'Display Name >info@qowaiv.org<',
-            'Display Name info@qowaiv.org<>',
-            'info@qowaiv.org (',
-            'info@qowaiv.org )',
-            'info@qowaiv.org ))',
-            'info@qowaiv.org ())',
-            'info@qowaiv.org (()',
-            'info@qowaiv.org )(',
-            '"Display Name info@qowaiv.org',
-            '"Display Name <"Display Name info@qowaiv.org>',
-            '"Display"" info@qowaiv.org',
-            "'Joe Smith' info@qowaiv.org",
-            'Joe Smith &lt;info@qowaiv.org&gt;',
+        // invalid display names
+        'Display Name info@qowaiv.org>',
+        'Display Name <info@qowaiv.org>>',
+        'Display Name >info@qowaiv.org<',
+        'Display Name info@qowaiv.org<>',
+        'info@qowaiv.org (',
+        'info@qowaiv.org )',
+        'info@qowaiv.org ))',
+        'info@qowaiv.org ())',
+        'info@qowaiv.org (()',
+        'info@qowaiv.org )(',
+        '"Display Name info@qowaiv.org',
+        '"Display Name <"Display Name info@qowaiv.org>',
+        '"Display"" info@qowaiv.org',
+        "'Joe Smith' info@qowaiv.org",
+        'Joe Smith &lt;info@qowaiv.org&gt;',
 
-            // mixed display
-            'Display Name <info@qowaiv.org> (after name with display)',
-            '"With extra  display name" Display Name<info@qowaiv.org>',
+        // mixed display
+        'Display Name <info@qowaiv.org> (after name with display)',
+        '"With extra  display name" Display Name<info@qowaiv.org>',
 
-            // comments,
-            'inf(o@qowaiv.org',
-            'info)@qowaiv.org',
-            'inf(?))o@qowaiv.org',
-            'in)wrong order(fo@qowaiv.org',
-            'ipv4.addr@[123.1.7(some comment)2.10]',
-            'ipv4.addr@123.1.7(some comment)2.10',
-            'in( nested(extra) )fo@qowaiv.org',
+        // comments,
+        'inf(o@qowaiv.org',
+        'info)@qowaiv.org',
+        'inf(?))o@qowaiv.org',
+        'in)wrong order(fo@qowaiv.org',
+        'ipv4.addr@[123.1.7(some comment)2.10]',
+        'ipv4.addr@123.1.7(some comment)2.10',
+        'in( nested(extra) )fo@qowaiv.org',
 
-            // prefixes
-            'in_domain@mailto:qowaiv.org',
-            'mailto:mailto:twice@qowaiv.org',
-            'not_at_start_mailto:info@qowaiv.org',
-            'at_end_mailto:@qowaiv.org',
-            'mai(comment)lto:info@qowaiv.org',
+        // prefixes
+        'in_domain@mailto:qowaiv.org',
+        'mailto:mailto:twice@qowaiv.org',
+        'not_at_start_mailto:info@qowaiv.org',
+        'at_end_mailto:@qowaiv.org',
+        'mai(comment)lto:info@qowaiv.org',
 
-            // IPv4 out of range
-            'email@111.222.333',
-            'email@111.222.333.256',
+        // IPv4 out of range
+        'email@111.222.333',
+        'email@111.222.333.256',
 
-            // IPv4 with bracket errors
-            'email@]123.123.123.123[',
-            'email@[123.123.123.123',
-            'email@[123.123.123].123',
-            'email@123.123.123.123]',
-            'email@123.123.[123.123]',
+        // IPv4 with bracket errors
+        'email@]123.123.123.123[',
+        'email@[123.123.123.123',
+        'email@[123.123.123].123',
+        'email@123.123.123.123]',
+        'email@123.123.[123.123]',
 
-            // IPv6
-            'IP-and-port@127.0.0.1:25',
-            'another-invalid-ip@127.0.0.256',
-            'invalid-ip@127.0.0.1.26',
-            'ipv4.with.ipv6prefix.addr@[IPv6:123.1.72.10]',
-            'ab@988.120.150.10',
-            'ab@120.256.256.120',
-            'ab@120.25.1111.120',
-            'ab@[188.120.150.10',
-            'ab@188.120.150.10]',
-            'ab@[188.120.150.10].com',
-        ])
+        // IPv6
+        'IP-and-port@127.0.0.1:25',
+        'another-invalid-ip@127.0.0.256',
+        'invalid-ip@127.0.0.1.26',
+        'ipv4.with.ipv6prefix.addr@[IPv6:123.1.72.10]',
+        'ab@988.120.150.10',
+        'ab@120.256.256.120',
+        'ab@120.25.1111.120',
+        'ab@[188.120.150.10',
+        'ab@188.120.150.10]',
+        'ab@[188.120.150.10].com',
+    ])
         ('can not parse %s', (s) => {
             const svo = EmailAddress.tryParse(s);
             expect(svo).toBeUndefined();
@@ -410,10 +421,10 @@ describe('Email address', () => {
 });
 
 class Create {
-    public static string(ch: string, len: number) : string {
+    public static string(ch: string, len: number): string {
         let str = '';
-        for(let i = 0; i<len; i++){
-            str+= ch;
+        for (let i = 0; i < len; i++) {
+            str += ch;
         }
         return str;
     }
