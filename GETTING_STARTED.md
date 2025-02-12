@@ -8,7 +8,7 @@ You are running on Linux or running in a [Linux WSL](https://learn.microsoft.com
 
 To setup your environment we are depending on devbox to have an isolated environment and all required tools are pre installed
 
-To install devbox open a terminal and run the following command
+To install DevBox open a terminal and run the following command:
 
 ```bash
 curl -fsSL https://get.jetify.com/devbox | bash
