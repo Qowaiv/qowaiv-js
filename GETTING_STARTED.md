@@ -4,7 +4,7 @@ This guide will setup your local environment.
 
 ## Prerequisite
 
-You are running on linux or running in a linux wsl environment.
+You are running on Linux or running in a [Linux WSL](https://learn.microsoft.com/windows/wsl/install) environment.
 
 To setup your environment we are depending on devbox to have an isolated environment and all required tools are pre installed
 
