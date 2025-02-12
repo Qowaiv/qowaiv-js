@@ -188,6 +188,7 @@ describe('Email address', () => {
                 'info@qow(domain part)aiv.org',
                 'in(with @)fo@qowaiv.org',
                 'info@qow(with @)aiv.org',
+                'info(direct)(attached)@qowaiv.org',
                 'in(multiple 1)fo@qow(multiple 2)aiv.or(multiple 3)g',
             ])
             ('are ignored in %s', (s) => {
@@ -366,6 +367,7 @@ describe('Email address', () => {
             // comments,
             'inf(o@qowaiv.org',
             'info)@qowaiv.org',
+            'inf(?))o@qowaiv.org',
             'in)wrong order(fo@qowaiv.org',
             'ipv4.addr@[123.1.7(some comment)2.10]',
             'ipv4.addr@123.1.7(some comment)2.10',

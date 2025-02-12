@@ -220,15 +220,14 @@ class Parser {
     }
 
     private next(index: number): number {
-        if (this.input[++index] !== '(') {
-            return index;
-        }
-        while (index++ < this.input.length) {
-            if (this.input[index] === ')') {
-                return index + 1;
-            }
-            else if (this.input[index] === '(') {
-                return -1;
+
+        let comment = false;
+
+        while (++index < this.input.length) {
+            switch (this.input[index]) {
+                case '(': if (comment) return -1; comment = true; break;
+                case ')': if (!comment) return -1; comment = false; break;
+                default: if (!comment) return index; break;
             }
         }
         return -1;
