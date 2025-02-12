@@ -18,7 +18,7 @@ curl -fsSL https://get.jetify.com/devbox | bash
 
 To open the environment run the following command
 
-```bash
+``` bash
 devbox shell
 ```
 
