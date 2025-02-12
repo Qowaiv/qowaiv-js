@@ -11,7 +11,7 @@ export class Svo {
         return s === ''
             || s === null
             || s === undefined
-            || (s instanceof(String) && s.trim() === '');
+            || (typeof(s) === 'string' && s.trim() === '');
     }
 
     /**
