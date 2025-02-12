@@ -106,11 +106,11 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      * @param {string} s A string containing postal code to convert.
      * @returns {PostalCode} A postal code if valid, otherwise trhows.
      */
-    public static parse(s: string | null | undefined): PostalCode | null {
+    public static parse(s: string | null | undefined): PostalCode | undefined {
         const svo = PostalCode.tryParse(s);
 
-        if (svo === undefined) {
-            throw new Unparsable('Not a valid postal code', s);
+        if (svo instanceof(Unparsable)) {
+            throw svo;
         }
         return svo;
     }
@@ -120,14 +120,14 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      * @param {string} s A string containing postal code to convert.
      * @returns {PostalCode} A postal code if valid, otherwise undefined.
      */
-    public static tryParse(s: string | null | undefined): PostalCode | null | undefined {
+    public static tryParse(s: string | null | undefined): PostalCode | Unparsable | undefined  {
 
-        if (Svo.isEmpty(s)) { return null; }
+        if (Svo.isEmpty(s)) return undefined;
 
         s = Svo.unify(s!);
         return s.length >= 2 && s.length <= 10
             ? new PostalCode(s)
-            : undefined;
+            : new Unparsable('Not a valid postal code', s);
     }
 
     private static readonly Infos = new Map<string, PostalCodeInfo>([
