@@ -9,7 +9,7 @@ describe("GUID: ", () => {
         undefined,
     ])('parses %s as null', (s) => {
         const svo = Guid.parse(s!);
-        expect(svo).toBe("test");
+        expect(svo).toBeNull();
     });
 
     it("The version of newGuid() should be valid", () => {
