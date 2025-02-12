@@ -10,7 +10,7 @@ To setup your environment we are depending on devbox to have an isolated environ
 
 To install DevBox open a terminal and run the following command:
 
-```bash
+``` bash
 curl -fsSL https://get.jetify.com/devbox | bash
 ```
 
