@@ -24,7 +24,7 @@ devbox shell
 
 this will install all the required tools in the environment.
 
-open the vscode
+open VSCode:
 
 ```bash
 code .
