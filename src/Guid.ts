@@ -49,7 +49,7 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * Returns the version of the GUID.
      */
     public get version(): number {
-        return parseInt(this.value.substring(14, 15));
+        return parseInt(this.value.slice(14, 15));
     }
 
     /**
@@ -132,7 +132,7 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
             v = merged;
         }
         // set version to 4 (Random).
-        v = v.substring(0, 14) + '4' + v.substring(15);
+        v = v.slice(0, 14) + '4' + v.slice(15);
         return new Guid(v);
     }
 

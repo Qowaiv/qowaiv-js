@@ -19,7 +19,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      * Gets the country of the IBAN.
      */
     public get country() {
-        return this.value.substring(0, 2);
+        return this.value.slice(0, 2);
     }
 
     /**
@@ -117,10 +117,10 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
 
         s = Svo.unify(s);
 
-        const pattern = InternationalBankAccountNumber.Bbans.get(s.substring(0, 2))
+        const pattern = InternationalBankAccountNumber.Bbans.get(s.slice(0, 2))
             ?? /^[A-Z0-9]{10,34}$/;
 
-        return pattern.test(s.substring(2)) &&
+        return pattern.test(s.slice(2)) &&
             InternationalBankAccountNumber.mod97(s)
             ? new InternationalBankAccountNumber(s)
             : undefined;
