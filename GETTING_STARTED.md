@@ -1,6 +1,6 @@
 # Getting Started
 
-This guide will setup you local environment.
+This guide will setup your local environment.
 
 ## Prerequisite
 
