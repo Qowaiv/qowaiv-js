@@ -198,8 +198,8 @@ describe('Email address', () => {
     });
 
     describe('mailto: prefix', () => {
-        test.each
-            ([
+        test.each(
+            [
                 "mailto:",
                 "MailTo:",
                 "MAILTO:",

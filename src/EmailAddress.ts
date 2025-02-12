@@ -16,11 +16,11 @@ class Is {
     }
 
     public static topDomain(part: string): boolean {
-        return /^([^\x00-\x7F]|[a-z])+$/.test(part);
+        return /^([^\x01-\x7F]|[a-z])+$/.test(part);
     }
 
     public static punycode(part: string): boolean {
-        return /^xn\-\-[a-z0-9\-]{2,}$/.test(part);
+        return /^xn--[a-z0-9-]{2,}$/.test(part);
     }
 
     public static ipV4(domain: string): string | undefined {
@@ -206,7 +206,7 @@ class Parser {
 
     private ipDomain(): Parser | undefined {
 
-        var domain = this.input.startsWith('[') && this.input.endsWith(']')
+        const domain = this.input.startsWith('[') && this.input.endsWith(']')
             ? this.input.slice(1, this.input.length - 1)
             : this.input;
 
@@ -234,7 +234,7 @@ class Parser {
     }
 
     private quoted(): string | undefined {
-        if (this.input[0] != '"') return undefined;
+        if (!this.input.startsWith('"')) return undefined;
 
         let escaped = true;
 
@@ -335,12 +335,9 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
      * @returns {EmailAddress} A email address if valid, otherwise undefined.
      */
     public static tryParse(s: string | null | undefined): EmailAddress | null | undefined {
-        if (Svo.isEmpty(s)) {
-            return null;
-        }
+        if (Svo.isEmpty(s)) return null;
 
         const svo = new Parser(s!.trim()).parse();
-
         return svo
             ? new EmailAddress(svo)
             : undefined;
