@@ -20,7 +20,7 @@ export class Svo {
      * @returns {string} a string without formatting.
      */
     public static unify(s: string, lowercase?: true): string {
-        const u = s.replace(/[_\-\s\.]/g, '');
+        const u = s.replace(/[_\-\s.]/g, '');
         return lowercase
             ? u.toLowerCase()
             : u.toUpperCase();
