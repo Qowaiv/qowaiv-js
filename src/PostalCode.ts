@@ -51,14 +51,14 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     /** 
      * Returns a string that represents the current postal code.
      */
-    toString(): string {
+    public toString(): string {
         return this.value;
     }
 
     /** 
      * Returns a string that represents the current postal code.
      */
-    format(f: string): string {
+    public format(f: string): string {
         const info = PostalCode.Infos.get(f);
 
         return info?.isValid(this.value)
@@ -97,7 +97,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      * @param {string} s A JSON string representing the postal code.
      * @returns {PostalCode} A postal code if valid, otherwise undefined.
      */
-    public static fromJSON(s: string): PostalCode | null {
+    public static fromJSON(s: string | null | undefined): PostalCode | undefined {
         return PostalCode.parse(s);
     }
 
@@ -109,7 +109,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     public static parse(s: string | null | undefined): PostalCode | undefined {
         const svo = PostalCode.tryParse(s);
 
-        if (svo instanceof(Unparsable)) {
+        if (svo instanceof (Unparsable)) {
             throw svo;
         }
         return svo;
@@ -120,7 +120,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      * @param {string} s A string containing postal code to convert.
      * @returns {PostalCode} A postal code if valid, otherwise undefined.
      */
-    public static tryParse(s: string | null | undefined): PostalCode | Unparsable | undefined  {
+    public static tryParse(s: string | null | undefined): PostalCode | Unparsable | undefined {
 
         if (Svo.isEmpty(s)) return undefined;
 
