@@ -1,5 +1,5 @@
 import { describe, expect, it, test } from 'vitest';
-import { PostalCode } from '../src';
+import { PostalCode, Unparsable } from '../src';
 
 describe('PostalCode', () => {
 
@@ -9,9 +9,9 @@ describe('PostalCode', () => {
         '',
         null,
         undefined,
-    ])('parses %s as null', (s) => {
+    ])('parses %s as undefined', (s) => {
         const svo = PostalCode.parse(s!);
-        expect(svo).toBeNull();
+        expect(svo).toBeUndefined();
     });
 
     it('has an accessble length', () => {
@@ -39,12 +39,12 @@ describe('PostalCode', () => {
 
     it('returns undefined when input is more than 10 characters', () => {
         const postalCode = PostalCode.tryParse('INVALIDINVALID');
-        expect(postalCode).toBeUndefined();
+        expect(postalCode).toBeInstanceOf(Unparsable);
     });
 
-    it('returns undefined when input is less than 2 characters', () => {
+    it('returns Unparsable when input is less than 2 characters', () => {
         const postalCode = PostalCode.tryParse('I');
-        expect(postalCode).toBeUndefined();
+        expect(postalCode).toBeInstanceOf(Unparsable);
     });
 
     it('throws for invalid input on parse', () => {

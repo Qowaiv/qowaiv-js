@@ -1,5 +1,5 @@
 import { describe, expect, it, test } from 'vitest';
-import { Guid } from '../src';
+import { Guid, Unparsable } from '../src';
 
 describe("GUID: ", () => {
 
@@ -9,9 +9,9 @@ describe("GUID: ", () => {
         '',
         null,
         undefined,
-    ])('parses %s as null', (s) => {
+    ])('parses %s as undefined', (s) => {
         const svo = Guid.parse(s!);
-        expect(svo).toBeNull();
+        expect(svo).toBeUndefined();
     });
 
     it("The version of newGuid() should be valid", () => {
@@ -72,7 +72,7 @@ describe("GUID: ", () => {
     it("Parse('Nonsense') should not be parseable.", () => {
 
         const svo = Guid.tryParse("Nonsense");
-        expect(svo).toBeUndefined();
+        expect(svo).toBeInstanceOf(Unparsable);
     });
 
     it('throws for invalid input on parse', () => {

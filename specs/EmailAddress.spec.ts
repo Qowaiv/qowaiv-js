@@ -1,5 +1,5 @@
 import { describe, expect, it, test } from 'vitest';
-import { EmailAddress } from '../src';
+import { EmailAddress, Unparsable } from '../src';
 
 describe('Email address', () => {
 
@@ -9,9 +9,9 @@ describe('Email address', () => {
         '',
         null,
         undefined,
-    ])('parses %s as null', (s) => {
+    ])('parses %s as undefined', (s) => {
         const svo = EmailAddress.parse(s!);
-        expect(svo).toBeNull();
+        expect(svo).toBeUndefined();
     });
 
     describe('length', () => {
@@ -23,13 +23,13 @@ describe('Email address', () => {
             ])
             ('not more than 254 (%s)', (s) => {
 
-                const svo = EmailAddress.tryParse(s);
+                const svo = EmailAddress.parse(s);
                 expect(svo?.length).toBe(254);
             });
 
         it('not 255 or longer', () => {
             const svo = EmailAddress.tryParse('i234567890_234567890_234567890_234567890_234567890_234567890_234@long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long.long1');
-            expect(svo).toBeUndefined();
+            expect(svo).toBeInstanceOf(Unparsable);
         })
     });
 
@@ -110,7 +110,7 @@ describe('Email address', () => {
             ('%s is not allowed', (ch) => {
 
                 const svo = EmailAddress.tryParse(`info@${ch}.org`);
-                expect(svo).toBeUndefined();
+                expect(svo).toBeInstanceOf(Unparsable);
             });
 
         test.each([
@@ -118,7 +118,8 @@ describe('Email address', () => {
             'com',
             'museum',
             'topleveldomain',
-            'co.jp'])
+            'co.jp'
+        ])
             ('topdomain %s can contain any letter', (top) => {
                 const s = `info@qowaiv.${top}`;
                 const svo = EmailAddress.tryParse(s);
@@ -416,7 +417,7 @@ describe('Email address', () => {
     ])
         ('can not parse %s', (s) => {
             const svo = EmailAddress.tryParse(s);
-            expect(svo).toBeUndefined();
+            expect(svo).toBeInstanceOf(Unparsable);
         });
 });
 

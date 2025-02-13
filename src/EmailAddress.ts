@@ -311,7 +311,7 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
      * @param {string} s A JSON string representing the email address.
      * @returns {EmailAddress} A email address if valid, otherwise undefined.
      */
-    public static fromJSON(s: string): EmailAddress | null {
+    public static fromJSON(s: string): EmailAddress | undefined {
         return EmailAddress.parse(s);
     }
 
@@ -320,11 +320,11 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
      * @param {string} s A string containing email address to convert.
      * @returns {EmailAddress} email address if valid, otherwise throws.
      */
-    public static parse(s: string | null | undefined): EmailAddress | null {
+    public static parse(s: string | null | undefined): EmailAddress | undefined {
         const svo = EmailAddress.tryParse(s);
 
-        if (svo === undefined) {
-            throw new Unparsable('Not a valid email address', s);
+        if (svo instanceof (Unparsable)) {
+            throw svo;
         }
         return svo;
     }
@@ -334,12 +334,12 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
      * @param {string} s A string containing email address to convert.
      * @returns {EmailAddress} A email address if valid, otherwise undefined.
      */
-    public static tryParse(s: string | null | undefined): EmailAddress | null | undefined {
-        if (Svo.isEmpty(s)) return null;
+    public static tryParse(s: string | null | undefined): EmailAddress | Unparsable | undefined {
+        if (Svo.isEmpty(s)) return undefined;
 
         const svo = new Parser(s!.trim()).parse();
         return svo
             ? new EmailAddress(svo)
-            : undefined;
+            : new Unparsable('Not a valid email address', s);
     }
 }
