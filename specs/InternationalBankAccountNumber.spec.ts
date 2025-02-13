@@ -1,5 +1,5 @@
 import { describe, expect, it, test } from 'vitest';
-import { InternationalBankAccountNumber } from '../src';
+import { InternationalBankAccountNumber, Unparsable } from '../src';
 
 describe('IBAN', () => {
 
@@ -14,9 +14,9 @@ describe('IBAN', () => {
         '',
         null,
         undefined,
-    ])('parses %s as null', (s) => {
+    ])('parses %s as undefined', (s) => {
         const svo = InternationalBankAccountNumber.parse(s!);
-        expect(svo).toBeNull();
+        expect(svo).toBeUndefined();
     });
 
     test.each([
@@ -152,12 +152,12 @@ describe('IBAN', () => {
 
     it('Does not parse IBAN with invalid checksum', () => {
         const iban = InternationalBankAccountNumber.tryParse('NL21INGB0001234567');
-        expect(iban).toBeUndefined();
+        expect(iban).toBeInstanceOf(Unparsable);
     });
 
     it('contains the country linked', () => {
-        const iban = InternationalBankAccountNumber.tryParse('NL20INGB0001234567');
-        expect(iban?.country).toBe('NL');
+        const iban = InternationalBankAccountNumber.parse('NL20INGB0001234567');
+        expect(iban!.country).toBe('NL');
     })
 
     it('formats to human readable with F', () => {
@@ -204,7 +204,7 @@ describe('IBAN', () => {
 
     it('should return undefined when input is more than 10 characters', () => {
         const postalCode = InternationalBankAccountNumber.tryParse('INVALID');
-        expect(postalCode).toBeUndefined();
+        expect(postalCode).toBeInstanceOf(Unparsable);
     });
 
     it('throws for invalid input on parse', () => {

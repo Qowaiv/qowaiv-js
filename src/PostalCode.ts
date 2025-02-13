@@ -124,9 +124,9 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
 
         if (Svo.isEmpty(s)) return undefined;
 
-        s = Svo.unify(s!);
-        return s.length >= 2 && s.length <= 10
-            ? new PostalCode(s)
+        const u = Svo.unify(s!);
+        return u.length >= 2 && u.length <= 10
+            ? new PostalCode(u)
             : new Unparsable('Not a valid postal code', s);
     }
 

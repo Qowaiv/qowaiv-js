@@ -85,7 +85,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      * @param {string} s A JSON string representing the IBAN.
      * @returns {InternationalBankAccountNumber} A IBAN if valid, otherwise undefined.
      */
-    public static fromJSON(s: string): InternationalBankAccountNumber | null {
+    public static fromJSON(s: string): InternationalBankAccountNumber | undefined {
         return InternationalBankAccountNumber.parse(s);
     }
 
@@ -94,11 +94,11 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      * @param {string} s A string containing IBAN to convert.
      * @returns {InternationalBankAccountNumber} IBAN if valid, otherwise throws.
      */
-    public static parse(s: string | null | undefined): InternationalBankAccountNumber | null {
+    public static parse(s: string | null | undefined): InternationalBankAccountNumber | undefined {
         const svo = InternationalBankAccountNumber.tryParse(s);
 
-        if (svo === undefined) {
-            throw new Unparsable('Not a valid IBAN', s);
+        if (svo instanceof (Unparsable)) {
+            throw svo;
         }
         return svo;
     }
@@ -108,22 +108,21 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      * @param {string} s A string containing IBAN to convert.
      * @returns {InternationalBankAccountNumber} A IBAN if valid, otherwise undefined.
      */
-    public static tryParse(s: string | null | undefined): InternationalBankAccountNumber | null | undefined {
+    public static tryParse(s: string | null | undefined): InternationalBankAccountNumber | Unparsable | undefined {
 
-        if (Svo.isEmpty(s)) { return null; }
+        if (Svo.isEmpty(s)) return undefined;
 
         // trim '(IBAN)', 'IBAN ', and 'IBAN:'.
-        s = s!.replace(/\s*(IBAN\s+|IBAN:|\(IBAN\))\s*/i, '');
+        let u = s!.replace(/\s*(IBAN\s+|IBAN:|\(IBAN\))\s*/i, '');
+        u = Svo.unify(u);
 
-        s = Svo.unify(s);
-
-        const pattern = InternationalBankAccountNumber.Bbans.get(s.slice(0, 2))
+        const pattern = InternationalBankAccountNumber.Bbans.get(u.slice(0, 2))
             ?? /^[A-Z0-9]{10,34}$/;
 
-        return pattern.test(s.slice(2)) &&
-            InternationalBankAccountNumber.mod97(s)
-            ? new InternationalBankAccountNumber(s)
-            : undefined;
+        return pattern.test(u.slice(2)) &&
+            InternationalBankAccountNumber.mod97(u)
+            ? new InternationalBankAccountNumber(u)
+            : new Unparsable('Not a valid IBAN', s);
     }
 
     private static mod97(iban: string): boolean {
