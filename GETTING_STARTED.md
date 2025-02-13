@@ -6,7 +6,7 @@ This guide will setup your local environment.
 
 You are running on Linux or running in a [Linux WSL](https://learn.microsoft.com/windows/wsl/install) environment.
 
-To setup your environment we are depending on devbox to have an isolated environment and all required tools are pre installed
+To setup your environment we are depending on [MS Dev Box(](https://azure.microsoft.com/en-us/products/dev-box). This ensures an isolated environment and all required tools to be installed.
 
 To install DevBox open a terminal and run the following command:
 
