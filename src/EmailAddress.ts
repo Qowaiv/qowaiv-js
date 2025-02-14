@@ -63,6 +63,7 @@ class Parser {
         return this
             ?.displayName()
             ?.mailto()
+            ?.stripComment()
             ?.local()
             ?.domain();
     }
@@ -104,6 +105,10 @@ class Parser {
             : this;
     }
 
+    private stripComment() : Parser{
+        return new Parser(this.input.replace(/\([^()]*\)/g, ''));
+    }
+
     private local(): Parser | undefined {
         return this.regularLocal()
             ?? this.quotedLocal();
@@ -112,18 +117,16 @@ class Parser {
     private regularLocal(): Parser | undefined {
 
         let buffer = '';
-        let i = this.next(-1);
-
-        while (i < this.input.length && i !== -1) {
-            const ch = this.input[i];
+        for (const ch of this.input) {
 
             if (ch === '.' && (buffer.length === 0 || buffer.endsWith('.'))) {
                 return undefined;
             }
             else if (ch === '@') {
-                return buffer.length > 0
-                    && !buffer.endsWith('.')
-                    ? new Parser(this.input.slice(i + 1), buffer + '@')
+                buffer += ch;
+                return buffer.length > 1
+                    && !buffer.endsWith('.@')
+                    ? new Parser(this.input.slice(buffer.length), buffer)
                     : undefined;
             }
             else if (buffer.length < 64 && Is.local(ch)) {
@@ -132,8 +135,6 @@ class Parser {
             else {
                 return undefined;
             }
-
-            i = this.next(i);
         }
         return undefined;
     }
@@ -158,11 +159,8 @@ class Parser {
         let buffer = '';
         let part = '';
         let prev = '';
-        let i = this.next(-1);
 
-        while (i < this.input.length && i !== -1) {
-            const ch = this.input[i];
-
+        for (const ch of this.input) {
             if (ch === '.') {
                 if (part.length === 0 || prev === '-' || part.length > 63) {
                     return undefined;
@@ -186,9 +184,7 @@ class Parser {
             else {
                 return undefined;
             }
-
             prev = ch;
-            i = this.next(i);
         }
 
         const domain = buffer + part;
@@ -212,25 +208,9 @@ class Parser {
 
         const ip = Is.ipV4(domain) ?? Is.ipV6(domain);
 
-        if (ip) {
-            return new Parser('', this.result + ip);
-        }
-
-        return undefined;
-    }
-
-    private next(index: number): number {
-
-        let comment = false;
-
-        while (++index < this.input.length) {
-            switch (this.input[index]) {
-                case '(': if (comment) return -1; comment = true; break;
-                case ')': if (!comment) return -1; comment = false; break;
-                default: if (!comment) return index; break;
-            }
-        }
-        return -1;
+        return ip
+            ? new Parser('', this.result + ip)
+            : undefined;
     }
 
     private quoted(): string | undefined {

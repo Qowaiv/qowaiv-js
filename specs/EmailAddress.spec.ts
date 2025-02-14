@@ -289,11 +289,20 @@ describe('Email address', () => {
 
         it('indicates an email address to be IP-based', () => {
 
-            const ip = EmailAddress.tryParse('valid.ipv4.addr@123.001.072.10');
+            const ip = EmailAddress.parse('valid.ipv4.addr@123.001.072.10');
             expect(ip!.isIPBased).toBe(true);
 
-            const non = EmailAddress.tryParse('info@qowaiv.org');
+            const non = EmailAddress.parse('info@qowaiv.org');
             expect(non!.isIPBased).toBe(false);
+        });
+
+        test.each([
+            'ipv4.addr@[123.1.7(some comment)2.10]',
+            'ipv4.addr@123.1.7(some comment)2.10',
+        ])
+        ('%s supports commnets', (s) =>{
+            const svo = EmailAddress.parse(s);
+            expect(svo?.toString()).toBe('ipv4.addr@[123.1.72.10]');
         });
 
         test.each([
@@ -381,8 +390,6 @@ describe('Email address', () => {
         'info)@qowaiv.org',
         'inf(?))o@qowaiv.org',
         'in)wrong order(fo@qowaiv.org',
-        'ipv4.addr@[123.1.7(some comment)2.10]',
-        'ipv4.addr@123.1.7(some comment)2.10',
         'in( nested(extra) )fo@qowaiv.org',
 
         // prefixes
