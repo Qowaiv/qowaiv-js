@@ -122,10 +122,12 @@ class Parser {
             if (buffer.length <= 64 && Is.local(ch)) {
                 if (buffer === '.' || buffer.endsWith('..')) return undefined;
             }
-            else if (ch === '@') return buffer.length > 1
-                && !buffer.endsWith('.@')
-                ? new Parser(this.input.slice(buffer.length), buffer)
-                : undefined;
+            else if (ch === '@')  {
+                return buffer.length > 1
+                    && !buffer.endsWith('.@')
+                    ? new Parser(this.input.slice(buffer.length), buffer)
+                    : undefined;
+            }
             else return undefined;
         }
         return undefined;
