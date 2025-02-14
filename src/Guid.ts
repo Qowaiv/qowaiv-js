@@ -66,7 +66,7 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
       * @param {string} s A JSON string representing the GUID.
       * @returns {Guid} A GUID if valid, otherwise undefined.
       */
-    public static fromJSON(s: string): Guid | null {
+    public static fromJSON(s: string): Guid | undefined {
         return Guid.parse(s);
     }
 
@@ -75,11 +75,11 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * @param {string} s A string containing GUID to convert.
      * @returns {Guid} A GUID if valid, otherwise trhows.
      */
-    public static parse(s: string | null | undefined): Guid | null {
+    public static parse(s: string | null | undefined): Guid | undefined {
         const svo = Guid.tryParse(s);
 
-        if (svo === undefined) {
-            throw new Unparsable('Not a valid GUID', s);
+        if (svo instanceof (Unparsable)) {
+            throw svo;
         }
         return svo;
     }
@@ -89,18 +89,18 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
      * @param {string} s A string containing GUID to convert.
      * @returns {Guid} A GUID if valid, otherwise undefined.
      */
-    public static tryParse(s: string | null | undefined): Guid | null | undefined {
+    public static tryParse(s: string | null | undefined): Guid | Unparsable | undefined {
 
-        if (Svo.isEmpty(s)) { return null; }
+        if (Svo.isEmpty(s)) return undefined;
 
-        s = Guid.unify(s!);
+        const u = Guid.unify(s!);
 
-        if (s === '00000000-0000-0000-0000-000000000000') { return null; }
+        if (u === '00000000-0000-0000-0000-000000000000') { return undefined; }
 
         // if the value parameter is valid
-        return /^[0-9ABCDEF]{32}$/.test(s)
-            ? new Guid(Guid.unstrip(s))
-            : undefined;
+        return /^[0-9ABCDEF]{32}$/.test(u)
+            ? new Guid(Guid.unstrip(u))
+            : new Unparsable('Not a valid GUID', s);
     }
 
     private static unify(s: string): string {

@@ -20,10 +20,23 @@ A Value Object that can be represented by a single scalar.
 ## Empty state
 In Qowaiv.NET - for non continuous - SVO's there is a not-null state: The
 default state of the `struct`. Such concept does not exist in JavaScript. As a
-result, for empty states, `null` is used. So for example:
+result, for empty states, `undefined` is used. So for example:
 
 ``` TypeScript
-const svo = PostalCode.parse(''); // null.
+const svo = PostalCode.parse(''); // undefined.
+```
+
+To not to have to rely on try-catch every SVO has an `tryParse` alternative.
+This resturns an `Unparsable` object, containing an error message and the
+attempted value once a value can not be parsed, this allows clean code to
+handle the unparsable state:
+
+``` TypeScript
+const svo = Guid.pars('not-a-guid'); // Unparsable object.
+
+if (svo instanceof (Unparsable)) {
+    // handle the unparsable state
+}
 ```
 
 ## Qowaiv types
