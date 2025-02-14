@@ -110,36 +110,28 @@ class Parser {
     }
 
     private local(): Parser | undefined {
-        return this.regularLocal()
-            ?? this.quotedLocal();
+        return this.localRegular()
+            ?? this.localQuoted();
     }
 
-    private regularLocal(): Parser | undefined {
+    private localRegular(): Parser | undefined {
 
         let buffer = '';
         for (const ch of this.input) {
-
-            if (ch === '.' && (buffer.length === 0 || buffer.endsWith('.'))) {
-                return undefined;
+            buffer += ch;            
+            if (buffer.length <= 64 && Is.local(ch)) {
+                if (buffer === '.' || buffer.endsWith('..')) return undefined;
             }
-            else if (ch === '@') {
-                buffer += ch;
-                return buffer.length > 1
-                    && !buffer.endsWith('.@')
-                    ? new Parser(this.input.slice(buffer.length), buffer)
-                    : undefined;
-            }
-            else if (buffer.length < 64 && Is.local(ch)) {
-                buffer += ch;
-            }
-            else {
-                return undefined;
-            }
+            else if (ch === '@') return buffer.length > 1
+                && !buffer.endsWith('.@')
+                ? new Parser(this.input.slice(buffer.length), buffer)
+                : undefined;
+            else return undefined;
         }
         return undefined;
     }
 
-    private quotedLocal(): Parser | undefined {
+    private localQuoted(): Parser | undefined {
         const quote = this.quoted();
         return quote != undefined
             && quote.length >= 3
@@ -150,41 +142,29 @@ class Parser {
     }
 
     private domain(): Parser | undefined {
-        return this.regularDomain()
-            ?? this.ipDomain();
+        return this.domainRegular()
+            ?? this.domainIp();
     }
 
-    private regularDomain(): Parser | undefined {
+    private domainRegular(): Parser | undefined {
 
         let buffer = '';
         let part = '';
-        let prev = '';
 
         for (const ch of this.input) {
-            if (ch === '.') {
-                if (part.length === 0 || prev === '-' || part.length > 63) {
-                    return undefined;
-                }
-                else {
-                    buffer += part + ch;
-                    part = '';
-                }
+            
+            if (Is.domain(ch)) part += ch.toLowerCase();
+            else if (ch === '.') {
+                if (part === '' || part.endsWith('-') || part.length > 63) return undefined;
+                
+                buffer += part + ch;
+                part = '';
             }
             else if (ch === '-') {
-                if (part.length === 0) {
-                    return undefined;
-                }
-                else {
-                    part += ch;
-                }
+                if (part.length === 0) return undefined;
+                part += ch;
             }
-            else if (Is.domain(ch)) {
-                part += ch.toLowerCase();
-            }
-            else {
-                return undefined;
-            }
-            prev = ch;
+            else return undefined;
         }
 
         const domain = buffer + part;
@@ -192,15 +172,15 @@ class Parser {
 
         return email.length <= 254
             && domain.length > 1
-            && prev !== '-'
-            && prev !== '.'
+            && !part.endsWith('-') 
+            && !part.endsWith('.') 
             && part.length <= 63
             && (Is.topDomain(part) || Is.punycode(part))
             ? new Parser('', email)
             : undefined;
     }
 
-    private ipDomain(): Parser | undefined {
+    private domainIp(): Parser | undefined {
 
         const domain = this.input.startsWith('[') && this.input.endsWith(']')
             ? this.input.slice(1, this.input.length - 1)
