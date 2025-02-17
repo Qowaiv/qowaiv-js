@@ -32,7 +32,7 @@ attempted value once a value can not be parsed, this allows clean code to
 handle the unparsable state:
 
 ``` TypeScript
-const svo = Guid.pars('not-a-guid'); // Unparsable object.
+const svo = Guid.parse('not-a-guid'); // Unparsable object.
 
 if (svo instanceof (Unparsable)) {
     // handle the unparsable state
