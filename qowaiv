@@ -41,8 +41,9 @@ def "main release" [
 
     main build
     main test
+
     (
-        "//registry.npmjs.org/:_authToken=" + $env.NPM_TOKEN + "\n\r"
+        "//registry.npmjs.org/:_authToken=" + $env.NODE_AUTH_TOKEN + "\n\r"
              | save --append .npmrc -f
     )
            
