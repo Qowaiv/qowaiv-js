@@ -25,7 +25,12 @@ jobs:
 
     - name: Release to NPM
       run: |
-        devbox run -- ./qowaiv release ${{ github.ref_name }}
+        arrTag=(${GITHUB_REF//\// })
+        VERSION="${arrTag[2]}"
+        echo Version: $VERSION
+        VERSION="${VERSION//v}"
+        echo Clean Version: $VERSION
+        devbox run -- ./qowaiv release $VERSION
 
     - name: Create Release
       run: |
