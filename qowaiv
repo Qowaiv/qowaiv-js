@@ -33,3 +33,19 @@ def "main publish" [
            
     npm publish
 }
+
+def "main release" [
+    tag: string # The tag of the image (e.g., 0.0.1)!
+] {
+    open package.json | update version $tag | save package.json -f
+
+    main build
+    main test
+
+    (
+        "//registry.npmjs.org/:_authToken=" + $env.NODE_AUTH_TOKEN + "\n\r"
+             | save --append .npmrc -f
+    )
+           
+    npm publish --access public
+}
