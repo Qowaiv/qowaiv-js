@@ -1,4 +1,4 @@
-import { Svo, Unparsable } from '../src';
+import { Svo, Unparsable } from '.';
 
 class Is {
     public static local(ch: string): boolean {
