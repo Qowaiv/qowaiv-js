@@ -125,7 +125,7 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
         if (seed !== null && seed instanceof (Guid)) {
             let merged = '';
             for (let i = 0; i < 36; i++) {
-                const l = '0123456789ABCDEF'.indexOf(seed.value.charAt(i));
+                const l = '0123456789ABCDEF'.indexOf(seed.#value.charAt(i));
                 const r = '0123456789ABCDEF'.indexOf(v.charAt(i));
                 merged += l === -1 || r === -1 ? v.charAt(i) : '0123456789ABCDEF'.charAt(l ^ r);
             }
