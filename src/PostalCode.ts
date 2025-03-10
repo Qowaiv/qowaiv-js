@@ -33,26 +33,26 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     *          PostalCode use PostalCode.parse(string).
     */
     private constructor(value: string) {
-        this.value = value;
+        this.#value = value;
     }
 
     /**
      * The underlying value.
      */
-    private readonly value: string;
+    readonly #value: string;
 
     /**
      * Gets the length of the postal code.
      */
     public get length() {
-        return this.value.length;
+        return this.#value.length;
     }
 
     /** 
      * Returns a string that represents the current postal code.
      */
     public toString(): string {
-        return this.value;
+        return this.#value;
     }
 
     /** 
@@ -61,16 +61,16 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     public format(f: string): string {
         const info = PostalCode.Infos.get(f);
 
-        return info?.isValid(this.value)
-            ? info.format(this.value)
-            : this.value;
+        return info?.isValid(this.#value)
+            ? info.format(this.#value)
+            : this.#value;
     }
 
     /** 
      * Returns a JSON representation of the postal code.
      */
     public toJSON(): string {
-        return this.value;
+        return this.#value;
     }
 
     /**
@@ -79,7 +79,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      */
     public equals(other: unknown): boolean {
         return other instanceof (PostalCode)
-            && other.value === this.value;
+            && other.#value === this.#value;
     }
 
     /**
@@ -89,7 +89,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      */
     public isValid(country: string): boolean {
         const info = PostalCode.Infos.get(country);
-        return info?.isValid(this.value) === true;
+        return info?.isValid(this.#value) === true;
     }
 
     /**
