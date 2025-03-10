@@ -1,4 +1,4 @@
-import { Svo, Unparsable } from '../src';
+import { Svo, Unparsable } from '.';
 
 export class InternationalBankAccountNumber implements IEquatable, IFormattable, IJsonStringifyable {
     /**

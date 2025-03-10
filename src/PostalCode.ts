@@ -1,4 +1,4 @@
-import { Svo, Unparsable } from '../src';
+import { Svo, Unparsable } from '.';
 
 class PostalCodeInfo {
     public constructor(pattern: RegExp, search?: RegExp | undefined, replace?: string | undefined) {
