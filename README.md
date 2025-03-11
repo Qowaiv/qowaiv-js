@@ -82,6 +82,8 @@ const lower = iban.format('h');  // 'nl20 ingb 0001 2345 67' with nbsp.
 ### PostalCode
 Represents a postal code. It supports validation for all countries.
 
+When formatted, non-breaking whitespace is used.
+
 ``` TypeScript
 const dutch = PostalCode.parse('2624DP');
 dutch.isValid('NL'); // true
