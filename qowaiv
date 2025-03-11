@@ -50,9 +50,9 @@ def "main release" [
     main build
     main test
 
-    print "Add the NODE_AUTH_TOKEN to the .npmrc file"
+    print "Add the NPM_TOKEN to the .npmrc file"
     (
-        "//registry.npmjs.org/:_authToken=" + $env.NODE_AUTH_TOKEN + "\n\r"
+        "//registry.npmjs.org/:_authToken=" + $env.NPM_TOKEN + "\n\r"
              | save --append .npmrc -f
     )
 
