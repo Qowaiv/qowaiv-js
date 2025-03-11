@@ -79,6 +79,19 @@ const formatted = iban.format(); // 'NL20 INGB 0001 2345 67' with nbsp.
 const lower = iban.format('h');  // 'nl20 ingb 0001 2345 67' with nbsp.
 ```
 
+### Percentage
+Represents a pecentage.
+
+``` TypeScript
+const p = Percentage.Parse("3.14");  // Parse: 3.14%;
+const p = Percentage.Parse("3.14%"); // Parse: 3.14%;
+const p = Percentage.Parse("31.4‰"); // Parse: 3.14%;
+const p = Percentage.new(3.14); // 3.14%
+
+const r = p.round(1); // 3.1%
+const s = p.toJson(); // '3.14%'
+```
+
 ### PostalCode
 Represents a postal code. It supports validation for all countries.
 
