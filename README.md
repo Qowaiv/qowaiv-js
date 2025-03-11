@@ -83,7 +83,7 @@ const lower = iban.format('h');  // 'nl20 ingb 0001 2345 67' with nbsp.
 Represents a pecentage.
 
 ``` TypeScript
-const p = Percentage.Parse("3.14");  // Parse: 3.14%;
+const p = Percentage.parse("3.14");  // Parse: 3.14%;
 const p = Percentage.Parse("3.14%"); // Parse: 3.14%;
 const p = Percentage.Parse("31.4‰"); // Parse: 3.14%;
 const p = Percentage.new(3.14); // 3.14%
