@@ -17,9 +17,9 @@ def "main test" [] {
 def "main publish" [
     tag: string # The tag of the image (e.g., 0.0.1)!
 ] {
-    print "Update package.json with version tag: '$tag'"
-    open package.json | update version $tag | save package.json -f
 
+    update-package $tag "https://npm.pkg.github.com"
+    
     print "Build and test the package"
     main build
     main test
@@ -43,8 +43,8 @@ def "main publish" [
 def "main release" [
     tag: string # The tag of the image (e.g., 0.0.1)!
 ] {
-    print "Update package.json with version tag: '$tag'"
-    open package.json | update version $tag | save package.json -f
+
+    update-package $tag "https://registry.npmjs.org"
 
     print "Build and test the package"
     main build
@@ -55,7 +55,20 @@ def "main release" [
         "//registry.npmjs.org/:_authToken=" + $env.NODE_AUTH_TOKEN + "\n\r"
              | save --append .npmrc -f
     )
-           
+
     print "Publish the package NPM registry"
     npm publish --access public
+}
+
+def "update-package" [
+    tag: string # The tag of the image (e.g., 0.0.1)!
+    registery: string # The registry to publish the package (e.g., https://npm.pkg.github.com)!
+] {
+    print $"Update package.json with version tag: '($tag)' and registry: '($registery)'"
+    (
+        open package.json 
+            | update version $tag 
+            | update publishConfig.registry $registery
+            | save package.json -f
+    )
 }
