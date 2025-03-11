@@ -84,8 +84,8 @@ Represents a pecentage.
 
 ``` TypeScript
 const p = Percentage.parse("3.14");  // Parse: 3.14%;
-const p = Percentage.Parse("3.14%"); // Parse: 3.14%;
-const p = Percentage.Parse("31.4‰"); // Parse: 3.14%;
+const p = Percentage.parse("3.14%"); // Parse: 3.14%;
+const p = Percentage.parse("31.4‰"); // Parse: 3.14%;
 const p = Percentage.new(3.14); // 3.14%
 
 const r = p.round(1); // 3.1%
