@@ -7,7 +7,7 @@ function percent(n: number): Percentage {
 
 describe('Percentage', () => {
 
-    it('sign is +1 for postive', () => {
+    it('sign is +1 for positive', () => {
         const svo = percent(3.14);
         expect(svo.sign()).toBe(+1);
     });
