@@ -59,7 +59,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      * Returns a string that represents the current postal code.
      */
     public format(f: string): string {
-        const info = PostalCode.Infos.get(f);
+        const info = PostalCode.#Infos.get(f);
 
         return info?.isValid(this.#value)
             ? info.format(this.#value)
@@ -74,7 +74,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     }
 
     /**
-     * Returns true if other is not null or undefined and a PostalCode
+     * Returns true if other is not null or undefined and a postal code
      * representing the same value, otherwise false.
      */
     public equals(other: unknown): boolean {
@@ -88,7 +88,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      * @remarks Returns false if the country does not have postal codes, unless the postal code is empty.
      */
     public isValid(country: string): boolean {
-        const info = PostalCode.Infos.get(country);
+        const info = PostalCode.#Infos.get(country);
         return info?.isValid(this.#value) === true;
     }
 
@@ -130,7 +130,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
             : new Unparsable('Not a valid postal code', s);
     }
 
-    private static readonly Infos = new Map<string, PostalCodeInfo>([
+    static readonly #Infos = new Map<string, PostalCodeInfo>([
         ['AD', new PostalCodeInfo(/^(AD)?[1-7]\d{2}$/, /^(AD)?(...)$/, 'AD-$2')],
         ['AF', new PostalCodeInfo(/^(0[1-9]|[1-3]\d|4[0-3])(\d{2})(?<!00)$/)],
         ['AI', new PostalCodeInfo(/^(AI)?2640$/, /^.+$/, 'AI-2640')],
