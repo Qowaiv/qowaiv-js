@@ -2,23 +2,23 @@ import { Svo, Unparsable } from '.';
 
 class PostalCodeInfo {
     public constructor(pattern: RegExp, search?: RegExp | undefined, replace?: string | undefined) {
-        this.pattern = pattern;
-        this.search = search;
-        this.replace = replace;
+        this.#pattern = pattern;
+        this.#search = search;
+        this.#replace = replace;
     }
 
-    private readonly pattern: RegExp;
-    private readonly search: RegExp | undefined;
-    private readonly replace: string | undefined;
+    readonly #pattern: RegExp;
+    readonly #search: RegExp | undefined;
+    readonly #replace: string | undefined;
 
     public isValid(code: string): boolean {
-        return this.pattern.test(code);
+        return this.#pattern.test(code);
     }
 
     public format(code: string) {
-        return this.search === undefined || this.replace === undefined
+        return this.#search === undefined || this.#replace === undefined
             ? code
-            : code.replace(this.search, this.replace);
+            : code.replace(this.#search, this.#replace);
     }
 }
 
@@ -59,7 +59,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      * Returns a string that represents the current postal code.
      */
     public format(f: string): string {
-        const info = PostalCode.Infos.get(f);
+        const info = PostalCode.#Infos.get(f);
 
         return info?.isValid(this.#value)
             ? info.format(this.#value)
@@ -88,7 +88,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
      * @remarks Returns false if the country does not have postal codes, unless the postal code is empty.
      */
     public isValid(country: string): boolean {
-        const info = PostalCode.Infos.get(country);
+        const info = PostalCode.#Infos.get(country);
         return info?.isValid(this.#value) === true;
     }
 
@@ -130,14 +130,14 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
             : new Unparsable('Not a valid postal code', s);
     }
 
-    private static readonly Infos = new Map<string, PostalCodeInfo>([
+    static readonly #Infos = new Map<string, PostalCodeInfo>([
         ['AD', new PostalCodeInfo(/^(AD)?[1-7]\d{2}$/, /^(AD)?(...)$/, 'AD-$2')],
         ['AF', new PostalCodeInfo(/^(0[1-9]|[1-3]\d|4[0-3])(\d{2})(?<!00)$/)],
         ['AI', new PostalCodeInfo(/^(AI)?2640$/, /^.+$/, 'AI-2640')],
         ['AL', new PostalCodeInfo(/^[1-9]\d{3}$/)],
         ['AM', new PostalCodeInfo(/^[0-4]\d{3}$/)],
-        ['AR', new PostalCodeInfo(/^[A-Z][1-9]\d{3}[A-Z]{3}$/, /^(.)(....)(...)$/, '$1 $2 $3')],
-        ['AS', new PostalCodeInfo(/^9\d{4}(\d{4})?$/, /^(.{5})(....)?$/, '$1 $2')],
+        ['AR', new PostalCodeInfo(/^[A-Z][1-9]\d{3}[A-Z]{3}$/, /^(.)(....)(...)$/, '$1 $2 $3')],
+        ['AS', new PostalCodeInfo(/^9\d{4}(\d{4})?$/, /^(.{5})(....)?$/, '$1 $2')],
         ['AT', new PostalCodeInfo(/^[1-9]\d{3}$/)],
         ['AU', new PostalCodeInfo(/^(0[89]|[1-9]\d)\d{2}$/)],
         ['AX', new PostalCodeInfo(/^22\d{3}$/, /^(..)(...)$/, '$1-$2')],
@@ -149,13 +149,13 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
         ['BG', new PostalCodeInfo(/^[1-9]\d{3}$/)],
         ['BH', new PostalCodeInfo(/^(1[0-2]|[1-9])\d{2}$/)],
         ['BL', new PostalCodeInfo(/^977\d{2}$/)],
-        ['BM', new PostalCodeInfo(/^[A-Z]{2}([A-Z0-9]{2})?$/, /^(..)(..)$/, '$1 $2')],
+        ['BM', new PostalCodeInfo(/^[A-Z]{2}([A-Z0-9]{2})?$/, /^(..)(..)$/, '$1 $2')],
         ['BN', new PostalCodeInfo(/^[A-Z]{2}\d{4}$/)],
         ['BO', new PostalCodeInfo(/^\d{4}$/)],
         ['BR', new PostalCodeInfo(/^(\d{2})(?<!00)\d{6}$/, /^(.{5})(...)$/, '$1-$2')],
         ['BT', new PostalCodeInfo(/^\d{3}$/)],
         ['BY', new PostalCodeInfo(/^\d{6}$/)],
-        ['CA', new PostalCodeInfo(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]\d[ABCEGHJKLMNPRSTVWXYZ]\d$/, /^(...)(...)$/, '$1 $2')],
+        ['CA', new PostalCodeInfo(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]\d[ABCEGHJKLMNPRSTVWXYZ]\d$/, /^(...)(...)$/, '$1 $2')],
         ['CC', new PostalCodeInfo(/^\d{4}$/)],
         ['CH', new PostalCodeInfo(/^[1-9]\d{3}$/)],
         ['CL', new PostalCodeInfo(/^\d{7}$/, /^(...)(....)$/, '$1-$2')],
@@ -166,7 +166,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
         ['CV', new PostalCodeInfo(/^\d{4}$/)],
         ['CX', new PostalCodeInfo(/^\d{4}$/)],
         ['CY', new PostalCodeInfo(/^[1-9]\d{3}$/)],
-        ['CZ', new PostalCodeInfo(/^[1-7]\d{4}$/, /^(...)(..)$/, '$1 $2')],
+        ['CZ', new PostalCodeInfo(/^[1-7]\d{4}$/, /^(...)(..)$/, '$1 $2')],
         ['DE', new PostalCodeInfo(/^(\d{2})(?<!00)\d{3}$/)],
         ['DK', new PostalCodeInfo(/^(DK)?[1-9]\d{3}$/, /^(DK)?(....)$/, 'DK-$2')],
         ['DZ', new PostalCodeInfo(/^\d{5}$/)],
@@ -176,19 +176,19 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
         ['ES', new PostalCodeInfo(/^((0[1-9])|([1-4]\d)|(5[012]))\d{3}$/)],
         ['ET', new PostalCodeInfo(/^\d{4}$/)],
         ['FI', new PostalCodeInfo(/^\d{5}$/, /^(..)(...)$/, '$1-$2')],
-        ['FK', new PostalCodeInfo(/^FIQQ1ZZ$/, /^.+$/, 'FIQQ 1ZZ')],
+        ['FK', new PostalCodeInfo(/^FIQQ1ZZ$/, /^.+$/, 'FIQQ 1ZZ')],
         ['FM', new PostalCodeInfo(/^9694[1234](\d{4})?$/, /^(.{5})(....)$/, '$1-$2')],
         ['FO', new PostalCodeInfo(/^(FO)?[1-9]\d{2}$/, /^(FO)?(...)$/, 'FO-$2')],
         ['FR', new PostalCodeInfo(/^(\d{2})(?<!00)\d{3}$/)],
-        ['GA', new PostalCodeInfo(/^\d{4}$/, /^(..)(..)$/, '$1 $2')],
-        ['GB', new PostalCodeInfo(/^[A-Z]?[A-Z]\d[A-Z0-9]?\d[A-Z]{2}$/, /^(.+)(...)$/, '$1 $2')],
+        ['GA', new PostalCodeInfo(/^\d{4}$/, /^(..)(..)$/, '$1 $2')],
+        ['GB', new PostalCodeInfo(/^[A-Z]?[A-Z]\d[A-Z0-9]?\d[A-Z]{2}$/, /^(.+)(...)$/, '$1 $2')],
         ['GE', new PostalCodeInfo(/^\d{4}$/)],
         ['GF', new PostalCodeInfo(/^973\d{2}$/)],
-        ['GG', new PostalCodeInfo(/^(GY)?\d{2,3}[A-Z]{2}$/, /^(GY)?(...?)(...)$/, 'GY$2 $3')],
+        ['GG', new PostalCodeInfo(/^(GY)?\d{2,3}[A-Z]{2}$/, /^(GY)?(...?)(...)$/, 'GY$2 $3')],
         ['GI', new PostalCodeInfo(/^GX111AA$/, /^.+$/, 'GX11 1AA')],
         ['GL', new PostalCodeInfo(/^(GL)?39\d{2}$/, /^(GL)?(....)$/, 'GL-$2')],
         ['GP', new PostalCodeInfo(/^971\d{2}$/)],
-        ['GR', new PostalCodeInfo(/^[1-9]\d{4}$/, /^(...)(..)$/, '$1 $2')],
+        ['GR', new PostalCodeInfo(/^[1-9]\d{4}$/, /^(...)(..)$/, '$1 $2')],
         ['GS', new PostalCodeInfo(/^SIQQ1ZZ$/, /^.+$/, 'SIQQ 1ZZ')],
         ['GT', new PostalCodeInfo(/^\d{5}$/)],
         ['GU', new PostalCodeInfo(/^969([12]\d|3[0-3])(\d{4})?$/, /^(.{5})(....)$/, '$1-$2')],
@@ -200,14 +200,14 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
         ['HU', new PostalCodeInfo(/^[1-9]\d{3}$/)],
         ['ID', new PostalCodeInfo(/^[1-9]\d{4}$/)],
         ['IL', new PostalCodeInfo(/^\d{7}$/)],
-        ['IM', new PostalCodeInfo(/^(IM)?\d{2,3}[A-Z]{2}$/, /^(IM)?(..?)(...)$/, 'IM$2 $3')],
+        ['IM', new PostalCodeInfo(/^(IM)?\d{2,3}[A-Z]{2}$/, /^(IM)?(..?)(...)$/, 'IM$2 $3')],
         ['IN', new PostalCodeInfo(/^[1-9]\d{5}$/)],
-        ['IO', new PostalCodeInfo(/^BBND1ZZ$/, /^.+$/, 'BBND 1ZZ')],
+        ['IO', new PostalCodeInfo(/^BBND1ZZ$/, /^.+$/, 'BBND 1ZZ')],
         ['IQ', new PostalCodeInfo(/^[13456]\d{4}$/)],
         ['IR', new PostalCodeInfo(/^\d{10}$/, /^(.{5})(.{5})$/, '$1-$2')],
         ['IS', new PostalCodeInfo(/^\d{3}$/)],
         ['IT', new PostalCodeInfo(/^(\d{3})(?<!000)\d{2}$/)],
-        ['JE', new PostalCodeInfo(/^(JE)?\d{2,3}[A-Z]{2}$/, /^(JE)?(...?)(...)$/, 'JE$2 $3')],
+        ['JE', new PostalCodeInfo(/^(JE)?\d{2,3}[A-Z]{2}$/, /^(JE)?(...?)(...)$/, 'JE$2 $3')],
         ['JO', new PostalCodeInfo(/^\d{5}$/)],
         ['JP', new PostalCodeInfo(/^\d{7}$/, /^(....)(...)$/, '$1-$2')],
         ['KG', new PostalCodeInfo(/^\d{6}$/)],
@@ -216,7 +216,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
         ['KY', new PostalCodeInfo(/^(KY)?\d{5}$/, /^(KY)?(.)(....)$/, 'KY$2-$3')],
         ['KZ', new PostalCodeInfo(/^\d{6}$/)],
         ['LA', new PostalCodeInfo(/^\d{5}$/)],
-        ['LB', new PostalCodeInfo(/^\d{8}$/, /^(....)(....)$/, '$1 $2')],
+        ['LB', new PostalCodeInfo(/^\d{8}$/, /^(....)(....)$/, '$1 $2')],
         ['LI', new PostalCodeInfo(/^94(8[5-9]|9[0-8])$/)],
         ['LK', new PostalCodeInfo(/^\d{5}$/)],
         ['LR', new PostalCodeInfo(/^\d{4}$/)],
@@ -225,7 +225,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
         ['LU', new PostalCodeInfo(/^\d{4}$/)],
         ['LV', new PostalCodeInfo(/^(LV)?\d{4}$/, /^(LV)?(....)$/, 'LV-$2')],
         ['LY', new PostalCodeInfo(/^\d{5}$/)],
-        ['MA', new PostalCodeInfo(/^[1-9]\d{4}$/, /^(..)(...)$/, '$1 $2')],
+        ['MA', new PostalCodeInfo(/^[1-9]\d{4}$/, /^(..)(...)$/, '$1 $2')],
         ['MC', new PostalCodeInfo(/^(MC)?980\d{2}$/)],
         ['MD', new PostalCodeInfo(/^(MD)?\d{4}$/, /^(MD)?(....)$/, 'MD-$2')],
         ['ME', new PostalCodeInfo(/^8[145]\d{3}$/)],
@@ -237,7 +237,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
         ['MN', new PostalCodeInfo(/^\d{5}$/)],
         ['MP', new PostalCodeInfo(/^9695[012](\d{4})?$/, /^(.{5})(....)$/, '$1-$2')],
         ['MQ', new PostalCodeInfo(/^972\d{2}$/)],
-        ['MT', new PostalCodeInfo(/^[A-Z]{3}\d{4}$/, /^(...)(....)$/, '$1 $2')],
+        ['MT', new PostalCodeInfo(/^[A-Z]{3}\d{4}$/, /^(...)(....)$/, '$1 $2')],
         ['MX', new PostalCodeInfo(/^\d{5}$/)],
         ['MY', new PostalCodeInfo(/^(\d{2})(?<!00)\d{3}$/)],
         ['MZ', new PostalCodeInfo(/^\d{4}$/)],
@@ -247,7 +247,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
         ['NF', new PostalCodeInfo(/^\d{4}$/)],
         ['NG', new PostalCodeInfo(/^\d{6}$/)],
         ['NI', new PostalCodeInfo(/^\d{5}$/)],
-        ['NL', new PostalCodeInfo(/^[1-9]\d{3}([A-Z]{2})(?<!SS|SA|SD)$/, /^(....)(..)$/, '$1 $2')],
+        ['NL', new PostalCodeInfo(/^[1-9]\d{3}([A-Z]{2})(?<!SS|SA|SD)$/, /^(....)(..)$/, '$1 $2')],
         ['NO', new PostalCodeInfo(/^\d{4}$/)],
         ['NP', new PostalCodeInfo(/^\d{5}$/)],
         ['NZ', new PostalCodeInfo(/^\d{4}$/)],
@@ -263,7 +263,7 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
         ['PN', new PostalCodeInfo(/^PCRN1ZZ$/, /^.+$/, 'PCRN 1ZZ')],
         ['PR', new PostalCodeInfo(/^\d{5}$/)],
         ['PS', new PostalCodeInfo(/^\d{5}$/)],
-        ['PT', new PostalCodeInfo(/^[1-9]\d{6}$/, /^(....)(...)$/, '$1 $2')],
+        ['PT', new PostalCodeInfo(/^[1-9]\d{6}$/, /^(....)(...)$/, '$1 $2')],
         ['PW', new PostalCodeInfo(/^96940(\d{4})?$/, /^(.{5})(....)$/, '$1-$2')],
         ['PY', new PostalCodeInfo(/^\d{4}$/)],
         ['RE', new PostalCodeInfo(/^974\d{2}$/)],
@@ -272,16 +272,16 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
         ['RU', new PostalCodeInfo(/^[1-6]\d{5}$/)],
         ['SA', new PostalCodeInfo(/^\d{5}(\d{4})?$/, /^(.{5})(....)$/, '$1-$2')],
         ['SD', new PostalCodeInfo(/^\d{5}$/)],
-        ['SE', new PostalCodeInfo(/^[1-9]\d{4}$/, /^(...)(..)$/, '$1 $2')],
+        ['SE', new PostalCodeInfo(/^[1-9]\d{4}$/, /^(...)(..)$/, '$1 $2')],
         ['SG', new PostalCodeInfo(/^\d{6}$/)],
         ['SH', new PostalCodeInfo(/^STHL1ZZ$/, /^.+$/, 'STHL 1ZZ')],
         ['SI', new PostalCodeInfo(/^(SI)?\d{4}$/, /^(SI)?(....)$/, 'SI-$2')],
-        ['SK', new PostalCodeInfo(/^\d{5}$/, /^(...)(..)$/, '$1 $2')],
+        ['SK', new PostalCodeInfo(/^\d{5}$/, /^(...)(..)$/, '$1 $2')],
         ['SM', new PostalCodeInfo(/^4789\d$/)],
         ['SN', new PostalCodeInfo(/^(CP)?\d{5}$/, /^(..)?(.{5})$/, 'CP$2')],
         ['SV', new PostalCodeInfo(/^01101$/)],
         ['SZ', new PostalCodeInfo(/^[HLMS]\d{3}$/)],
-        ['TC', new PostalCodeInfo(/^TKCA1ZZ$/, /^.+$/, 'TKCA 1ZZ')],
+        ['TC', new PostalCodeInfo(/^TKCA1ZZ$/, /^.+$/, 'TKCA 1ZZ')],
         ['TD', new PostalCodeInfo(/^\d{5}$/)],
         ['TH', new PostalCodeInfo(/^[1-9]\d{4}$/)],
         ['TJ', new PostalCodeInfo(/^\d{6}$/)],
