@@ -1,28 +1,15 @@
-{
-  "name": "@qowaiv/qowaiv",
-  "version": "0.0.2",
-  "description": "Qowaiv implements common, universal domain objects. These types form the base of your domain model.",
-  "keywords": [
-    "typescript",
-    "types",
-    "qowaiv",
-    "svo"
-  ],
+﻿{
+  "workspaces": [ "packages/qowaiv", "packages/qowaiv-zod" ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/qowaiv/qowaiv-js.git"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
+  },
   "author": "Qowaiv Community",
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "/dist"
-  ],
-  "scripts": {
-    "build": "tsc",
-    "test": "vitest run"
-  },
   "devDependencies": {
     "eslint": "^9.18.0",
     "typescript": "^5.7.3",

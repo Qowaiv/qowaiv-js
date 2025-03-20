@@ -1,17 +1,24 @@
 #!/usr/bin/env nu
 
 def main [] {
-    ./qowaiv --help    
+    nu ./qowaiv --help    
 }
 
-# build qowaiv package
+# build qowaiv packages
 def "main build" [] {
-    npm run build
+    npm run build --workspaces --if-present
 }
 
 # Test the qowaiv package
 def "main test" [] {
-    npm run test
+    npm run test --workspaces --if-present
+}
+
+def "main pack" [
+] {
+    main build
+    main test
+    npm pack --workspaces
 }
 
 def "main publish" [
@@ -30,7 +37,7 @@ def "main publish" [
         "//npm.pkg.github.com/:_authToken=" + $env.GITHUB_TOKEN + "\n\r"
              | save --append .npmrc -f
     )
-           
+    
     npm publish
 }
 
