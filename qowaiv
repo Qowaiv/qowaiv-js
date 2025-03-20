@@ -24,35 +24,58 @@ def "main pack" [
 def "main publish" [
     tag: string # The tag of the image (e.g., 0.0.1)!
 ] {
-    open package.json | update version $tag | save package.json -f
 
+    update-package $tag "https://npm.pkg.github.com"
+    
+    print "Build and test the package"
     main build
     main test
 
+
     if 'GITHUB_TOKEN' not-in $env {
+        print "Set the GITHUB_TOKEN environment variable"
         $env.GITHUB_TOKEN = (gh auth token)
     }
 
+    print "Add the GITHUB_TOKEN to the .npmrc file"
     (
         "//npm.pkg.github.com/:_authToken=" + $env.GITHUB_TOKEN + "\n\r"
              | save --append .npmrc -f
     )
-    
+
+    print "Publish the package to Github registry"   
     npm publish
 }
 
 def "main release" [
     tag: string # The tag of the image (e.g., 0.0.1)!
 ] {
-    open package.json | update version $tag | save package.json -f
 
+    update-package $tag "https://registry.npmjs.org"
+
+    print "Build and test the package"
     main build
     main test
 
+    print "Add the NPM_TOKEN to the .npmrc file"
     (
-        "//registry.npmjs.org/:_authToken=" + $env.NODE_AUTH_TOKEN + "\n\r"
+        "//registry.npmjs.org/:_authToken=" + $env.NPM_TOKEN + "\n\r"
              | save --append .npmrc -f
     )
-           
+
+    print "Publish the package NPM registry"
     npm publish --access public
+}
+
+def "update-package" [
+    tag: string # The tag of the image (e.g., 0.0.1)!
+    registery: string # The registry to publish the package (e.g., https://npm.pkg.github.com)!
+] {
+    print $"Update package.json with version tag: '($tag)' and registry: '($registery)'"
+    (
+        open package.json 
+            | update version $tag 
+            | update publishConfig.registry $registery
+            | save package.json -f
+    )
 }

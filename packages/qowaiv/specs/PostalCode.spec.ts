@@ -20,9 +20,11 @@ describe('PostalCode', () => {
     });
 
     it('parses and format a postal code', () => {
-        const postalCode = PostalCode.parse(' AD700 ');
-        expect(postalCode!.toString()).toBe('AD700');
-        expect(postalCode!.format('AD')).toBe('AD-700');
+        const postalCode0 = PostalCode.parse(' AD700 ');
+        const postalCode1 = PostalCode.parse('2017IL');
+        expect(postalCode0!.toString()).toBe('AD700');
+        expect(postalCode0!.format('AD')).toBe('AD-700');
+        expect(postalCode1!.format('NL')).toBe('2017 IL');
     });
 
     it('does not format a postal code that is not valid for a country', () => {

@@ -30,7 +30,7 @@ jobs:
       - name: Test
         run: |
           devbox run -- ./qowaiv test
-      - name: All
+      - name: Publish to Githbub Packages
         if: github.event_name != 'pull_request'
         run: |
           devbox run -- ./qowaiv publish $TAG

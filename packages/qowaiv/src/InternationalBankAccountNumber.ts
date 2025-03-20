@@ -1,4 +1,4 @@
-import { Svo, Unparsable } from '../src';
+import { Svo, Unparsable } from '.';
 
 export class InternationalBankAccountNumber implements IEquatable, IFormattable, IJsonStringifyable {
     /**
@@ -7,33 +7,33 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      *          you will normally use InternationalBankAccountNumber.parse(string).
      */
     private constructor(value: string) {
-        this.value = value;
+        this.#value= value;
     }
 
     /**
      * The underlying value.
      */
-    private readonly value;
+    readonly #value;
 
     /**
      * Gets the country of the IBAN.
      */
     public get country() {
-        return this.value.slice(0, 2);
+        return this.#value.slice(0, 2);
     }
 
     /**
      * Gets the length of the IBAN.
      */
     public get length() {
-        return this.value.length;
+        return this.#value.length;
     }
 
     /** 
     * Returns a string that represents the current IBAN.
     */
     public toString(): string {
-        return this.value;
+        return this.#value;
     }
 
     /** 
@@ -51,8 +51,8 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
     */
     public format(f?: string): string {
         switch (f) {
-            case 'u': case 'm': return this.value.toLowerCase();
-            case 'U': case 'M': return this.value;
+            case 'u': case 'm': return this.#value.toLowerCase();
+            case 'U': case 'M': return this.#value;
             case 'f': return this.humanReadable(' ').toLowerCase();
             case 'F': return this.humanReadable(' ');
             case 'h': return this.humanReadable(' ').toLowerCase();
@@ -61,7 +61,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
     }
 
     private humanReadable(ch: string): string {
-        return this.value.replace(/.{4}(?!$)/g, '$&' + ch);
+        return this.#value.replace(/.{4}(?!$)/g, '$&' + ch);
     }
 
     /**
@@ -70,14 +70,14 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
      */
     public equals(other: unknown): boolean {
         return other instanceof (InternationalBankAccountNumber)
-            && other.value === this.value;
+            && other.#value === this.#value;
     }
 
     /** 
      * Returns a JSON representation of the IBAN.
      */
     public toJSON(): string {
-        return this.value;
+        return this.#value;
     }
 
     /**

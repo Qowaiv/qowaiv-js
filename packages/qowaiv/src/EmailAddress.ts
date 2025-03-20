@@ -1,4 +1,4 @@
-import { Svo, Unparsable } from '../src';
+import { Svo, Unparsable } from '.';
 
 class Is {
     public static local(ch: string): boolean {
@@ -223,33 +223,33 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
      *          you will normally use EmailAddress.parse(string) or EmailAddress.tryParse(string).
      */
     private constructor(value: string) {
-        this.value = value;
+        this.#value = value;
     }
 
     /**
      * The underlying value.
      */
-    private readonly value: string;
+    readonly #value: string;
 
     /**
      * The length of the email address.
      */
     public get length(): number {
-        return this.value.length;
+        return this.#value.length;
     }
 
     /**
      * Indicates if the email address is IP-based.
      */
     public get isIPBased(): boolean {
-        return this.value.endsWith(']');
+        return this.#value.endsWith(']');
     }
 
     /** 
     * Returns a string that represents the current email address.
     */
     public toString(): string {
-        return this.value;
+        return this.#value;
     }
 
     /**
@@ -258,14 +258,14 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
      */
     public equals(other: unknown): boolean {
         return other instanceof (EmailAddress)
-            && other.value === this.value;
+            && other.#value === this.#value;
     }
 
     /** 
      * Returns a JSON representation of the email address.
      */
     public toJSON(): string {
-        return this.value;
+        return this.#value;
     }
 
     /**
