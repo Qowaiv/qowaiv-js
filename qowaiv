@@ -1,17 +1,17 @@
 #!/usr/bin/env nu
 
 def main [] {
-    ./qowaiv --help    
+    nu ./qowaiv --help    
 }
 
-# build qowaiv package
+# Build qowaiv packages
 def "main build" [] {
-    npm run build
+    npm run build --workspaces --if-present
 }
 
-# Test the qowaiv package
+# Test the qowaiv packages
 def "main test" [] {
-    npm run test
+    npm run test --workspaces --if-present
 }
 
 def "main publish" [
@@ -20,7 +20,7 @@ def "main publish" [
 
     update-package $tag "https://npm.pkg.github.com"
     
-    print "Build and test the package"
+    print "Build and test the packages"
     main build
     main test
 
@@ -36,8 +36,9 @@ def "main publish" [
              | save --append .npmrc -f
     )
 
-    print "Publish the package to Github registry"   
-    npm publish
+    print "Publish the packages to Github registry"
+    npm publish --workspace packages/qowaiv
+    npm publish --workspace packages/qowaiv-zod
 }
 
 def "main release" [
@@ -46,7 +47,7 @@ def "main release" [
 
     update-package $tag "https://registry.npmjs.org"
 
-    print "Build and test the package"
+    print "Build and test the packages"
     main build
     main test
 
@@ -56,18 +57,19 @@ def "main release" [
              | save --append .npmrc -f
     )
 
-    print "Publish the package NPM registry"
-    npm publish --access public
+    print "Publish the packages NPM registry"
+    npm publish --access public --workspace packages/qowaiv
+    npm publish --access public --workspace packages/qowaiv-zod
 }
 
 def "update-package" [
     tag: string # The tag of the image (e.g., 0.0.1)!
     registery: string # The registry to publish the package (e.g., https://npm.pkg.github.com)!
 ] {
-    print $"Update package.json with version tag: '($tag)' and registry: '($registery)'"
+    ^npm version $tag --workspaces
+    print $"Update package.json with registry: '($registery)'"
     (
         open package.json 
-            | update version $tag 
             | update publishConfig.registry $registery
             | save package.json -f
     )
