@@ -1,5 +1,8 @@
-﻿{
-  "workspaces": [ "packages/qowaiv", "packages/qowaiv-zod" ],
+{
+  "workspaces": [
+    "packages/qowaiv",
+    "packages/qowaiv-zod"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/qowaiv/qowaiv-js.git"

@@ -66,10 +66,10 @@ def "update-package" [
     tag: string # The tag of the image (e.g., 0.0.1)!
     registery: string # The registry to publish the package (e.g., https://npm.pkg.github.com)!
 ] {
-    print $"Update package.json with version tag: '($tag)' and registry: '($registery)'"
+    ^npm version $tag --workspaces
+    print $"Update package.json with registry: '($registery)'"
     (
         open package.json 
-            | update version $tag 
             | update publishConfig.registry $registery
             | save package.json -f
     )
