@@ -8,5 +8,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+  "exclude": ["node_modules", "dist", "**/*.test.ts"],
+  "references": [
+    { "path": "packages/qowaiv" },
+    { "path": "packages/qowaiv-zod" }
+  ]
 }

@@ -1,7 +1,7 @@
 ﻿{
   "extends": "../../tsconfig.json",
-  "include": ["./src/**/*"],
   "compilerOptions": {
-    "outDir": "../../dist/qowaiv-zod"
-  }
+    "outDir": "./dist"
+  },
+  "include": ["./src/**/*"]
 }
