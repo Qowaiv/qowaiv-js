@@ -7,10 +7,6 @@
     "type": "git",
     "url": "git+https://github.com/qowaiv/qowaiv-js.git"
   },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com"
-  },
   "author": "Qowaiv Community",
   "license": "MIT",
   "devDependencies": {

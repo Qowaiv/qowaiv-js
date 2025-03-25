@@ -6,12 +6,12 @@ def main [] {
 
 # Build qowaiv packages
 def "main build" [] {
-    npm run build --workspaces --if-present
+    npm run build --workspaces
 }
 
 # Test the qowaiv packages
 def "main test" [] {
-    npm run test --workspaces --if-present
+    npm run test --workspaces
 }
 
 def "main publish" [
@@ -23,7 +23,6 @@ def "main publish" [
     print "Build and test the packages"
     main build
     main test
-
 
     if 'GITHUB_TOKEN' not-in $env {
         print "Set the GITHUB_TOKEN environment variable"
@@ -37,8 +36,9 @@ def "main publish" [
     )
 
     print "Publish the packages to Github registry"
-    npm publish --workspace packages/qowaiv
-    npm publish --workspace packages/qowaiv-zod
+    workspaces | each { | workspace |
+        npm publish --workspace $workspace
+    }
 }
 
 def "main release" [
@@ -58,19 +58,44 @@ def "main release" [
     )
 
     print "Publish the packages NPM registry"
-    npm publish --access public --workspace packages/qowaiv
-    npm publish --access public --workspace packages/qowaiv-zod
+    workspaces | each { | workspace |
+        npm publish --access public --workspace $workspace
+    }
+}
+
+def "main pack" [
+    tag: string # The tag of the image (e.g., 0.0.1)!
+] {
+
+    update-package $tag "https://registry.npmjs.org"
+
+    print "Build and test the packages"
+    main build
+    main test
+
+    print "Pack the packages"
+    workspaces | each { | workspace |
+        npm pack --workspace $workspace
+    }
 }
 
 def "update-package" [
     tag: string # The tag of the image (e.g., 0.0.1)!
-    registery: string # The registry to publish the package (e.g., https://npm.pkg.github.com)!
+    registry: string # The registry to publish the package (e.g., https://npm.pkg.github.com)!
 ] {
-    ^npm version $tag --workspaces
-    print $"Update package.json with registry: '($registery)'"
-    (
-        open package.json 
-            | update publishConfig.registry $registery
-            | save package.json -f
-    )
+
+    npm version $tag --workspaces
+    workspaces | each { | workspace |
+        print $"Update ($workspace)/package.json with version tag: '($tag)' and registry: '($registry)'"
+        (
+            open $"($workspace)/package.json" 
+                | update version $tag 
+                | update publishConfig.registry registry
+                | save $"($workspace)/package.json" -f
+        )
+    }
+}
+
+def "workspaces" [] {
+    open package.json | get workspaces
 }

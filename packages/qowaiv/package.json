@@ -1,7 +1,7 @@
 {
   "name": "@qowaiv/qowaiv",
   "description": "Qowaiv implements common, universal domain objects. These types form the base of your domain model.",
-  "version": "0.0.2",
+  "version": "1.0.4",
   "keywords": [
     "typescript",
     "types",
@@ -16,5 +16,9 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest run"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "registry"
   }
 }
