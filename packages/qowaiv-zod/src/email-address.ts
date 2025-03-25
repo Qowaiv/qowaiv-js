@@ -10,8 +10,8 @@ import {
     ZodType,
     type ZodTypeDef,
 } from 'zod';
-import { appIssueCodes } from '@/shared/zod';
 import { EmailAddress } from '@qowaiv/qowaiv';
+import { QowaivIssueCode } from './QowaivError';
 
 export type EmailAddressCheck = { kind: 'invalid_email_address' } | { kind: 'invalid_email_address_ipbased' };
 
@@ -32,9 +32,9 @@ class EmailAddressValidator extends ZodType<EmailAddress | undefined, EmailAddre
             ctx = this._getOrReturnCtx(input, ctx);
 
             addIssueToContext(ctx, {
-                code: ZodIssueCode.custom,
+                code: 'custom',
                 params: {
-                    code: appIssueCodes.invalid_email_address,
+                    qowaiv: QowaivIssueCode.invalid_email_address,
                 },
             });
 
@@ -52,7 +52,7 @@ class EmailAddressValidator extends ZodType<EmailAddress | undefined, EmailAddre
                 addIssueToContext(ctx, {
                     code: ZodIssueCode.custom,
                     params: {
-                        code: appIssueCodes.invalid_email_address_ipbased,
+                        qowaiv: QowaivIssueCode.invalid_email_address_ip_based,
                     },
                 });
 

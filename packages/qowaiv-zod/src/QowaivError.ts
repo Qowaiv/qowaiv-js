@@ -1,12 +1,57 @@
 ﻿import { util } from 'zod';
+import { ErrorMapCtx, ZodErrorMap, ZodIssueBase, ZodIssueOptionalMessage } from 'zod/lib/ZodError';
+import { defaultErrorMap } from 'zod/lib/errors';
 
 export const QowaivIssueCode = util.arrayToEnum([
-    "invalid_email",
-    "invalid_email_ipbased",
+    'invalid_email_address',
+    'invalid_email_address_ip_based',
 ]);
 
-export type ZodIssueCode = keyof typeof QowaivIssueCode;
-
-export function isQowaivIssueCode(issueCode: string): issueCode is keyof typeof QowaivIssueCode {
-    return Object.keys(QowaivIssueCode).indexOf(issueCode) !== -1;
+export interface QowaivInvalidEmailIssue extends ZodIssueBase {
+    code: 'custom';
+    params: {
+        qowaiv: typeof QowaivIssueCode.invalid_email_address;
+    };
 }
+
+export interface QowaivInvalidEmailIpBasedIssue extends ZodIssueBase {
+    code: 'custom';
+    params: {
+        qowaiv: typeof QowaivIssueCode.invalid_email_address_ip_based;
+    };
+}
+
+export type QowaivIssue = QowaivInvalidEmailIssue | QowaivInvalidEmailIpBasedIssue;
+
+export function isQowaivIssue(issue: ZodIssueOptionalMessage | QowaivIssue): issue is QowaivIssue {
+    return (
+        issue.code === 'custom' &&
+        issue.params !== undefined &&
+        'qowaiv' in issue.params &&
+        issue.params.qowaiv in QowaivIssueCode
+    );
+}
+
+export type QowaivErrorMap = (
+    issue: ZodIssueOptionalMessage | QowaivIssue,
+    _ctx: ErrorMapCtx
+) => { message: string };
+
+export const qowaivErrorMap: QowaivErrorMap = (issue, _ctx) => {
+    if (!isQowaivIssue(issue)) {
+        console.log('not a qowaiv issue');
+        return defaultErrorMap(issue, _ctx);
+    }
+
+    console.log('it is a qowaiv issue');
+    switch (issue.params.qowaiv) {
+        case QowaivIssueCode.invalid_email_address:
+            return {
+                message: 'Invalid e-mail address',
+            };
+        case QowaivIssueCode.invalid_email_address_ip_based:
+            return {
+                message: 'IP-based e-mail address not allowed',
+            };
+    }
+};
