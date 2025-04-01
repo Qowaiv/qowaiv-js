@@ -83,16 +83,28 @@ def "update-package" [
     tag: string # The tag of the image (e.g., 0.0.1)!
     registry: string # The registry to publish the package (e.g., https://npm.pkg.github.com)!
 ] {
-
-    workspaces | each { | workspace |
+    workspaces | each { |workspace|
         print $"Update ($workspace)/package.json with version tag: '($tag)' and registry: '($registry)'"
-        (
-            open $"($workspace)/package.json" 
-                | update version $tag
-                | update dependencies[@qowaiv/qowaiv] $tag
-                | update publishConfig.registry registry
-                | save $"($workspace)/package.json" -f
+        let pkg = open $"($workspace)/package.json"
+
+        let dependencies = (
+            if ($pkg | get dependencies? | is-not-empty) and (
+                $pkg.dependencies | columns | any { |col| $col == "@qowaiv/qowaiv" }
+            ) {
+                $pkg.dependencies | upsert "@qowaiv/qowaiv" $tag
+            } else {
+                $pkg.dependencies
+            }
         )
+
+        let pkg = (
+            $pkg
+            | update version $tag
+            | update dependencies $dependencies
+            | update publishConfig.registry $registry
+        )
+
+        $pkg | save $"($workspace)/package.json" -f
     }
 }
 
