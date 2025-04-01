@@ -84,12 +84,12 @@ def "update-package" [
     registry: string # The registry to publish the package (e.g., https://npm.pkg.github.com)!
 ] {
 
-    npm version $tag --workspaces
     workspaces | each { | workspace |
         print $"Update ($workspace)/package.json with version tag: '($tag)' and registry: '($registry)'"
         (
             open $"($workspace)/package.json" 
-                | update version $tag 
+                | update version $tag
+                | update dependencies[@qowaiv/qowaiv] $tag
                 | update publishConfig.registry registry
                 | save $"($workspace)/package.json" -f
         )
