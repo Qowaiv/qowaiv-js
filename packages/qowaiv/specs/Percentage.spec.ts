@@ -48,6 +48,14 @@ describe('Percentage', () => {
         expect(svo.round(+4).equals(percent(31.4159)));
     });
 
+    it('formats based on optons', () =>{
+
+        const svo = percent(31.41592653589793);
+
+        expect(svo.format('nl', { maximumFractionDigits: 1, symbol: '‰' })).equals("314,2‰");
+
+    });
+
     test.each([
         '3.25',
         '3.250',
@@ -56,7 +64,7 @@ describe('Percentage', () => {
         '32.5‰',
         '325‱',
     ])('parses %s as 3.25%', (s) => {
-        const svo = Percentage.parse(s!);
+        const svo = Percentage.parse(s);
         expect(svo.equals(percent(3.25))).toBe(true);
     });
 
