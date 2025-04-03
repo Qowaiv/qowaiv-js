@@ -1,6 +1,6 @@
 import { Svo, Unparsable } from '.';
 
-type InternationalBankAccountNumberFormat = 'm' |'M' |'u' |'U' |'h' |'H' |'f' |'F';
+type InternationalBankAccountNumberFormat = 'm' | 'M' | 'u' | 'U' | 'h' | 'H' | 'f' | 'F';
 
 export class InternationalBankAccountNumber implements IEquatable, IFormattable<InternationalBankAccountNumberFormat>, IJsonStringifyable {
     /**
