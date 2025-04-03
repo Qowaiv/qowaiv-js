@@ -1,9 +1,11 @@
 import { Svo, Unparsable } from '.';
 
+type GuidFormat = 'B' | 'b' | 'S' | 's' | 'l' | 'U' | 'u';
+
 /**
  * Represents a Globally unique identifier (GUID).
  */
-export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
+export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringifyable {
 
     /**
      * @constructor
@@ -27,8 +29,17 @@ export class Guid implements IEquatable, IFormattable, IJsonStringifyable {
     }
     /** 
      * Returns a string that represents the current GUID.
+     * @param {string} f the format to apply.
+     * @remarks The formats:
+     * B: Surrounded by { }.
+     * b: Lowercased, surrounded by { }.
+     * S: Stripped from its dashes.
+     * s: Lowercased, stripped from its dashes.
+     * l: Lowercased.
+     * U: Uppercased.
+     * u: Uppercased.
      */
-    public format(f?: string): string {
+    public format(f?: GuidFormat): string {
         switch (f) {
             case 'B': return '{' + this.#value + '}';
             case 'b': return '{' + this.#value.toLowerCase() + '}';

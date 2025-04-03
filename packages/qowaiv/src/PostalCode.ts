@@ -25,7 +25,7 @@ class PostalCodeInfo {
 /**
  * Represents a postal code.
  */
-export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable {
+export class PostalCode implements IEquatable, IFormattable<string>, IJsonStringifyable {
 
     /**
     * @constructor
@@ -58,8 +58,8 @@ export class PostalCode implements IEquatable, IFormattable, IJsonStringifyable 
     /** 
      * Returns a string that represents the current postal code.
      */
-    public format(f: string): string {
-        const info = PostalCode.#Infos.get(f);
+    public format(f?: string): string {
+        const info = f ? PostalCode.#Infos.get(f) : undefined;
 
         return info?.isValid(this.#value)
             ? info.format(this.#value)
