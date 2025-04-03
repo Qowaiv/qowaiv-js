@@ -3,7 +3,7 @@ import { Unparsable } from '.';
 /**
  * Represents a percentage.
  */
-export class Percentage implements IEquatable, ILocalizable<Qowaiv.PercentageFormatOptions>, IJsonStringifyable {
+export class Percentage implements IEquatable, ILocalizable<PercentageFormatOptions>, IJsonStringifyable {
 
     /**
      * Represents 0 percent.
@@ -68,14 +68,13 @@ export class Percentage implements IEquatable, ILocalizable<Qowaiv.PercentageFor
     }
 
     /** 
-     * Returns a string that represents the current percentage.
+     *  Returns a formatted string that represents the current percentage.
      */
-    public format(locales?: string | string[], options?: Qowaiv.PercentageFormatOptions): string {
+    public format(locales?: string | string[], options?: PercentageFormatOptions): string {
 
         const symbol = options?.symbol ?? Percentage.#PercentSymbol;
-        const f =  Percentage.#Factors.get(symbol) ?? Percentage.#Factor;
+        const f = Percentage.#Factors.get(symbol) ?? Percentage.#Factor;
         const value = this.#value / f;
-        
 
         return `${value.toLocaleString(locales, options)}${symbol}`;
     }
@@ -154,10 +153,10 @@ export class Percentage implements IEquatable, ILocalizable<Qowaiv.PercentageFor
                 }
             }
 
-            const n = parseFloat(s.trim());
+            const n = parseFloat(s.trim()) * factor;
 
             if (isFinite(n)) {
-                return new Percentage(n * factor)
+                return new Percentage(n)
             }
         }
         return new Unparsable('Not a valid percentage', s);
