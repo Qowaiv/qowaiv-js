@@ -1,6 +1,8 @@
 import { Svo, Unparsable } from '.';
 
-export class InternationalBankAccountNumber implements IEquatable, IFormattable, IJsonStringifyable {
+type InternationalBankAccountNumberFormat = 'm' | 'M' | 'u' | 'U' | 'h' | 'H' | 'f' | 'F';
+
+export class InternationalBankAccountNumber implements IEquatable, IFormattable<InternationalBankAccountNumberFormat>, IJsonStringifyable {
     /**
      * @constructor
      * @remarks It is the default constructor, for creating an actual IBAN
@@ -49,7 +51,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable,
     * f: as formatted lowercase.
     * F: as formatted uppercase.
     */
-    public format(f?: string): string {
+    public format(f?: InternationalBankAccountNumberFormat): string {
         switch (f) {
             case 'u': case 'm': return this.#value.toLowerCase();
             case 'U': case 'M': return this.#value;

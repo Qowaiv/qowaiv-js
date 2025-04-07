@@ -1,4 +1,4 @@
-﻿/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-underscore-dangle */
 import {
     addIssueToContext,
     INVALID,

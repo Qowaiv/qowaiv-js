@@ -1,7 +1,7 @@
 {
   "name": "@qowaiv/qowaiv-zod",
   "description": "Zod integration for @qowaiv/qowaiv",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "keywords": [
     "typescript",
     "types",
@@ -19,7 +19,22 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@qowaiv/qowaiv": "0.0.2",
+    "@qowaiv/qowaiv": "0.0.3",
     "zod": "^3.24.2"
-  }
+  },
+  "devDependencies": {
+    "eslint": "^9.18.0",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qowaiv/qowaiv-js.git"
+  },
+  "author": "Qowaiv Community",
+  "license": "MIT"
 }
