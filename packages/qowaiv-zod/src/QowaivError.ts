@@ -39,11 +39,9 @@ export type QowaivErrorMap = (
 
 export const qowaivErrorMap: QowaivErrorMap = (issue, _ctx) => {
     if (!isQowaivIssue(issue)) {
-        console.log('not a qowaiv issue');
         return defaultErrorMap(issue, _ctx);
     }
 
-    console.log('it is a qowaiv issue');
     switch (issue.params.qowaiv) {
         case QowaivIssueCode.invalid_email_address:
             return {
