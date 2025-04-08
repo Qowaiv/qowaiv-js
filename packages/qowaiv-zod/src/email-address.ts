@@ -13,7 +13,7 @@ import {
 import { EmailAddress } from '@qowaiv/qowaiv';
 import { QowaivIssueCode } from './QowaivError';
 
-export type EmailAddressCheck = { kind: 'invalid_email_address' } | { kind: 'invalid_email_address_ipbased' };
+export type EmailAddressCheck = { kind: 'invalid_email_address' } | { kind: 'invalid_email_address_ip_based' };
 
 export interface EmailAddressDef extends ZodTypeDef {
     checks: EmailAddressCheck[];
@@ -46,7 +46,7 @@ class EmailAddressValidator extends ZodType<EmailAddress | undefined, EmailAddre
         input.data = emailAddress;
 
         for (const check of this._def.checks) {
-            if (check.kind === 'invalid_email_address_ipbased' && emailAddress.isIPBased) {
+            if (check.kind === 'invalid_email_address_ip_based' && emailAddress.isIPBased) {
                 ctx = this._getOrReturnCtx(input, ctx);
 
                 addIssueToContext(ctx, {
@@ -65,7 +65,7 @@ class EmailAddressValidator extends ZodType<EmailAddress | undefined, EmailAddre
 
     noIpBased() {
         return this._addCheck({
-            kind: 'invalid_email_address_ipbased',
+            kind: 'invalid_email_address_ip_based',
         });
     }
 
