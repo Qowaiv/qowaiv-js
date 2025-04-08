@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { qowaivErrorMap } from './QowaivError';
-import { emailAddress } from './email-address';
+import { emailAddress } from './EmailAddress';
 
 z.setErrorMap(qowaivErrorMap);
 
