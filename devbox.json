@@ -14,7 +14,8 @@
     ],
     "scripts": {
       "run_test": [
-        "npm run test"
+        "npm run build --workspaces",
+        "npm run test --workspaces"
       ],
       "dev": [
         "code ."
