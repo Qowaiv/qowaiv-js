@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { qowaivErrorMap } from './QowaivError';
-import { emailAddress } from './EmailAddress';
+import { email } from './Email';
 
 z.setErrorMap(qowaivErrorMap);
 
 export const q = {
-    emailAddress: emailAddress,
+    email,
 };

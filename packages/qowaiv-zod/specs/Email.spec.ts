@@ -6,7 +6,7 @@ import { isQowaivIssue, QowaivIssue } from '../src/QowaivError';
 describe('Email address validation', () => {
     it('is invalid', () => {
         const definition = z.object({
-            emailAddress: q.emailAddress()
+            emailAddress: q.email()
         });
         const result = definition.safeParse({
             emailAddress: 'invalid',
@@ -23,7 +23,7 @@ describe('Email address validation', () => {
 
     it('is valid', () => {
         const definition = z.object({
-            emailAddress: q.emailAddress()
+            emailAddress: q.email()
         });
         const result = definition.safeParse({
             emailAddress: 'valid@0.0.0.0',
@@ -35,7 +35,7 @@ describe('Email address validation', () => {
 
     it('is invalid ip based', () => {
         const definition = z.object({
-            emailAddress: q.emailAddress().noIpBased(),
+            emailAddress: q.email().noIpBased(),
         });
         const result = definition.safeParse({
             emailAddress: 'ip@0.0.0.0',
@@ -52,7 +52,7 @@ describe('Email address validation', () => {
 
     it('is valid ip based', () => {
         const definition = z.object({
-            emailAddress: q.emailAddress().noIpBased()
+            emailAddress: q.email().noIpBased()
         });
         const result = definition.safeParse({
             emailAddress: 'valid@email.com',
