@@ -84,8 +84,7 @@ class EmailAddressValidator extends ZodType<EmailAddress | undefined, EmailAddre
     }
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const email = () =>
+export const email = (): EmailAddressValidator =>
     new EmailAddressValidator({
         checks: [
             {
