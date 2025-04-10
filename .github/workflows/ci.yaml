@@ -27,6 +27,9 @@ jobs:
         uses: jetify-com/devbox-install-action@v0.11.0
         with:
           project-path: devbox.json
+      - name: Build
+        run: |
+          devbox run -- ./qowaiv build
       - name: Test
         run: |
           devbox run -- ./qowaiv test
