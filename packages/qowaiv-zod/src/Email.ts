@@ -13,7 +13,7 @@ import {
 import { EmailAddress } from '@qowaiv/qowaiv';
 import { QowaivIssueCode } from './QowaivError';
 
-export type EmailAddressCheck = { kind: 'invalid_email_address' } | { kind: 'invalid_email_address_ip_based' };
+export type EmailAddressCheck = { kind: 'invalid_email_address_ip_based' };
 
 export interface EmailAddressDef extends ZodTypeDef {
     checks: EmailAddressCheck[];
@@ -63,8 +63,8 @@ class EmailAddressValidator extends ZodType<EmailAddress | undefined, EmailAddre
         return { status: status.value, value: emailAddress };
     }
 
-    noIpBased() {
-        return this._addCheck({
+    ipBased() {
+        return this._removeCheck({
             kind: 'invalid_email_address_ip_based',
         });
     }
@@ -75,10 +75,21 @@ class EmailAddressValidator extends ZodType<EmailAddress | undefined, EmailAddre
             checks: [...this._def.checks, check],
         });
     }
+    
+    _removeCheck(check: EmailAddressCheck) {
+        return new EmailAddressValidator({
+            ...this._def,
+            checks: this._def.checks.filter(current => current.kind !== check.kind),
+        });
+    }
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const email = () =>
     new EmailAddressValidator({
-        checks: [],
+        checks: [
+            {
+                kind: 'invalid_email_address_ip_based'
+            },
+        ],
     });

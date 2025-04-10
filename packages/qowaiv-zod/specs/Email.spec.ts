@@ -21,21 +21,9 @@ describe('Email address validation', () => {
         expect(issue.params.qowaiv).toBe('invalid_email_address');
     });
 
-    it('is valid', () => {
+    it('is invalid ip based by default', () => {
         const definition = z.object({
-            emailAddress: q.email()
-        });
-        const result = definition.safeParse({
-            emailAddress: 'valid@0.0.0.0',
-        });
-
-        expect(result.success).toBe(true);
-        expect(result.error).toBeUndefined();
-    });
-
-    it('is invalid ip based', () => {
-        const definition = z.object({
-            emailAddress: q.email().noIpBased(),
+            emailAddress: q.email(),
         });
         const result = definition.safeParse({
             emailAddress: 'ip@0.0.0.0',
@@ -50,13 +38,27 @@ describe('Email address validation', () => {
         expect(issue.params.qowaiv).toBe('invalid_email_address_ip_based');
     });
 
-    it('is valid ip based', () => {
+    it('is valid', () => {
         const definition = z.object({
-            emailAddress: q.email().noIpBased()
+            emailAddress: q.email()
         });
         const result = definition.safeParse({
             emailAddress: 'valid@email.com',
         });
+
+        expect(result.success).toBe(true);
+        expect(result.error).toBeUndefined();
+    });
+
+    it('is valid ip based', () => {
+        const definition = z.object({
+            emailAddress: q.email().ipBased(),
+        });
+        const result = definition.safeParse({
+            emailAddress: 'valid@0.0.0.0',
+        });
+        
+        console.log(result.error)
 
         expect(result.success).toBe(true);
         expect(result.error).toBeUndefined();
