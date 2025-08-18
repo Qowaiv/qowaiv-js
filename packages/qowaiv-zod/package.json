@@ -19,7 +19,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@qowaiv/qowaiv": "0.0.3",
+    "@qowaiv/qowaiv": "^0.0.4",
     "zod": "^3.24.2"
   },
   "devDependencies": {
