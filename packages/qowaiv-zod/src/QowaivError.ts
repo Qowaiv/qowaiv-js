@@ -1,10 +1,11 @@
 import { util } from 'zod';
-import { ErrorMapCtx, ZodErrorMap, ZodIssueBase, ZodIssueOptionalMessage } from 'zod';
+import { ErrorMapCtx, ZodIssueBase, ZodIssueOptionalMessage } from 'zod';
 import { defaultErrorMap } from 'zod';
 
 export const QowaivIssueCode = util.arrayToEnum([
     'invalid_email_address',
     'invalid_email_address_ip_based',
+    'invalid_iban',
 ]);
 
 export interface QowaivInvalidEmailIssue extends ZodIssueBase {
@@ -21,7 +22,14 @@ export interface QowaivInvalidEmailIpBasedIssue extends ZodIssueBase {
     };
 }
 
-export type QowaivIssue = QowaivInvalidEmailIssue | QowaivInvalidEmailIpBasedIssue;
+export interface QowaivInvalidInternationalBankAccountNumber extends ZodIssueBase {
+    code: 'custom';
+    params: {
+        qowaiv: typeof QowaivIssueCode.invalid_iban;
+    };
+}
+
+export type QowaivIssue = QowaivInvalidEmailIssue | QowaivInvalidEmailIpBasedIssue | QowaivInvalidInternationalBankAccountNumber;
 
 export function isQowaivIssue(issue: ZodIssueOptionalMessage | QowaivIssue): issue is QowaivIssue {
     return (
@@ -51,5 +59,9 @@ export const qowaivErrorMap: QowaivErrorMap = (issue, _ctx) => {
             return {
                 message: 'IP-based e-mail address not allowed',
             };
+        case QowaivIssueCode.invalid_iban:
+            return {
+                message: 'Invalid international bank account number'
+            }
     }
 };
