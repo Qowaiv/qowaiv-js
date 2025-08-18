@@ -32,4 +32,16 @@ describe('Iban validation', () => {
         expect(result.success).toBe(true);
         expect(result.error).toBeUndefined();
     });
+    
+    it('is valid if optional', () => {
+        const definition = z.object({
+            iban: q.iban().optional()
+        });
+        const result = definition.safeParse({
+            iban: undefined,
+        });
+
+        expect(result.success).toBe(true);
+        expect(result.error).toBeUndefined();
+    });
 });

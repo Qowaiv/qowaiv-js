@@ -63,4 +63,16 @@ describe('Email address validation', () => {
         expect(result.success).toBe(true);
         expect(result.error).toBeUndefined();
     });
+
+        it('is valid if optional', () => {
+        const definition = z.object({
+            emailAddress: q.email().optional()
+        });
+        const result = definition.safeParse({
+            emailAddress: undefined,
+        });
+
+        expect(result.success).toBe(true);
+        expect(result.error).toBeUndefined();
+    });
 });
