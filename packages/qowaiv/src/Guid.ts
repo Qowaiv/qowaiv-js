@@ -154,7 +154,7 @@ export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringif
      */
     private static rnd(): string {
         if (typeof crypto?.randomUUID == "function") {
-            return crypto.randomUUID();
+            return crypto.randomUUID().replace(' ', '');
         }
         else if (typeof window?.crypto?.getRandomValues === "function") {
 
