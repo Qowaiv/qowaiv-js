@@ -1,6 +1,7 @@
 export { Clock } from "./Clock";
 export { DateOnly } from "./DateOnly";
 export { EmailAddress } from "./EmailAddress";
+export { Guard } from "./Guard";
 export { Guid } from "./Guid";
 export { InternationalBankAccountNumber } from "./InternationalBankAccountNumber";
 export { Percentage } from "./Percentage";
