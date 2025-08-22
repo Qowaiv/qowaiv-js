@@ -96,6 +96,30 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
     }
 
     /**
+     * Adds the specified number of years to the specified date-only.
+     * @param years The years to add to the specified date-only.
+     * @returns a new instance of a date-only.
+     */
+    public addYears(years: number): DateOnly {
+        // TODO: leave guaring to the ctor.
+        const year = Guard.int(this.year + years, 1, 9999);
+        return new DateOnly(year, this.getMonth(), this.day);
+    }
+
+    /**
+     * Adds the specified number of months to the specified date-only.
+     * @param months The months to add to the specified date-only.
+     * @returns a new instance of a date-only.
+     */
+    public addMonths(months: number): DateOnly {
+        const ms = this.year * 12 + this.month + Guard.int(months);
+        const year = ~~(ms / 12);
+        const month = (ms % 12) + 1; 
+        const day = Math.min(DateOnly.daysPerMonth(year, month), this.day);
+        return new DateOnly(year, month, day);
+    }
+
+    /**
      * @returns the specified date-only as a date-time for dates starting at 1970-01-01.
      */
     public toDateTime(): Date {
@@ -156,6 +180,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      * @returns the total days for the specified year/month.
      */
     public static daysPerMonth(year: number, month: number){
+        Guard.int(year, 1, 9999);
         if (month === 2) {
             return  DateOnly.isLeapYear(year) ? 29 : 28;
         }

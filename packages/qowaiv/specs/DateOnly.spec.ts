@@ -41,6 +41,47 @@ describe('Date-only', () => {
         expect(date.getYear()).toBe(2017);
     });
 
+    describe('add', () => {
+
+        it('years guards min value', () =>{
+            expect(() => DateOnly.minValue.addYears(-1)).throws();
+        });
+
+        it('years guards max value', () =>{
+            expect(() => DateOnly.maxValue.addYears(+1)).throws();
+        });
+
+        it('years returns a new date-only', () =>{
+            const curr = new DateOnly(2017, 6, 11);
+            const next = curr.addYears(8);
+
+            expect(next).toStrictEqual(new DateOnly(2025, 6, 11));
+            expect(next).not.toBe(curr);
+        });
+
+        it('months guards min value', () => {
+            expect(() => DateOnly.minValue.addMonths(-1)).throws();
+        });
+
+        it('months guards max value', () => {
+            expect(() => DateOnly.maxValue.addMonths(+1)).throws();
+        });
+
+         it('months returns a new date-only', () =>{
+            const curr = new DateOnly(2017, 6, 11);
+            const next = curr.addMonths(8);
+            expect(next).toStrictEqual(new DateOnly(2018, 2, 11));
+            expect(next).not.toBe(curr);
+        });
+
+        it('months returns a new date-only guarding the day of the month', () =>{
+            const curr = new DateOnly(1988, 5, 31);
+            const next = curr.addMonths(-3);
+            expect(next).toStrictEqual(new DateOnly(1988, 2, 29));
+        });
+
+    });
+
     it('toDateTime() returns date equvilent of dates from 1970 and up', () => {
         const date = new DateOnly(2017, 6, 11);
         const time = new Date(Date.UTC(2017, 6 - 1, 11));
