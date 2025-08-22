@@ -87,7 +87,7 @@ export class Percentage implements IEquatable, ILocalizable<PercentageFormatOpti
     }
 
     /**
-     * @returns true if other a percentage representing the same value.
+     * @returns true if other is a percentage representing the same value.
      */
     public equals(other: unknown): boolean {
         return other instanceof (Percentage)
