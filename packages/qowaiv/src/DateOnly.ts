@@ -50,14 +50,12 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
 
     /**
      * @returns the day of the week (0 – 6) for the specified date-only.
-     * @remarks Uses Tomohiko Sakamoto's method @see https://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week
      */
     public getDayOfWeek(): number {
-        const y = this.month < 2 ? this.year - 1 : this.year;
-        const days = this.day
-            + y // shift per year
-            + [0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4][this.month] // shifts per month
-            + ~~(y/4) // extra shift for leap years
+        const y = this.year - 1;
+        const days = this.getDayOfYear()
+            + y
+            + ~~(y/4)
             + ~~(y/400)
             - ~~(y/100);
         return days % 7;
@@ -81,13 +79,30 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
             : new Date(Date.UTC(this.year, this.month, this.day));
     }
 
-     /** 
+    /** 
+     * @returns a string that represents the current postal code.
+     */
+    public toString(): string {
+        return `${DateOnly.#pad(this.getYear(), 4)}-${DateOnly.#pad(this.getMonth())}-${DateOnly.#pad(this.getDate())}`;
+    }
+
+    /** 
      * @returns a JSON representation of the date-only.
      */
     public toJSON(): string {
-        return `${this.getYear()}-${this.getMonth()}-${this.getDate()}`;
+        return this.toString();
     }
 
+    /**
+     * @remarks String.ProtoType.padStart() is not available.
+     */
+    static #pad(n: number, padding?: number) : string{
+        let s = n.toString();
+        while(s.length < (padding ?? 2)){
+            s = '0'+s;
+        }
+        return s;
+    }
     /**
      * @returns true if other is a date representing the same value.
      */
