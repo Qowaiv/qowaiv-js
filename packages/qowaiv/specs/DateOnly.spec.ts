@@ -4,10 +4,11 @@ import { DateOnly } from '../src';
 describe('Date-time', () => {
 
     test.each([
-        [new DateOnly(1753, 1, 1), -6847804800000],
-        [new DateOnly(1970, 1, 1), 0],
-        [new DateOnly(1970, 1, 2), 86400000],
-        [new DateOnly(1970, 1, 3), 172800000],
+        [new DateOnly(1753,  1,  1), -6847804800000],
+        [new DateOnly(1969, 12, 31), -86400000],
+        [new DateOnly(1970,  1,  1), 0],
+        [new DateOnly(1970,  1,  2), 86400000],
+        [new DateOnly(1970,  1,  3), 172800000],
         [new DateOnly(9999, 12, 31), 253402214400000],
     ])('unix time stamp for %0 is %1', (date, expected) => {
         const timestamp = Date.UTC(date.year, date.month, date.day);
@@ -80,6 +81,48 @@ describe('Date-only', () => {
             expect(next).toStrictEqual(new DateOnly(1988, 2, 29));
         });
 
+        it('days guards min value', () => {
+            expect(() => DateOnly.minValue.addDays(-1)).throws();
+        });
+
+        it('days guards max value', () => {
+            expect(() => DateOnly.maxValue.addDays(+1)).throws();
+        });
+
+         it('0 days returns a new date-only', () =>{
+            const curr = new DateOnly(2017, 6, 11);
+            const next = curr.addDays(0);
+            expect(next).toStrictEqual(new DateOnly(2017, 6, 11));
+            expect(next).not.toBe(curr);
+        });
+
+        it('-1 days returns a new date-only', () =>{
+            const curr = new DateOnly(2017, 6, 11);
+            const next = curr.addDays(-1);
+            expect(next).toStrictEqual(new DateOnly(2017, 6, 10));
+            expect(next).not.toBe(curr);
+        });
+
+         it('+1 days returns a new date-only', () =>{
+            const curr = new DateOnly(2017, 6, 11);
+            const next = curr.addDays(+1);
+            expect(next).toStrictEqual(new DateOnly(2017, 6, 12));
+            expect(next).not.toBe(curr);
+        });
+
+          it('+1 days returns a new date-only in a leap year', () =>{
+            const curr = new DateOnly(1988, 2, 29);
+            const next = curr.addDays(+1);
+            expect(next).toStrictEqual(new DateOnly(1988, 3, 1));
+            expect(next).not.toBe(curr);
+        });
+
+         it('days returns a new date-only', () =>{
+            const curr = new DateOnly(2017, 6, 11);
+            const next = curr.addDays(3650);
+            expect(next).toStrictEqual(new DateOnly(2027, 6, 9));
+            expect(next).not.toBe(curr);
+        });
     });
 
     it('toDateTime() returns date equvilent of dates from 1970 and up', () => {

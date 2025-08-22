@@ -1,4 +1,4 @@
-import {  Guard, Unparsable } from '.';
+import { Guard, Unparsable } from '.';
 
 export class DateOnly implements IEquatable, IJsonStringifyable {
 
@@ -15,6 +15,8 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
     static readonly #daysPerYear = 365;
     static readonly #daysTo1970 = 719162;
     static readonly #secondsPerDay = 86400000;
+    static readonly #daysToMonth = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
+    static readonly #daysPerMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
     /**
      * Creates a new date-only.
@@ -68,14 +70,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      * @remarks the number of seconds since 1970-01-01.
      */
     public get unixEpoch(): number {
-        const y = this.year - 1;
-        const day = this.dayOfYear
-            + y * DateOnly.#daysPerYear
-            + ~~(y / 4)
-            + ~~(y / 400)
-            - ~~(y / 100);
-
-        return (day - DateOnly.#daysTo1970 - 1) * DateOnly.#secondsPerDay;
+        return (this.#totalDays - DateOnly.#daysTo1970 - 1) * DateOnly.#secondsPerDay;
     }
 
     /**
@@ -91,7 +86,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      */
     public get dayOfYear(): number {
         return this.day
-            + [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334][this.month] // days per month
+            + DateOnly.#daysToMonth[this.month] // days per month
             + (this.month >= 2 && DateOnly.isLeapYear(this.year) ? 1 : 0);
     }
 
@@ -114,8 +109,41 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
     public addMonths(months: number): DateOnly {
         const ms = this.year * 12 + this.month + Guard.int(months);
         const year = ~~(ms / 12);
-        const month = (ms % 12) + 1; 
+        const month = (ms % 12) + 1;
         const day = Math.min(DateOnly.daysPerMonth(year, month), this.day);
+        return new DateOnly(year, month, day);
+    }
+
+    /**
+     * Adds the specified number of days to the specified date-only.
+     * @param days The days to add to the specified date-only.
+     * @returns a new instance of a date-only.
+     */
+    public addDays(days: number): DateOnly {
+
+        let day = this.#totalDays + Guard.int(days);
+
+        // Aproximate the number of years.
+        let year = ~~(day / (365.2425)) + 1;
+        day -= (year - 1) * DateOnly.#daysPerYear + DateOnly.#getLeapYears(year);
+
+        const daysPerYear = DateOnly.#getDaysPerYear(year);
+
+        // Narrow down.
+        if (daysPerYear < day) {
+            day -= daysPerYear;
+            year++;
+        }
+
+        let month = 0;
+        while (month < 12) {
+            const days = DateOnly.daysPerMonth(year, ++month);
+            if (day < days) break;
+            day -= days;
+        }
+
+        // TODO: Guard should be done by ctor.
+        Guard.int(day, 1, DateOnly.daysPerMonth(year, month));
         return new DateOnly(year, month, day);
     }
 
@@ -138,17 +166,6 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      */
     public toJSON(): string {
         return this.toString();
-    }
-
-    /**
-     * @remarks String.ProtoType.padStart() is not available.
-     */
-    static #pad(n: number, padding?: number): string {
-        let s = n.toString();
-        while (s.length < (padding ?? 2)) {
-            s = '0' + s;
-        }
-        return s;
     }
 
     /**
@@ -179,13 +196,13 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      * @param month The month to check.
      * @returns the total days for the specified year/month.
      */
-    public static daysPerMonth(year: number, month: number){
+    public static daysPerMonth(year: number, month: number) {
         Guard.int(year, 1, 9999);
         if (month === 2) {
-            return  DateOnly.isLeapYear(year) ? 29 : 28;
+            return DateOnly.isLeapYear(year) ? 29 : 28;
         }
         else {
-            return [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][Guard.int(month, 1, 12)];
+            return DateOnly.#daysPerMonth[Guard.int(month, 1, 12)];
         }
     }
 
@@ -210,5 +227,42 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      */
     public static tryParse(s: string | null | undefined): DateOnly | Unparsable | undefined {
         return new Unparsable('Not a valid date', s);
+    }
+
+    /**
+    * @returns the total number of days from 0001-01-01.
+    */
+    get #totalDays(): number {
+        return this.dayOfYear
+            + (this.year - 1) * DateOnly.#daysPerYear
+            + DateOnly.#getLeapYears(this.year);
+    }
+
+    /**
+     * @returns the total of leap years that occurred before the specified year.
+     */
+    static #getLeapYears(year: number) {
+        const y = year - 1;
+        return ~~(y / 4)
+            + ~~(y / 400)
+            - ~~(y / 100);
+    }
+
+    /**
+     * @returns the total of days for the specified year.
+     */
+    static #getDaysPerYear(year: number): number {
+        return DateOnly.isLeapYear(year) ? 366 : DateOnly.#daysPerYear;
+    }
+
+    /**
+     * @remarks String.ProtoType.padStart() is not available.
+     */
+    static #pad(n: number, padding?: number): string {
+        let s = n.toString();
+        while (s.length < (padding ?? 2)) {
+            s = '0' + s;
+        }
+        return s;
     }
 }
