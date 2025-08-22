@@ -11,6 +11,14 @@ describe('Date-only', () => {
     const fri = 5;
     const sat = 6;
 
+    it('minValue is 0001-01-01', () => {
+        expect(DateOnly.minValue).toStrictEqual(new DateOnly(1, 1, 1));
+    });
+
+    it('maxValue is 9999-12-31', () => {
+        expect(DateOnly.maxValue).toStrictEqual(new DateOnly(9999, 12, 31));
+    });
+
     it('getDate() returns 1-based day of the month', () => {
         const date = new DateOnly(2017, 6, 11);
         expect(date.getDate()).toBe(11);

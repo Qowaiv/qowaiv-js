@@ -3,6 +3,16 @@ import { Unparsable } from '.';
 export class DateOnly implements IEquatable, IJsonStringifyable {
 
     /**
+     * The mimimum value of date-only (0001-01-01).
+     */
+    public static readonly minValue = new DateOnly(1, 1, 1);
+
+    /**
+     * The maxium value of date-only (9999-12-31).
+     */
+    public static readonly maxValue = new DateOnly(9999, 12, 31);
+
+    /**
      * Creates a new date-only.
      * @param year 1 based year
      * @param month 1 based month
