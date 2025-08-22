@@ -50,7 +50,7 @@ export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringif
         }
     }
     /** 
-     * Returns a JSON representation of the GUID.
+     * @returns a JSON representation of the GUID.
      */
     public toJSON(): string {
         return this.#value;
@@ -64,8 +64,8 @@ export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringif
     }
 
     /**
-     * Returns true if other is not null or undefined and a GUID
-     * representing the same value, otherwise false.
+     * @param other the object to compare with.
+     * @returns true if other is a GUID representing the same value.
      */
     public equals(other: unknown): boolean {
         return other instanceof (Guid)
@@ -84,7 +84,7 @@ export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringif
     /**
      * Parses a GUID string.
      * @param {string} s A string containing GUID to convert.
-     * @returns {Guid} A GUID if valid, otherwise trhows.
+     * @returns {Guid} A GUID if valid, otherwise throws.
      */
     public static parse(s: string | null | undefined): Guid | undefined {
         const svo = Guid.tryParse(s);

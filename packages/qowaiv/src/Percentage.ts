@@ -80,15 +80,14 @@ export class Percentage implements IEquatable, ILocalizable<PercentageFormatOpti
     }
 
     /** 
-     * Returns a JSON representation of the percentage.
+     * @returns a JSON representation of the percentage.
      */
     public toJSON(): string {
         return this.toString();
     }
 
     /**
-     * Returns true if other is not null or undefined and a Percentage
-     * representing the same value, otherwise false.
+     * @returns true if other is a percentage representing the same value.
      */
     public equals(other: unknown): boolean {
         return other instanceof (Percentage)
@@ -119,7 +118,7 @@ export class Percentage implements IEquatable, ILocalizable<PercentageFormatOpti
     /**
      * Parses a percentage string.
      * @param {string} s A string containing percentage to convert.
-     * @returns {Percentage} A percentage if valid, otherwise trhows.
+     * @returns {Percentage} A percentage if valid, otherwise throws.
      */
     public static parse(s: string | null | undefined): Percentage {
         const svo = Percentage.tryParse(s);

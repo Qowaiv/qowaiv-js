@@ -2,8 +2,9 @@
  * To support JSON.stringify()
  */
 interface IJsonStringifyable {
+
     /** 
-     * Returns a JSON representation of the object.
+     * @returns a JSON representation of the object.
      */
     toJSON(): any;
 }

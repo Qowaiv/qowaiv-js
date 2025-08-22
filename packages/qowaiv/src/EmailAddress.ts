@@ -253,8 +253,8 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
     }
 
     /**
-     * Returns true if other is an email address
-     * representing the same value, otherwise false.
+     * @param other the object to compare with.
+     * @returns true if other is an email address representing the same value.
      */
     public equals(other: unknown): boolean {
         return other instanceof (EmailAddress)
@@ -262,7 +262,7 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
     }
 
     /** 
-     * Returns a JSON representation of the email address.
+     * @returns a JSON representation of the email address.
      */
     public toJSON(): string {
         return this.#value;

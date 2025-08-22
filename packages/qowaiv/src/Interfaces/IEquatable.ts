@@ -2,9 +2,10 @@
  * Defines a generalized method that for determining equality of instances.
  */
 interface IEquatable {
+    
     /**
-     * Returns true if other is not null or undefined and a object
-     * representing the same value, otherwise false.
+     * @param other the object to compare with.
+     * @returns true if {other} represents the same value, otherwise false.
      */
     equals(other: unknown): boolean;
 }
