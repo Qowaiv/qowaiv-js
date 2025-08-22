@@ -52,27 +52,38 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      * @returns the day of the week (0 – 6) for the specified date-only.
      */
     public getDay(): number{
-        return this.asDate().getDay();
+        // TODO: implement self to ensure working in dates before 1970
+        return this.toDateTime()!.getUTCDay();
     }
 
     /**
-     * @returns the specified date-only as a date-time.
+     * @returns the specified date-only as a date-time for dates starting at 1970-01-01.
      */
-    public asDate(): Date {
-        return new Date(this.year, this.month, this.day);
+    public toDateTime(): Date | undefined {
+        return this.year < 1970
+            ? undefined
+            : new Date(Date.UTC(this.year, this.month, this.day));
     }
 
-    /** @inheritdoc */
+     /** 
+     * @returns a JSON representation of the date-only.
+     */
     public toJSON(): string {
         return `${this.getYear()}-${this.getMonth()}-${this.getDate()}`;
     }
 
-    /** @inheritdoc */
+    /**
+     * @returns true if other is a date representing the same value.
+     */
     public equals(other: unknown): boolean {
-         return other instanceof(DateOnly)
-         && this.year === other.year
-         && this.month === other.month
-         && this.day === other.day;
+        return (other instanceof(DateOnly)
+            && this.year === other.year
+            && this.month === other.month
+            && this.day === other.day)
+        || (other instanceof(Date)
+            && this.year === other.getUTCFullYear()
+            && this.month === other.getUTCMonth()
+            && this.day === other.getUTCDate());
     }
 
     /**
