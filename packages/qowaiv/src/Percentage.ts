@@ -118,7 +118,7 @@ export class Percentage implements IEquatable, ILocalizable<PercentageFormatOpti
     /**
      * Parses a percentage string.
      * @param {string} s A string containing percentage to convert.
-     * @returns {Percentage} A percentage if valid, otherwise trhows.
+     * @returns {Percentage} A percentage if valid, otherwise throws.
      */
     public static parse(s: string | null | undefined): Percentage {
         const svo = Percentage.tryParse(s);

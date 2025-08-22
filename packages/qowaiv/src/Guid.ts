@@ -84,7 +84,7 @@ export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringif
     /**
      * Parses a GUID string.
      * @param {string} s A string containing GUID to convert.
-     * @returns {Guid} A GUID if valid, otherwise trhows.
+     * @returns {Guid} A GUID if valid, otherwise throws.
      */
     public static parse(s: string | null | undefined): Guid | undefined {
         const svo = Guid.tryParse(s);

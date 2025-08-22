@@ -104,7 +104,7 @@ export class PostalCode implements IEquatable, IFormattable<string>, IJsonString
     /**
      * Parses a postal code string.
      * @param {string} s A string containing postal code to convert.
-     * @returns {PostalCode} A postal code if valid, otherwise trhows.
+     * @returns {PostalCode} A postal code if valid, otherwise throws.
      */
     public static parse(s: string | null | undefined): PostalCode | undefined {
         const svo = PostalCode.tryParse(s);
