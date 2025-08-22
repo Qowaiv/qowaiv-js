@@ -65,7 +65,7 @@ export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringif
 
     /**
      * @param other the object to compare with.
-     * @returns true if other a GUID representing the same value.
+     * @returns true if other is a GUID representing the same value.
      */
     public equals(other: unknown): boolean {
         return other instanceof (Guid)
