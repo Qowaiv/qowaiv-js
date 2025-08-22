@@ -3,10 +3,13 @@ import { DateOnly } from '../src';
 
 describe('Date-only', () => {
 
-    it('getDay() returns 0-based day of the week', () => {
-        const date = new DateOnly(2017, 6, 11);
-        expect(date.getDay()).toBe(0);
-    });
+    const sun = 0;
+    const mon = 1;
+    const tue = 2;
+    const wed = 3;
+    const thu = 4;
+    const fri = 5;
+    const sat = 6;
 
     it('getDate() returns 1-based day of the month', () => {
         const date = new DateOnly(2017, 6, 11);
@@ -60,4 +63,20 @@ describe('Date-only', () => {
         const date = new DateOnly(2017, 6, 11);
         expect(date.equals(other)).toBe(false);
     });
+    
+    test.each([
+        [new DateOnly(2017,  6, 11), sun],
+        [new DateOnly(2000,  9, 10), sun],
+        [new DateOnly(1848, 12, 25), mon],
+        [new DateOnly(2001,  9, 11), tue],
+        [new DateOnly(2023,  2, 14), tue],
+        [new DateOnly(1969,  4, 30), wed],
+        [new DateOnly(1900,  5, 24), thu],
+        [new DateOnly(2025,  8, 22), fri],
+        [new DateOnly(2025, 10,  3), fri],
+        [new DateOnly(1979, 12,  1), sat],
+    ])('getDayOfWeek() of the week returns %0', (date, day) => {
+        expect(date.getDayOfWeek()).toBe(day);
+    });
+
 });

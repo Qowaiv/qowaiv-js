@@ -50,10 +50,17 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
 
     /**
      * @returns the day of the week (0 – 6) for the specified date-only.
+     * @remarks Uses Tomohiko Sakamoto's method @see https://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week
      */
-    public getDay(): number{
-        // TODO: implement self to ensure working in dates before 1970
-        return this.toDateTime()!.getUTCDay();
+    public getDayOfWeek(): number {
+        const y = this.month < 2 ? this.year - 1 : this.year;
+        const days = this.day
+            + y // shift per year
+            + [0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4][this.month] // shifts per month
+            + ~~(y/4) // extra shift for leap years
+            + ~~(y/400)
+            - ~~(y/100);
+        return days % 7;
     }
 
     /**
