@@ -50,7 +50,7 @@ export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringif
         }
     }
     /** 
-     * Returns a JSON representation of the GUID.
+     * @returns a JSON representation of the GUID.
      */
     public toJSON(): string {
         return this.#value;

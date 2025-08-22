@@ -76,7 +76,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable<
     }
 
     /** 
-     * Returns a JSON representation of the IBAN.
+     * @returns a JSON representation of the IBAN.
      */
     public toJSON(): string {
         return this.#value;

@@ -80,7 +80,7 @@ export class Percentage implements IEquatable, ILocalizable<PercentageFormatOpti
     }
 
     /** 
-     * Returns a JSON representation of the percentage.
+     * @returns a JSON representation of the percentage.
      */
     public toJSON(): string {
         return this.toString();

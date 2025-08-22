@@ -262,7 +262,7 @@ export class EmailAddress implements IEquatable, IJsonStringifyable {
     }
 
     /** 
-     * Returns a JSON representation of the email address.
+     * @returns a JSON representation of the email address.
      */
     public toJSON(): string {
         return this.#value;

@@ -67,7 +67,7 @@ export class PostalCode implements IEquatable, IFormattable<string>, IJsonString
     }
 
     /** 
-     * Returns a JSON representation of the postal code.
+     * @returns a JSON representation of the postal code.
      */
     public toJSON(): string {
         return this.#value;
