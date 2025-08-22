@@ -67,8 +67,8 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable<
     }
 
     /**
-     * Returns true if other is an IBAN
-     * representing the same value, otherwise false.
+     * @param other the object to compare with.
+     * @returns true if other is an IBAN representing the same value.
      */
     public equals(other: unknown): boolean {
         return other instanceof (InternationalBankAccountNumber)

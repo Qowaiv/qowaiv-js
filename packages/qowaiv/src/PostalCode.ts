@@ -74,8 +74,8 @@ export class PostalCode implements IEquatable, IFormattable<string>, IJsonString
     }
 
     /**
-     * Returns true if other is not null or undefined and a postal code
-     * representing the same value, otherwise false.
+     * @param other the object to compare with.
+     * @returns true if other a postal code representing the same value.
      */
     public equals(other: unknown): boolean {
         return other instanceof (PostalCode)
