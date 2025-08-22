@@ -75,8 +75,42 @@ describe('Date-only', () => {
         [new DateOnly(2025,  8, 22), fri],
         [new DateOnly(2025, 10,  3), fri],
         [new DateOnly(1979, 12,  1), sat],
-    ])('getDayOfWeek() of the week returns %0', (date, day) => {
+    ])('getDayOfWeek() returns %0', (date, day) => {
         expect(date.getDayOfWeek()).toBe(day);
     });
 
+    // values from: https://nsidc.org/data/user-resources/help-center/day-year-doy-calendar
+    test.each([
+        [new DateOnly(2025,  1,  1),   1],
+        [new DateOnly(2025,  2,  3),  34],
+        [new DateOnly(2025,  3,  5),  64],
+        [new DateOnly(2025,  4,  7),  97],
+        [new DateOnly(2025,  5,  9), 129],
+        [new DateOnly(2025,  6, 11), 162],
+        [new DateOnly(2025,  7, 13), 194],
+        [new DateOnly(2025,  8, 15), 227],
+        [new DateOnly(2025,  9, 17), 260],
+        [new DateOnly(2025, 10, 19), 292],
+        [new DateOnly(2025, 11, 21), 325],
+        [new DateOnly(2025, 12, 31), 365],
+    ])('getDayOfYear() of the week for non leap years returns %0', (date, day) => {
+        expect(date.getDayOfYear()).toBe(day);
+    });
+
+    test.each([
+        [new DateOnly(2024,  1,  1),   1],
+        [new DateOnly(2024,  2,  3),  34],
+        [new DateOnly(2024,  3,  5),  65],
+        [new DateOnly(2024,  4,  7),  98],
+        [new DateOnly(2024,  5,  9), 130],
+        [new DateOnly(2024,  6, 11), 163],
+        [new DateOnly(2024,  7, 13), 195],
+        [new DateOnly(2024,  8, 15), 228],
+        [new DateOnly(2024,  9, 17), 261],
+        [new DateOnly(2024, 10, 19), 293],
+        [new DateOnly(2024, 11, 21), 326],
+        [new DateOnly(2024, 12, 31), 366],
+    ])('getDayOfYear() of the week for leap years returns %0', (date, day) => {
+        expect(date.getDayOfYear()).toBe(day);
+    });
 });

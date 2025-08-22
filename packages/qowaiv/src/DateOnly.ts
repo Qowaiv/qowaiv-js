@@ -64,6 +64,15 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
     }
 
     /**
+     * @returns The day of the year (1 - 366) for the specified date-only.
+     */
+    public getDayOfYear(): number {
+        return this.day
+            + [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334][this.month] // days per month
+            + (this.month >= 2 && DateOnly.isLeapYear(this.year) ? 1 : 0);
+    }
+
+    /**
      * @returns the specified date-only as a date-time for dates starting at 1970-01-01.
      */
     public toDateTime(): Date | undefined {
@@ -91,6 +100,14 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
             && this.year === other.getUTCFullYear()
             && this.month === other.getUTCMonth()
             && this.day === other.getUTCDate());
+    }
+
+    /**
+     * @param year The year to check.
+     * @returns true if the year is a leap year.
+     */
+    public static isLeapYear(year: number) : boolean{
+        return !(year & 3 || year & 15 && !(year % 25))
     }
 
     /**
