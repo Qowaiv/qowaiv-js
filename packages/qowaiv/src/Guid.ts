@@ -131,7 +131,7 @@ export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringif
      * @returns {Guid} A random GUID.
      */
     public static newGuid(seed?: Guid): Guid {
-        let v = Guid.unstrip(Guid.rnd());
+        let v = Guid.rnd();
 
         if (seed !== null && seed instanceof (Guid)) {
             let merged = '';
@@ -153,20 +153,26 @@ export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringif
      * otherwise Math.Random().
      */
     private static rnd(): string {
-        if (typeof window !== "undefined" &&
-            typeof window.crypto.getRandomValues === "function") {
+        if (typeof crypto?.randomUUID == "function") {
+            return crypto.randomUUID();
+        }
+        else if (typeof window?.crypto?.getRandomValues === "function") {
 
             const bytes = new Uint32Array(4);
             window.crypto.getRandomValues(bytes);
-            return bytes[0].toString(16) +
+            return Guid.unstrip(
+                bytes[0].toString(16) +
                 bytes[1].toString(16) +
                 bytes[2].toString(16) +
-                bytes[3].toString(16);
+                bytes[3].toString(16));
         }
-        return Guid.rndBlock() +
-            Guid.rndBlock() +
-            Guid.rndBlock() +
-            Guid.rndBlock();
+        else {
+            return Guid.unstrip(
+                Guid.rndBlock() +
+                Guid.rndBlock() +
+                Guid.rndBlock() +
+                Guid.rndBlock());
+        }
     }
 
     /**
