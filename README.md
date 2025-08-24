@@ -39,9 +39,9 @@ if (svo instanceof (Unparsable)) {
 }
 ```
 
-## Qowaiv types
+## Types
 
-### Guid
+### GUID
 Represents a Globally Unique Identifier (GUID). 
 
 ``` TypeScript
@@ -49,7 +49,7 @@ const next = Guid.newGuid(); // 123E4567-E89B-12D3-A456-426655440000
 const str = next.format("B"); // {123E4567-E89B-12D3-A456-426655440000}
 ```
 
-### Email address
+### Email Address
 Represents an email address. It supports
 * local part with quotes (`"Can contain anything"@qowaiv.org`)
 * comments (`in(some comment)fo@qowaiv.org`)
@@ -69,7 +69,7 @@ const ip = Email.parse('info@[127.0.0.1]');
 const isIP = ip.isIpBased; // true
 ```
 
-### InternationBankAccountNumber
+### Internation Bank Account Number
 Represnts a IBAN.
 
 ``` TypeScript
@@ -92,7 +92,7 @@ const r = p.round(1); // 3.1%
 const s = p.toJson(); // '3.14%'
 ```
 
-### PostalCode
+### Postal Code
 Represents a postal code. It supports validation for all countries.
 
 When formatted, non-breaking whitespace is used.
@@ -107,15 +107,44 @@ argentina.format('AR'); // Z 1230 ABC
 argentina.format('NL'); // Z1230ABC
 ```
 
-## Qowaiv Interfaces
+## Schema Validation
+For schema validation, we extend on [Zod](https://zod.dev} schema validation.
+
+Qowaiv.js uses the `q` constant: 
+
+``` TypeScript
+const Model = z.object({
+    name: z.string(), // Zod defined type
+	email: q.email(), // Qowaiv-Zod defined type
+});
+````
+
+### Email Address
+For email validation, the following features are available:
+
+``` TypeScript
+q.emai();             // required email address
+q.email().ipBased();  // required email address including IP=based
+q.email().optional(); // optional email address
+```
+
+### Internation Bank Accoun tNumber
+For IBAN validation, the following features are available:
+
+``` TypeScript
+q.iban();            // required IBAN
+q.iban().optional(); // optional IBAN
+```
+
+## Interfaces
 
 ### IFormattable
 As JavaScript does not support method overloading, this interface makes explicit
-by including `toString()` and `format(f?: string)` that the `format` method
+by including `toString()` and `format(f?: TOption)` that the `format` method
 should be the overloaded version of `toString`.
 
 ``` TypeScript
-interface IFormattable {
+interface IFormattable<string> {
     toString(): string;
     format(f?: string): string;
 }
