@@ -12,12 +12,9 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      */
     public static readonly maxValue = new DateOnly(9999, 12, 31);
 
-    static readonly #daysPerYear = 365;
     static readonly #daysTo1970 = 719162;
     static readonly #secondsPerDay = 86400000;
-    static readonly #daysToMonth = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
-    static readonly #daysPerMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
+        
     /**
      * Creates a new date-only.
      * @param year 1-based (1 - 9999) year
@@ -25,10 +22,9 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      * @param day  1-based (1 - 31) day
      */
     constructor(year: number, month: number, day: number) {
-        this.year = year;
-        this.month = month - 1;
-        // TODO: guard leads to TypeError: Cannot read properties of undefined.
-        this.day = day;// Guard.int(day, 1, DateOnly.daysPerMonth(year, month));
+        this.year = Guard.int(year, 1, 9999);
+        this.month = Guard.int(month, 1, 12) - 1;
+        this.day = Guard.int(day, 1, DateOnly.daysPerMonth(year, month));
     }
 
     /**
@@ -86,7 +82,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      */
     public get dayOfYear(): number {
         return this.day
-            + DateOnly.#daysToMonth[this.month] // days per month
+            + [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365][this.month] // days per month
             + (this.month >= 2 && DateOnly.isLeapYear(this.year) ? 1 : 0);
     }
 
@@ -125,15 +121,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
 
         // Aproximate the number of years.
         let year = ~~(day / (365.2425)) + 1;
-        day -= (year - 1) * DateOnly.#daysPerYear + DateOnly.#getLeapYears(year);
-
-        const daysPerYear = DateOnly.#getDaysPerYear(year);
-
-        // Narrow down.
-        if (daysPerYear < day) {
-            day -= daysPerYear;
-            year++;
-        }
+        day -= (year - 1) * 365 + DateOnly.#getLeapYears(year);
 
         let month = 0;
         while (month < 12) {
@@ -187,8 +175,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      * @returns true if the year is a leap year.
      */
     public static isLeapYear(year: number): boolean {
-        Guard.int(year, 1, 9999);
-        return !(year & 3 || year & 15 && !(year % 25))
+        return !(Guard.int(year, 1, 9999) & 3 || year & 15 && !(year % 25));
     }
 
     /**
@@ -202,7 +189,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
             return DateOnly.isLeapYear(year) ? 29 : 28;
         }
         else {
-            return DateOnly.#daysPerMonth[Guard.int(month, 1, 12)];
+            return [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][Guard.int(month, 1, 12)];
         }
     }
 
@@ -234,7 +221,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
     */
     get #totalDays(): number {
         return this.dayOfYear
-            + (this.year - 1) * DateOnly.#daysPerYear
+            + (this.year - 1) * 365
             + DateOnly.#getLeapYears(this.year);
     }
 
@@ -252,7 +239,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      * @returns the total of days for the specified year.
      */
     static #getDaysPerYear(year: number): number {
-        return DateOnly.isLeapYear(year) ? 366 : DateOnly.#daysPerYear;
+        return DateOnly.isLeapYear(year) ? 366 : 365;
     }
 
     /**
