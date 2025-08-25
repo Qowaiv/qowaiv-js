@@ -5,14 +5,14 @@
 
 ## Domain-driven design bottom up
 Qowaiv is a (Single) Value Object library. It aims to model reusable (Single)
-Value Objects that can be used a wide variety of modeling scenarios, both
+Value Objects that can be used in a wide variety of modeling scenarios, both
 inside and outside a Domain-driven context.
 
 Supported scenarios include parsing, formatting, validation, (de)serialization,
 and domain specific logic.
 
 ## TypeScript
-As developement tool, we addopted [TypeScript](http://typescriptlang.org/).
+As developement tool, we adopted [TypeScript](http://typescriptlang.org/).
 
 # Single Value Object
 A Value Object that can be represented by a single scalar.
@@ -26,9 +26,9 @@ result, for empty states, `undefined` is used. So for example:
 const svo = PostalCode.parse(''); // undefined.
 ```
 
-To not to have to rely on try-catch every SVO has an `tryParse` alternative.
-This resturns an `Unparsable` object, containing an error message and the
-attempted value once a value can not be parsed, this allows clean code to
+To not have to rely on try-catch, every SVO has a `tryParse` alternative.
+This returns an `Unparsable` object, containing an error message and the
+attempted value once a value can not be parsed. This allows clean code to
 handle the unparsable state:
 
 ``` TypeScript
@@ -39,9 +39,9 @@ if (svo instanceof (Unparsable)) {
 }
 ```
 
-## Qowaiv types
+## Types
 
-### Guid
+### GUID
 Represents a Globally Unique Identifier (GUID). 
 
 ``` TypeScript
@@ -49,7 +49,7 @@ const next = Guid.newGuid(); // 123E4567-E89B-12D3-A456-426655440000
 const str = next.format("B"); // {123E4567-E89B-12D3-A456-426655440000}
 ```
 
-### Email address
+### Email Address
 Represents an email address. It supports
 * local part with quotes (`"Can contain anything"@qowaiv.org`)
 * comments (`in(some comment)fo@qowaiv.org`)
@@ -58,7 +58,7 @@ Represents an email address. It supports
   - `"John Smith" info@qowaiv.org`
   - `info@qowaiv.org (John Smith)`
 * Mailto prefix (`mailto:info@qowaiv.org`)
-* IP-based domins (`info@[127.0.0.1]`)
+* IP-based domains (`info@[127.0.0.1]`)
 
 Comments, display names, and the mailto prefix are stripped.
 
@@ -69,18 +69,18 @@ const ip = Email.parse('info@[127.0.0.1]');
 const isIP = ip.isIpBased; // true
 ```
 
-### InternationBankAccountNumber
-Represnts a IBAN.
+### International Bank Account Number
+Represents an IBAN.
 
 ``` TypeScript
-const iban = InternationBankAccountNumber.parse('NL20INGB0001234567');
+const iban = InternationalBankAccountNumber.parse('NL20INGB0001234567');
 const country = iban.country; // 'NL';
 const formatted = iban.format(); // 'NL20 INGB 0001 2345 67' with nbsp.
 const lower = iban.format('h');  // 'nl20 ingb 0001 2345 67' with nbsp.
 ```
 
 ### Percentage
-Represents a pecentage.
+Represents a percentage.
 
 ``` TypeScript
 const p = Percentage.parse("3.14");  // Parse: 3.14%;
@@ -92,7 +92,7 @@ const r = p.round(1); // 3.1%
 const s = p.toJson(); // '3.14%'
 ```
 
-### PostalCode
+### Postal Code
 Represents a postal code. It supports validation for all countries.
 
 When formatted, non-breaking whitespace is used.
@@ -107,15 +107,44 @@ argentina.format('AR'); // Z 1230 ABC
 argentina.format('NL'); // Z1230ABC
 ```
 
-## Qowaiv Interfaces
+## Schema Validation
+For schema validation, we extend on [Zod](https://zod.dev} schema validation.
+
+Qowaiv.js uses the `q` constant: 
+
+``` TypeScript
+const Model = z.object({
+    name: z.string(), // Zod defined type
+	email: q.email(), // Qowaiv-Zod defined type
+});
+````
+
+### Email Address
+For email validation, the following features are available:
+
+``` TypeScript
+q.email();             // required email address
+q.email().ipBased();  // required email address including IP=based
+q.email().optional(); // optional email address
+```
+
+### International Bank Account Number
+For IBAN validation, the following features are available:
+
+``` TypeScript
+q.iban();            // required IBAN
+q.iban().optional(); // optional IBAN
+```
+
+## Interfaces
 
 ### IFormattable
 As JavaScript does not support method overloading, this interface makes explicit
-by including `toString()` and `format(f?: string)` that the `format` method
+by including `toString()` and `format(f?: TOption)` that the `format` method
 should be the overloaded version of `toString`.
 
 ``` TypeScript
-interface IFormattable {
+interface IFormattable<string> {
     toString(): string;
     format(f?: string): string;
 }
@@ -131,7 +160,7 @@ interface IEquatable {
 }
 ```
 
-Compared with the follow snippet, you could work arround it, although using a
+Compared with the following snippet, you could work around it, although using a
 function `eq(l, r)` over `l === r` is obvious not trivial, or close to ideal.
 
 ``` JavaScript
