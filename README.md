@@ -5,14 +5,14 @@
 
 ## Domain-driven design bottom up
 Qowaiv is a (Single) Value Object library. It aims to model reusable (Single)
-Value Objects that can be used a wide variety of modeling scenarios, both
+Value Objects that can be used in a wide variety of modeling scenarios, both
 inside and outside a Domain-driven context.
 
 Supported scenarios include parsing, formatting, validation, (de)serialization,
 and domain specific logic.
 
 ## TypeScript
-As developement tool, we addopted [TypeScript](http://typescriptlang.org/).
+As developement tool, we adopted [TypeScript](http://typescriptlang.org/).
 
 # Single Value Object
 A Value Object that can be represented by a single scalar.
@@ -26,9 +26,9 @@ result, for empty states, `undefined` is used. So for example:
 const svo = PostalCode.parse(''); // undefined.
 ```
 
-To not to have to rely on try-catch every SVO has an `tryParse` alternative.
-This resturns an `Unparsable` object, containing an error message and the
-attempted value once a value can not be parsed, this allows clean code to
+To not have to rely on try-catch, every SVO has a `tryParse` alternative.
+This returns an `Unparsable` object, containing an error message and the
+attempted value once a value can not be parsed. This allows clean code to
 handle the unparsable state:
 
 ``` TypeScript
@@ -58,7 +58,7 @@ Represents an email address. It supports
   - `"John Smith" info@qowaiv.org`
   - `info@qowaiv.org (John Smith)`
 * Mailto prefix (`mailto:info@qowaiv.org`)
-* IP-based domins (`info@[127.0.0.1]`)
+* IP-based domains (`info@[127.0.0.1]`)
 
 Comments, display names, and the mailto prefix are stripped.
 
@@ -69,8 +69,8 @@ const ip = Email.parse('info@[127.0.0.1]');
 const isIP = ip.isIpBased; // true
 ```
 
-### Internation Bank Account Number
-Represnts a IBAN.
+### International Bank Account Number
+Represents an IBAN.
 
 ``` TypeScript
 const iban = InternationBankAccountNumber.parse('NL20INGB0001234567');
@@ -80,7 +80,7 @@ const lower = iban.format('h');  // 'nl20 ingb 0001 2345 67' with nbsp.
 ```
 
 ### Percentage
-Represents a pecentage.
+Represents a percentage.
 
 ``` TypeScript
 const p = Percentage.parse("3.14");  // Parse: 3.14%;
@@ -123,12 +123,12 @@ const Model = z.object({
 For email validation, the following features are available:
 
 ``` TypeScript
-q.emai();             // required email address
+q.email();             // required email address
 q.email().ipBased();  // required email address including IP=based
 q.email().optional(); // optional email address
 ```
 
-### Internation Bank Accoun tNumber
+### International Bank Account Number
 For IBAN validation, the following features are available:
 
 ``` TypeScript
@@ -160,7 +160,7 @@ interface IEquatable {
 }
 ```
 
-Compared with the follow snippet, you could work arround it, although using a
+Compared with the following snippet, you could work around it, although using a
 function `eq(l, r)` over `l === r` is obvious not trivial, or close to ideal.
 
 ``` JavaScript
