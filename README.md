@@ -73,7 +73,7 @@ const isIP = ip.isIpBased; // true
 Represents an IBAN.
 
 ``` TypeScript
-const iban = InternationBankAccountNumber.parse('NL20INGB0001234567');
+const iban = InternationalBankAccountNumber.parse('NL20INGB0001234567');
 const country = iban.country; // 'NL';
 const formatted = iban.format(); // 'NL20 INGB 0001 2345 67' with nbsp.
 const lower = iban.format('h');  // 'nl20 ingb 0001 2345 67' with nbsp.
