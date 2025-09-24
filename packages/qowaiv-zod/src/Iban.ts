@@ -10,7 +10,7 @@ import {
   type ZodTypeDef,
 } from "zod";
 import { InternationalBankAccountNumber } from "@qowaiv/qowaiv";
-import { QowaivIssueCode } from "./QowaivError";
+import { QowaivZodIssueCode } from './QowaivZodIssueCode';
 
 export type InternationalBankAccountNumberCheck = { kind: "invalid_iban" };
 
@@ -45,7 +45,7 @@ class InternationalBankAccountNumberValidator extends ZodType<
             addIssueToContext(ctx, {
                 code: "custom",
                 params: {
-                    qowaiv: QowaivIssueCode.invalid_iban,
+                    qowaiv: QowaivZodIssueCode.invalid_iban,
                 },
             });
 
@@ -77,10 +77,4 @@ class InternationalBankAccountNumberValidator extends ZodType<
 }
 
 export const iban = (): InternationalBankAccountNumberValidator =>
-    new InternationalBankAccountNumberValidator({
-        checks: [
-            {
-                kind: "invalid_iban",
-            },
-        ],
-    });
+    new InternationalBankAccountNumberValidator({ checks: [{ kind: QowaivZodIssueCode.invalid_iban }] });

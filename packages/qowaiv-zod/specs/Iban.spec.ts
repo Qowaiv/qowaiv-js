@@ -1,7 +1,8 @@
 ﻿import { describe, expect, it } from "vitest";
 import { z, ZodError } from 'zod';
 import { q } from '../src';
-import { isQowaivIssue, QowaivIssue } from '../src/QowaivError';
+import { QowaivZodIssue } from '../src/QowaivZodIssue';
+import { QowaivZodIssues } from '../src/QowaivZodIssues';
 
 describe('Iban validation', () => {
     it('is invalid', () => {
@@ -16,8 +17,8 @@ describe('Iban validation', () => {
         expect(result.error).toBeInstanceOf(ZodError);
         expect(result.error?.issues.length).toBe(1);
 
-        const issue = result.error?.issues[0]! as QowaivIssue;
-        expect(isQowaivIssue(issue)).toBe(true);
+        const issue = result.error?.issues[0]! as QowaivZodIssue;
+        expect(QowaivZodIssues.supports(issue)).toBe(true);
         expect(issue.params.qowaiv).toBe('invalid_iban');
     });
 
