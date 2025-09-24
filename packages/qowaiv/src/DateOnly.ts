@@ -8,7 +8,7 @@ export class DateOnly implements IEquatable, ILocalizable<DateOnlyFormat>, IJson
     public static readonly minValue = new DateOnly(1, 1, 1);
 
     /**
-     * The maxium value of date-only (9999-12-31).
+     * The maximum value of date-only (9999-12-31).
      */
     public static readonly maxValue = new DateOnly(9999, 12, 31);
 
