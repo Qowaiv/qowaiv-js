@@ -1,19 +1,29 @@
 import { describe, expect, it, test } from 'vitest';
 import { DateOnly } from '../src';
+import { Rnd } from './_rnd';
 
 describe('Date-time', () => {
 
     test.each([
-        [new DateOnly(1753,  1,  1), -6847804800000],
-        [new DateOnly(1969, 12, 31), -86400000],
-        [new DateOnly(1970,  1,  1), 0],
-        [new DateOnly(1970,  1,  2), 86400000],
-        [new DateOnly(1970,  1,  3), 172800000],
+        [new DateOnly(1308,  4, 16), -20881584000000],
+        [new DateOnly(1753,  1,  1),  -6847804800000],
+        [new DateOnly(1969, 12, 31),       -86400000],
+        [new DateOnly(1970,  1,  1),               0],
+        [new DateOnly(1970,  1,  2),        86400000],
+        [new DateOnly(1970,  1,  3),       172800000],
         [new DateOnly(9999, 12, 31), 253402214400000],
-    ])('unix time stamp for %0 is %1', (date, expected) => {
-        const timestamp = Date.UTC(date.year, date.month, date.day);
-        expect(timestamp).toBe(expected);
+    ])('unix time stamp for %s is %', (date, expected) => {
+        const timestamp = Date.UTC(date.year, date.month - 1, date.day);
+
         expect(date.unixEpoch).toBe(expected);
+        expect(timestamp).toBe(expected);
+    });
+
+    test.each(Rnd.nextDates(100))
+    ('%s: DateOnly.dayOfWeek equals Date.getDay() ', (date) => {
+
+        const dateOnly = DateOnly.fromDate(date);
+        expect(dateOnly.dayOfWeek).toBe(date.getUTCDay());
     });
 });
 
@@ -27,32 +37,62 @@ describe('Date-only', () => {
         expect(DateOnly.maxValue).toStrictEqual(new DateOnly(9999, 12, 31));
     });
 
-    it('getDate() returns 1-based day of the month', () => {
+    it('day returns 1-based day of the month', () => {
         const date = new DateOnly(2017, 6, 11);
-        expect(date.getDay()).toBe(11);
+        expect(date.day).toBe(11);
     });
 
-    it('getMonth() returns 1-based month of the year', () => {
+    it('month returns 1-based month of the year', () => {
         const date = new DateOnly(2017, 6, 11);
-        expect(date.getMonth()).toBe(6);
+        expect(date.month).toBe(6);
     });
 
-    it('getYear() returns 1-based year', () => {
+    it('year returns 1-based year', () => {
         const date = new DateOnly(2017, 6, 11);
-        expect(date.getYear()).toBe(2017);
+        expect(date.year).toBe(2017);
+    });
+
+    describe('parse', () => {
+
+        test.each([
+            ' ',
+            '\t',
+            '',
+            null,
+            undefined,
+            ])('parses %s as undefined', (s) => {
+                const svo = DateOnly.parse(s!);
+                expect(svo).toBeUndefined();
+            });
+
+        it('throws for invalid input', () => {
+            expect(() => DateOnly.parse('not a date')).throws('Not a valid date');
+        });
+
+        it('parses yyyy-MM-dd', () => {
+            expect(DateOnly.parse('2017-06-11')).toStrictEqual(new DateOnly(2017, 6, 11));
+        });
+
+        it('parses yyy-M-d', () => {
+            expect(DateOnly.parse('217-6-3')).toStrictEqual(new DateOnly(217, 6, 3));
+        });
+
+        it('parses standard date-time string format', () => {
+            expect(DateOnly.parse('2017-06-11T06:15:00Z')).toStrictEqual(new DateOnly(2017, 6, 11));
+        });
     });
 
     describe('add', () => {
 
-        it('years guards min value', () =>{
+        it('years guards min value', () => {
             expect(() => DateOnly.minValue.addYears(-1)).throws();
         });
 
-        it('years guards max value', () =>{
+        it('years guards max value', () => {
             expect(() => DateOnly.maxValue.addYears(+1)).throws();
         });
 
-        it('years returns a new date-only', () =>{
+        it('years returns a new date-only', () => {
             const curr = new DateOnly(2017, 6, 11);
             const next = curr.addYears(8);
 
@@ -68,14 +108,14 @@ describe('Date-only', () => {
             expect(() => DateOnly.maxValue.addMonths(+1)).throws();
         });
 
-         it('months returns a new date-only', () =>{
+         it('months returns a new date-only', () => {
             const curr = new DateOnly(2017, 6, 11);
             const next = curr.addMonths(8);
             expect(next).toStrictEqual(new DateOnly(2018, 2, 11));
             expect(next).not.toBe(curr);
         });
 
-        it('months returns a new date-only guarding the day of the month', () =>{
+        it('months returns a new date-only guarding the day of the month', () => {
             const curr = new DateOnly(1988, 5, 31);
             const next = curr.addMonths(-3);
             expect(next).toStrictEqual(new DateOnly(1988, 2, 29));
@@ -89,35 +129,35 @@ describe('Date-only', () => {
             expect(() => DateOnly.maxValue.addDays(+1)).throws();
         });
 
-         it('0 days returns a new date-only', () =>{
+         it('0 days returns a new date-only', () => {
             const curr = new DateOnly(2017, 6, 11);
             const next = curr.addDays(0);
             expect(next).toStrictEqual(new DateOnly(2017, 6, 11));
             expect(next).not.toBe(curr);
         });
 
-        it('-1 days returns a new date-only', () =>{
+        it('-1 days returns a new date-only', () => {
             const curr = new DateOnly(2017, 6, 11);
             const next = curr.addDays(-1);
             expect(next).toStrictEqual(new DateOnly(2017, 6, 10));
             expect(next).not.toBe(curr);
         });
 
-         it('+1 days returns a new date-only', () =>{
+         it('+1 days returns a new date-only', () => {
             const curr = new DateOnly(2017, 6, 11);
             const next = curr.addDays(+1);
             expect(next).toStrictEqual(new DateOnly(2017, 6, 12));
             expect(next).not.toBe(curr);
         });
 
-          it('+1 days returns a new date-only in a leap year', () =>{
+          it('+1 days returns a new date-only in a leap year', () => {
             const curr = new DateOnly(1988, 2, 29);
             const next = curr.addDays(+1);
             expect(next).toStrictEqual(new DateOnly(1988, 3, 1));
             expect(next).not.toBe(curr);
         });
 
-         it('days returns a new date-only', () =>{
+         it('days returns a new date-only', () => {
             const curr = new DateOnly(2017, 6, 11);
             const next = curr.addDays(3650);
             expect(next).toStrictEqual(new DateOnly(2027, 6, 9));
@@ -153,7 +193,7 @@ describe('Date-only', () => {
         new Date(2017, 5, 10),
         null,
         undefined,
-    ])('equals is false for %0', (other) => {
+    ])('equals is false for %s', (other) => {
         const date = new DateOnly(2017, 6, 11);
         expect(date.equals(other)).toBe(false);
     });

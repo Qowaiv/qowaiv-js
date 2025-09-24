@@ -41,6 +41,28 @@ if (svo instanceof (Unparsable)) {
 
 ## Types
 
+### Date (only)
+Represents a date (only) within the range of 0001-01-01 and 9999-12-31.
+Contrary to JavaScript's `Date`, the month component is 1-based, just like the
+year and the day (of month).
+
+``` TypeScript
+const date = DateOnly.parse('2017-06-11');
+const epoch = date.unixEpoch;     // total seconds since 1970-01-01
+const dayOfMonth = date.day;      // 11
+const dayOfWeek = date.dayOfWeek; // 0, Sunday
+const dayOfYear = date.dayOfYear; // 162
+
+const next = date.addYears(10);   // 2027-06-11
+const next = date.addMonths(-3);  // 2017-03-11
+const next = date.addDays(40);    // 2017-07-21
+
+const leap = DateOnly.isLeapYear(1988);      // true
+const days = DateOnly.daysPerMonth(1988, 2); // 29
+
+const dateTime = date.toDateTime(); // 2017-06-11T:00:00:00Z
+```
+
 ### GUID
 Represents a Globally Unique Identifier (GUID). 
 

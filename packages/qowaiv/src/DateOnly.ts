@@ -1,4 +1,4 @@
-import { Guard, Unparsable } from '.';
+import { Guard, Svo, Unparsable } from '.';
 
 export class DateOnly implements IEquatable, IJsonStringifyable {
 
@@ -23,43 +23,22 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      */
     constructor(year: number, month: number, day: number) {
         this.year = Guard.int(year, 1, 9999);
-        this.month = Guard.int(month, 1, 12) - 1;
+        this.month = Guard.int(month, 1, 12);
         this.day = Guard.int(day, 1, DateOnly.daysPerMonth(year, month));
     }
 
     /**
-     * The year component (1 based).
+     * The year component (1-based).
      */
-    readonly year: number = 1;
+    public readonly year: number = 1;
     /**
-     * The month component (0 based).
+     * The month component (1-based).
      */
-    readonly month: number = 0;
+    public readonly month: number = 1;
     /**
-     * The day component (1 based).
+     * The day component (1-based).
      */
-    readonly day: number = 1;
-
-    /**
-     * @returns the year (4 digits for 4-digit years) fpr the specified date-only.
-     */
-    public getYear(): number {
-        return this.year;
-    }
-
-    /**
-     * @returns the month (1 – 12) for the specified date-only.
-     */
-    public getMonth(): number {
-        return this.month + 1;
-    }
-
-    /**
-     * @returns the  day of the month (1 – 31) for the specified date-only.
-     */
-    public getDay(): number {
-        return this.day;
-    }
+    public readonly day: number = 1;
 
     /**
      * @returns the UNIX epoch for the specified date-only.
@@ -82,8 +61,8 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      */
     public get dayOfYear(): number {
         return this.day
-            + [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365][this.month] // days per month
-            + (this.month >= 2 && DateOnly.isLeapYear(this.year) ? 1 : 0);
+            + [0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365][this.month] // days per month
+            + (this.month >= 3 && DateOnly.isLeapYear(this.year) ? 1 : 0);
     }
 
     /**
@@ -92,9 +71,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      * @returns a new instance of a date-only.
      */
     public addYears(years: number): DateOnly {
-        // TODO: leave guaring to the ctor.
-        const year = Guard.int(this.year + years, 1, 9999);
-        return new DateOnly(year, this.getMonth(), this.day);
+        return new DateOnly(this.year + years, this.month, this.day);
     }
 
     /**
@@ -103,7 +80,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      * @returns a new instance of a date-only.
      */
     public addMonths(months: number): DateOnly {
-        const ms = this.year * 12 + this.month + Guard.int(months);
+        const ms = this.year * 12 + this.month - 1 + Guard.int(months);
         const year = ~~(ms / 12);
         const month = (ms % 12) + 1;
         const day = Math.min(DateOnly.daysPerMonth(year, month), this.day);
@@ -116,7 +93,6 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      * @returns a new instance of a date-only.
      */
     public addDays(days: number): DateOnly {
-
         let day = this.#totalDays + Guard.int(days);
 
         // Aproximate the number of years.
@@ -130,8 +106,6 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
             day -= days;
         }
 
-        // TODO: Guard should be done by ctor.
-        Guard.int(day, 1, DateOnly.daysPerMonth(year, month));
         return new DateOnly(year, month, day);
     }
 
@@ -146,7 +120,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      * @returns a string that represents the current postal code.
      */
     public toString(): string {
-        return `${DateOnly.#pad(this.getYear(), 4)}-${DateOnly.#pad(this.getMonth())}-${DateOnly.#pad(this.getDay())}`;
+        return `${DateOnly.#pad(this.year, 4)}-${DateOnly.#pad(this.month)}-${DateOnly.#pad(this.day)}`;
     }
 
     /** 
@@ -166,7 +140,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
             && this.day === other.day)
             || (other instanceof (Date)
                 && this.year === other.getUTCFullYear()
-                && this.month === other.getUTCMonth()
+                && this.month === (other.getUTCMonth() + 1)
                 && this.day === other.getUTCDate());
     }
 
@@ -183,7 +157,7 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      * @param month The month to check.
      * @returns the total days for the specified year/month.
      */
-    public static daysPerMonth(year: number, month: number) {
+    public static daysPerMonth(year: number, month: number): number {
         Guard.int(year, 1, 9999);
         if (month === 2) {
             return DateOnly.isLeapYear(year) ? 29 : 28;
@@ -191,6 +165,15 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
         else {
             return [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][Guard.int(month, 1, 12)];
         }
+    }
+
+    /**
+     * Creates a date-only based on a date-time.
+     * @param {Date} d The date-time to convert.
+     * @returns {DateOnly} represting the (UTC) date part of the date-time.
+     */
+    public static fromDate(d: Date) : DateOnly {
+        return new DateOnly(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate());
     }
 
     /**
@@ -213,7 +196,23 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
      * @returns {DateOnly} A date if valid, otherwise unparsable.
      */
     public static tryParse(s: string | null | undefined): DateOnly | Unparsable | undefined {
-        return new Unparsable('Not a valid date', s);
+        if (Svo.isEmpty(s)) {
+            return undefined;
+        }
+        try {
+            const str = s!.trim();
+            const match = str.match(/^(\d{1,4})-(1[0-2]|0?\d)-(3[01]|[0-2]?\d)$/);
+            if (match?.length === 4) {
+                return new DateOnly(Number.parseInt(match[1]),Number.parseInt(match[2]), Number.parseInt(match[3]));
+            }
+
+            const date = new Date(Date.parse(str));
+            if (Number.isFinite(date.getTime())) {
+                return new DateOnly(date.getUTCFullYear(), date.getUTCMonth() +1, date.getUTCDate());
+            }
+        }
+        catch { /* fall trough */}
+        return new Unparsable("Not a valid date", s);
     }
 
     /**
@@ -233,13 +232,6 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
         return ~~(y / 4)
             + ~~(y / 400)
             - ~~(y / 100);
-    }
-
-    /**
-     * @returns the total of days for the specified year.
-     */
-    static #getDaysPerYear(year: number): number {
-        return DateOnly.isLeapYear(year) ? 366 : 365;
     }
 
     /**
