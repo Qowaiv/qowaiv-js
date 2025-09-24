@@ -41,6 +41,17 @@ if (svo instanceof (Unparsable)) {
 
 ## Types
 
+### Clock
+The clock provides a testable set of functions that return the current time/date.
+
+``` TypeScript
+const now = Clock.now();
+const today = Clock.today();
+
+// updates the generator.
+Clock.generator = () => new Date(2025, 09, 10);
+```
+
 ### Date (only)
 Represents a date (only) within the range of 0001-01-01 and 9999-12-31.
 Contrary to JavaScript's `Date`, the month component is 1-based, just like the
