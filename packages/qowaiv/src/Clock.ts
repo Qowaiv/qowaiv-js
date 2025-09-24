@@ -1,5 +1,8 @@
 import { DateOnly } from "./DateOnly";
 
+/**
+ * Static (testable) clock.
+ */
 export class Clock {
 
     public static generator = () => new Date();
