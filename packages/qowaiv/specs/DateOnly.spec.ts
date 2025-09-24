@@ -194,7 +194,7 @@ describe('Date-only', () => {
 
      });
 
-    it('toDateTime() returns date equvilent of dates.', () => {
+    it('toDateTime() returns date equivalent of dates.', () => {
         const date = new DateOnly(2017, 6, 11);
         const time = new Date(Date.UTC(2017, 6 - 1, 11));
         expect(date.toDateTime()).toStrictEqual(time);
