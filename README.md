@@ -61,6 +61,8 @@ const leap = DateOnly.isLeapYear(1988);      // true
 const days = DateOnly.daysPerMonth(1988, 2); // 29
 
 const dateTime = date.toDateTime(); // 2017-06-11T:00:00:00Z
+
+const format = date.format('nl', { dateStyle: 'full' }); // zondag 11 juni 2017
 ```
 
 ### GUID
@@ -139,13 +141,13 @@ const Model = z.object({
     name: z.string(), // Zod defined type
 	email: q.email(), // Qowaiv-Zod defined type
 });
-````
+```
 
 ### Email Address
 For email validation, the following features are available:
 
 ``` TypeScript
-q.email();             // required email address
+q.email();            // required email address
 q.email().ipBased();  // required email address including IP=based
 q.email().optional(); // optional email address
 ```

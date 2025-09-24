@@ -108,7 +108,7 @@ describe('Date-only', () => {
             expect(() => DateOnly.maxValue.addMonths(+1)).throws();
         });
 
-         it('months returns a new date-only', () => {
+        it('months returns a new date-only', () => {
             const curr = new DateOnly(2017, 6, 11);
             const next = curr.addMonths(8);
             expect(next).toStrictEqual(new DateOnly(2018, 2, 11));
@@ -165,7 +165,36 @@ describe('Date-only', () => {
         });
     });
 
-    it('toDateTime() returns date equvilent of dates from 1970 and up', () => {
+     describe('format', () => {
+        
+        it('toString() is conform ISO', () => {
+            expect(new DateOnly(2017, 6, 11).toString()).toBe('2017-06-11');
+        });
+
+        it('dd/MM/yyyy for unspecified', () => {
+            expect(new DateOnly(2017, 6, 11).format()).toBe('11/06/2017');
+        });
+
+        it('Supports date style full', () => {
+            expect(new DateOnly(2017, 6, 11).format('nl', { dateStyle: 'full' })).toBe('zondag 11 juni 2017');
+        });
+
+         it('Supports date style long', () => {
+            expect(new DateOnly(2017, 6, 11).format('nl', { dateStyle: 'long' })).toBe('11 juni 2017');
+        });
+
+
+        it('Supports date style medium', () => {
+            expect(new DateOnly(2017, 6, 11).format('nl', { dateStyle: 'medium' })).toBe('11 jun 2017');
+        });
+
+        it('Supports date style short', () => {
+            expect(new DateOnly(2017, 6, 11).format('nl', { dateStyle: 'short' })).toBe('11-06-2017');
+        });
+
+     });
+
+    it('toDateTime() returns date equvilent of dates.', () => {
         const date = new DateOnly(2017, 6, 11);
         const time = new Date(Date.UTC(2017, 6 - 1, 11));
         expect(date.toDateTime()).toStrictEqual(time);

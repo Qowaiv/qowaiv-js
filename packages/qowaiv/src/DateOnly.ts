@@ -1,6 +1,6 @@
 import { Guard, Svo, Unparsable } from '.';
 
-export class DateOnly implements IEquatable, IJsonStringifyable {
+export class DateOnly implements IEquatable, ILocalizable<DateOnlyFormat>, IJsonStringifyable {
 
     /**
      * The mimimum value of date-only (0001-01-01).
@@ -117,10 +117,21 @@ export class DateOnly implements IEquatable, IJsonStringifyable {
     }
 
     /** 
-     * @returns a string that represents the current postal code.
+     * @returns a string that represents the current date-only.
      */
     public toString(): string {
         return `${DateOnly.#pad(this.year, 4)}-${DateOnly.#pad(this.month)}-${DateOnly.#pad(this.day)}`;
+    }
+
+    /**
+     * Returns a formatted string that represents the date.
+     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+     * @param options An object that contains one or more properties that specify comparison options.
+     * @returns formatted string.
+     */
+     public format(locales?: string | string[], options?: DateOnlyFormat): string {
+        const date = this.toDateTime();
+        return date.toLocaleDateString(locales, options);
     }
 
     /** 

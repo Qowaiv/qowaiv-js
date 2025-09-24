@@ -1,4 +1,5 @@
 interface PercentageFormatOptions {
+    locale?: string | undefined;
     localeMatcher?: "lookup" | "best fit" | undefined;
     symbol?: string | undefined;
     useGrouping?: boolean | undefined;
