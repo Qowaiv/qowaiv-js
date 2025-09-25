@@ -12,15 +12,15 @@ import {
 import { InternationalBankAccountNumber } from "@qowaiv/qowaiv";
 import { QowaivZodIssueCode } from './QowaivZodIssueCode';
 
-export type InternationalBankAccountNumberCheck = { kind: "invalid_iban" };
+export type IbanCheck = { kind: "invalid_iban" };
 
-export interface InternationalBankAccountNumberDef extends ZodTypeDef {
-    checks: InternationalBankAccountNumberCheck[];
+export interface IbanDef extends ZodTypeDef {
+    checks: IbanCheck[];
 }
 
-class InternationalBankAccountNumberValidator extends ZodType<
+class IbanValidator extends ZodType<
     InternationalBankAccountNumber | undefined,
-    InternationalBankAccountNumberDef,
+    IbanDef,
     unknown
 > {
     _parse(
@@ -59,15 +59,15 @@ class InternationalBankAccountNumberValidator extends ZodType<
         return { status: status.value, value: iban };
     }
 
-    _addCheck(check: InternationalBankAccountNumberCheck) {
-        return new InternationalBankAccountNumberValidator({
+    _addCheck(check: IbanCheck) {
+        return new IbanValidator({
             ...this._def,
             checks: [...this._def.checks, check],
         });
     }
 
-    _removeCheck(check: InternationalBankAccountNumberCheck) {
-        return new InternationalBankAccountNumberValidator({
+    _removeCheck(check: IbanCheck) {
+        return new IbanValidator({
             ...this._def,
             checks: this._def.checks.filter(
                 (current) => current.kind !== check.kind
@@ -76,5 +76,4 @@ class InternationalBankAccountNumberValidator extends ZodType<
     }
 }
 
-export const iban = (): InternationalBankAccountNumberValidator =>
-    new InternationalBankAccountNumberValidator({ checks: [{ kind: QowaivZodIssueCode.invalid_iban }] });
+export const iban = (): IbanValidator => new IbanValidator({ checks: [{ kind: QowaivZodIssueCode.invalid_iban }] });

@@ -13,13 +13,13 @@ import {
 import { EmailAddress } from '@qowaiv/qowaiv';
 import { QowaivZodIssueCode } from './QowaivZodIssueCode';
 
-export type EmailAddressCheck = { kind: 'invalid_email_address_ip_based' };
+export type EmailCheck = { kind: 'invalid_email_address_ip_based' };
 
-export interface EmailAddressDef extends ZodTypeDef {
-    checks: EmailAddressCheck[];
+export interface EmailDef extends ZodTypeDef {
+    checks: EmailCheck[];
 }
 
-class EmailAddressValidator extends ZodType<EmailAddress | undefined, EmailAddressDef, unknown> {
+class EmailValidator extends ZodType<EmailAddress | undefined, EmailDef, unknown> {
     _parse(input: ParseInput): ParseReturnType<EmailAddress | undefined> {
         let ctx: undefined | ParseContext = undefined;
 
@@ -69,20 +69,19 @@ class EmailAddressValidator extends ZodType<EmailAddress | undefined, EmailAddre
         });
     }
 
-    _addCheck(check: EmailAddressCheck) {
-        return new EmailAddressValidator({
+    _addCheck(check: EmailCheck) {
+        return new EmailValidator({
             ...this._def,
             checks: [...this._def.checks, check],
         });
     }
     
-    _removeCheck(check: EmailAddressCheck) {
-        return new EmailAddressValidator({
+    _removeCheck(check: EmailCheck) {
+        return new EmailValidator({
             ...this._def,
             checks: this._def.checks.filter(current => current.kind !== check.kind),
         });
     }
 }
 
-export const email = (): EmailAddressValidator =>
-    new EmailAddressValidator({ checks: [{ kind: QowaivZodIssueCode.invalid_email_address_ip_based }] });
+export const email = (): EmailValidator => new EmailValidator({ checks: [{ kind: QowaivZodIssueCode.invalid_email_address_ip_based }] });
