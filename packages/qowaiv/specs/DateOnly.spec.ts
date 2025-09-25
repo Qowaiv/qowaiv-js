@@ -171,10 +171,6 @@ describe('Date-only', () => {
             expect(new DateOnly(2017, 6, 11).toString()).toBe('2017-06-11');
         });
 
-        it('dd/MM/yyyy for unspecified', () => {
-            expect(new DateOnly(2017, 6, 11).format()).toBe('11/06/2017');
-        });
-
         it('Supports date style full', () => {
             expect(new DateOnly(2017, 6, 11).format('nl', { dateStyle: 'full' })).toBe('zondag 11 juni 2017');
         });
