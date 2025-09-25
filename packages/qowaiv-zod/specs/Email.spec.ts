@@ -59,8 +59,6 @@ describe('Email address validation', () => {
         const result = definition.safeParse({
             emailAddress: 'valid@0.0.0.0',
         });
-        
-        console.log(result.error)
 
         expect(result.success).toBe(true);
         expect(result.error).toBeUndefined();
