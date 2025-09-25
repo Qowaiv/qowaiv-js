@@ -21,14 +21,13 @@ export interface EmailDef extends ZodTypeDef {
 
 class EmailValidator extends ZodType<EmailAddress | undefined, EmailDef, unknown> {
     _parse(input: ParseInput): ParseReturnType<EmailAddress | undefined> {
+   
         let ctx: undefined | ParseContext = undefined;
-
         const status = new ParseStatus();
-
         const parsed = typeof input.data === 'string' ? EmailAddress.tryParse(input.data) : undefined;
-        const emailAddress = parsed instanceof EmailAddress ? parsed : undefined;
+        const svo = parsed instanceof EmailAddress ? parsed : undefined;
 
-        if (emailAddress === undefined) {
+        if (svo === undefined) {
             ctx = this._getOrReturnCtx(input, ctx);
 
             addIssueToContext(ctx, {
@@ -39,33 +38,31 @@ class EmailValidator extends ZodType<EmailAddress | undefined, EmailDef, unknown
             });
 
             status.dirty();
-
             return INVALID;
         }
 
-        input.data = emailAddress;
+        input.data = svo;
 
         for (const check of this._def.checks) {
-            if (check.kind === 'invalid_email_address_ip_based' && emailAddress.isIPBased) {
+            if (check.kind === 'invalid_email_address_ip_based' && svo.isIPBased) {
                 ctx = this._getOrReturnCtx(input, ctx);
 
                 addIssueToContext(ctx, {
                     code: ZodIssueCode.custom,
-                    params: {
-                        qowaiv: QowaivZodIssueCode.invalid_email_address_ip_based,
-                    },
+                    params: { qowaiv: QowaivZodIssueCode.invalid_email_address_ip_based },
                 });
 
                 status.dirty();
+                return INVALID;
             }
         }
 
-        return { status: status.value, value: emailAddress };
+        return { status: status.value, value: svo };
     }
 
     ipBased() {
         return this._removeCheck({
-            kind: 'invalid_email_address_ip_based',
+            kind: QowaivZodIssueCode.invalid_email_address_ip_based,
         });
     }
 

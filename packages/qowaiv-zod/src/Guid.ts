@@ -9,35 +9,35 @@ import {
   ZodType,
   type ZodTypeDef,
 } from "zod";
-import { InternationalBankAccountNumber } from "@qowaiv/qowaiv";
+import { Guid } from "@qowaiv/qowaiv";
 import { QowaivZodIssueCode } from './QowaivZodIssueCode';
 
-export type IbanCheck = { kind: "invalid_iban" };
+export type GuidCheck = { kind: "invalid_guid" };
 
-export interface IbanDef extends ZodTypeDef {
-    checks: IbanCheck[];
+export interface GuidDef extends ZodTypeDef {
+    checks: GuidCheck[];
 }
 
-class IbanValidator extends ZodType<
-    InternationalBankAccountNumber | undefined,
-    IbanDef,
+class GuidValidator extends ZodType<
+    Guid | undefined,
+    GuidDef,
     unknown
 > {
     _parse(
         input: ParseInput
-    ): ParseReturnType<InternationalBankAccountNumber | undefined> {
+    ): ParseReturnType<Guid | undefined> {
 
         let ctx: undefined | ParseContext = undefined;
         const status = new ParseStatus();
-        const parsed = typeof input.data === "string" ? InternationalBankAccountNumber.tryParse(input.data) : undefined;
-        const svo = parsed instanceof InternationalBankAccountNumber ? parsed : undefined;
+        const parsed = typeof input.data === "string" ? Guid.tryParse(input.data) : undefined;
+        const svo = parsed instanceof Guid ? parsed : undefined;
 
         if (svo === undefined) {
             ctx = this._getOrReturnCtx(input, ctx);
 
             addIssueToContext(ctx, {
                 code: "custom",
-                params: { qowaiv: QowaivZodIssueCode.invalid_iban },
+                params: { qowaiv: QowaivZodIssueCode.invalid_guid },
             });
 
             status.dirty();
@@ -49,15 +49,15 @@ class IbanValidator extends ZodType<
         return { status: status.value, value: svo };
     }
 
-    _addCheck(check: IbanCheck) {
-        return new IbanValidator({
+    _addCheck(check: GuidCheck) {
+        return new GuidValidator({
             ...this._def,
             checks: [...this._def.checks, check],
         });
     }
 
-    _removeCheck(check: IbanCheck) {
-        return new IbanValidator({
+    _removeCheck(check: GuidCheck) {
+        return new GuidValidator({
             ...this._def,
             checks: this._def.checks.filter(
                 (current) => current.kind !== check.kind
@@ -66,4 +66,4 @@ class IbanValidator extends ZodType<
     }
 }
 
-export const iban = (): IbanValidator => new IbanValidator({ checks: [{ kind: QowaivZodIssueCode.invalid_iban }] });
+export const guid = (): GuidValidator => new GuidValidator({ checks: [{ kind: QowaivZodIssueCode.invalid_guid }] });
