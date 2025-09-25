@@ -9,35 +9,35 @@ import {
   ZodType,
   type ZodTypeDef,
 } from "zod";
-import { Guid } from "@qowaiv/qowaiv";
+import { PostalCode } from "@qowaiv/qowaiv";
 import { QowaivZodIssueCode } from './QowaivZodIssueCode';
 
-export type GuidCheck = { kind: "invalid_guid" };
+export type PostalCodeCheck = { kind: "invalid_postal_code" };
 
-export interface GuidDef extends ZodTypeDef {
-    checks: GuidCheck[];
+export interface PostalCodeDef extends ZodTypeDef {
+    checks: PostalCodeCheck[];
 }
 
-class GuidValidator extends ZodType<
-    Guid | undefined,
-    GuidDef,
+class PostalCodeValidator extends ZodType<
+    PostalCode | undefined,
+    PostalCodeDef,
     unknown
 > {
     _parse(
         input: ParseInput
-    ): ParseReturnType<Guid | undefined> {
+    ): ParseReturnType<PostalCode | undefined> {
 
         let ctx: undefined | ParseContext = undefined;
         const status = new ParseStatus();
-        const parsed = typeof input.data === "string" ? Guid.tryParse(input.data) : undefined;
-        const svo = parsed instanceof Guid ? parsed : undefined;
+        const parsed = typeof input.data === "string" ? PostalCode.tryParse(input.data) : undefined;
+        const svo = parsed instanceof PostalCode ? parsed : undefined;
 
         if (svo === undefined) {
             ctx = this._getOrReturnCtx(input, ctx);
 
             addIssueToContext(ctx, {
                 code: "custom",
-                params: { qowaiv: QowaivZodIssueCode.invalid_guid },
+                params: { qowaiv: QowaivZodIssueCode.invalid_postal_code },
             });
 
             status.dirty();
@@ -49,19 +49,19 @@ class GuidValidator extends ZodType<
         return { status: status.value, value: svo };
     }
 
-    _addCheck(check: GuidCheck) {
-        return new GuidValidator({
+    _addCheck(check: PostalCodeCheck) {
+        return new PostalCodeValidator({
             ...this._def,
             checks: [...this._def.checks, check],
         });
     }
 
-    _removeCheck(check: GuidCheck) {
-        return new GuidValidator({
+    _removeCheck(check: PostalCodeCheck) {
+        return new PostalCodeValidator({
             ...this._def,
             checks: this._def.checks.filter(cur => cur.kind !== check.kind),
         });
     }
 }
 
-export const guid = (): GuidValidator => new GuidValidator({ checks: [{ kind: QowaivZodIssueCode.invalid_guid }] });
+export const postalCode = (): PostalCodeValidator => new PostalCodeValidator({ checks: [{ kind: QowaivZodIssueCode.invalid_postal_code }] });

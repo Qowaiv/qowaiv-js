@@ -76,7 +76,7 @@ class EmailValidator extends ZodType<EmailAddress | undefined, EmailDef, unknown
     _removeCheck(check: EmailCheck) {
         return new EmailValidator({
             ...this._def,
-            checks: this._def.checks.filter(current => current.kind !== check.kind),
+            checks: this._def.checks.filter(cur => cur.kind !== check.kind),
         });
     }
 }

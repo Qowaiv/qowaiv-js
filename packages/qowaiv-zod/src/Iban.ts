@@ -59,9 +59,7 @@ class IbanValidator extends ZodType<
     _removeCheck(check: IbanCheck) {
         return new IbanValidator({
             ...this._def,
-            checks: this._def.checks.filter(
-                (current) => current.kind !== check.kind
-            ),
+            checks: this._def.checks.filter(cur => cur.kind !== check.kind),
         });
     }
 }

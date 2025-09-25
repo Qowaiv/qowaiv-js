@@ -4,13 +4,13 @@ import { q } from '../src';
 import { QowaivZodIssue } from '../src/QowaivZodIssue';
 import { QowaivZodIssues } from '../src/QowaivZodIssues';
 
-describe('IBAN validation', () => {
+describe('Postal code validation', () => {
     it('is invalid', () => {
         const definition = z.object({
-            iban: q.iban()
+            postalCode: q.postalCode()
         });
         const result = definition.safeParse({
-            iban: 'invalid',
+            postalCode: 'invalid1234566',
         });
 
         expect(result.success).toBe(false);
@@ -19,15 +19,15 @@ describe('IBAN validation', () => {
 
         const issue = result.error?.issues[0]! as QowaivZodIssue;
         expect(QowaivZodIssues.supports(issue)).toBe(true);
-        expect(issue.params.qowaiv).toBe('invalid_iban');
+        expect(issue.params.qowaiv).toBe('invalid_postal_code');
     });
 
     it('is valid', () => {
         const definition = z.object({
-            iban: q.iban()
+            postalCode: q.postalCode()
         });
         const result = definition.safeParse({
-            iban: 'NL02ABNA0123456789',
+            postalCode: '8599IQ',
         });
 
         expect(result.success).toBe(true);
@@ -36,10 +36,10 @@ describe('IBAN validation', () => {
     
     it('is valid if optional', () => {
         const definition = z.object({
-            iban: q.iban().optional()
+            postalCode: q.postalCode().optional()
         });
         const result = definition.safeParse({
-            iban: undefined,
+            postalCode: undefined,
         });
 
         expect(result.success).toBe(true);
