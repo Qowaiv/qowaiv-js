@@ -3,7 +3,6 @@ import { Clock, DateOnly } from '../src';
 
 describe("Clock: ", () => {
 
-
     it("Clock now can be updated", () => {
 
         Clock.generator = () => new Date(2017, 6, 11);
