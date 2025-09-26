@@ -3,7 +3,7 @@ import { Rnd } from './_rnd';
 
 describe('Rnd', () => {
 
-    it('nextInt() has inclusive bounderies', () => {
+    it('nextInt() has inclusive boundaries', () => {
 
         const counts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
