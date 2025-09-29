@@ -3,7 +3,7 @@ export class Guard {
     /**
      * Guards a value to be an integer within the (optional) range.
      * @param value the value to guard.
-     * @param min the (optional) minimum allowed value
+     * @param min the (optional) minimum allowed (inclusive) value
      * @param max the (optional) maximum allowed (inclusive) value
      * @returns the value when an integer within the specified range.
      */
