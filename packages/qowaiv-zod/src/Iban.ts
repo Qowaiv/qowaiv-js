@@ -30,9 +30,9 @@ class IbanValidator extends ZodType<
         let ctx: undefined | ParseContext = undefined;
         const status = new ParseStatus();
         const parsed = typeof input.data === "string" ? InternationalBankAccountNumber.tryParse(input.data) : undefined;
-        const svo = parsed instanceof InternationalBankAccountNumber ? parsed : undefined;
+        const iban = parsed instanceof InternationalBankAccountNumber ? parsed : undefined;
 
-        if (svo === undefined) {
+        if (iban === undefined) {
             ctx = this._getOrReturnCtx(input, ctx);
 
             addIssueToContext(ctx, {
@@ -44,9 +44,9 @@ class IbanValidator extends ZodType<
             return INVALID;
         }
 
-        input.data = svo;
+        input.data = iban;
 
-        return { status: status.value, value: svo };
+        return { status: status.value, value: iban };
     }
 
     _addCheck(check: IbanCheck) {

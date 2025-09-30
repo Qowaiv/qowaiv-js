@@ -30,9 +30,9 @@ class PostalCodeValidator extends ZodType<
         let ctx: undefined | ParseContext = undefined;
         const status = new ParseStatus();
         const parsed = typeof input.data === "string" ? PostalCode.tryParse(input.data) : undefined;
-        const svo = parsed instanceof PostalCode ? parsed : undefined;
+        const postalCode = parsed instanceof PostalCode ? parsed : undefined;
 
-        if (svo === undefined) {
+        if (postalCode === undefined) {
             ctx = this._getOrReturnCtx(input, ctx);
 
             addIssueToContext(ctx, {
@@ -44,9 +44,9 @@ class PostalCodeValidator extends ZodType<
             return INVALID;
         }
 
-        input.data = svo;
+        input.data = postalCode;
 
-        return { status: status.value, value: svo };
+        return { status: status.value, value: postalCode };
     }
 
     _addCheck(check: PostalCodeCheck) {

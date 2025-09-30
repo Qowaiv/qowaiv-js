@@ -25,9 +25,9 @@ class EmailValidator extends ZodType<EmailAddress | undefined, EmailDef, unknown
         let ctx: undefined | ParseContext = undefined;
         const status = new ParseStatus();
         const parsed = typeof input.data === 'string' ? EmailAddress.tryParse(input.data) : undefined;
-        const svo = parsed instanceof EmailAddress ? parsed : undefined;
+        const email = parsed instanceof EmailAddress ? parsed : undefined;
 
-        if (svo === undefined) {
+        if (email === undefined) {
             ctx = this._getOrReturnCtx(input, ctx);
 
             addIssueToContext(ctx, {
@@ -41,10 +41,10 @@ class EmailValidator extends ZodType<EmailAddress | undefined, EmailDef, unknown
             return INVALID;
         }
 
-        input.data = svo;
+        input.data = email;
 
         for (const check of this._def.checks) {
-            if (check.kind === 'invalid_email_address_ip_based' && svo.isIPBased) {
+            if (check.kind === 'invalid_email_address_ip_based' && email.isIPBased) {
                 ctx = this._getOrReturnCtx(input, ctx);
 
                 addIssueToContext(ctx, {
@@ -57,7 +57,7 @@ class EmailValidator extends ZodType<EmailAddress | undefined, EmailDef, unknown
             }
         }
 
-        return { status: status.value, value: svo };
+        return { status: status.value, value: email };
     }
 
     ipBased() {

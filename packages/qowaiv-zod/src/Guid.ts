@@ -30,9 +30,9 @@ class GuidValidator extends ZodType<
         let ctx: undefined | ParseContext = undefined;
         const status = new ParseStatus();
         const parsed = typeof input.data === "string" ? Guid.tryParse(input.data) : undefined;
-        const svo = parsed instanceof Guid ? parsed : undefined;
+        const guid = parsed instanceof Guid ? parsed : undefined;
 
-        if (svo === undefined) {
+        if (guid === undefined) {
             ctx = this._getOrReturnCtx(input, ctx);
 
             addIssueToContext(ctx, {
@@ -44,9 +44,9 @@ class GuidValidator extends ZodType<
             return INVALID;
         }
 
-        input.data = svo;
+        input.data = guid;
 
-        return { status: status.value, value: svo };
+        return { status: status.value, value: guid };
     }
 
     _addCheck(check: GuidCheck) {

@@ -30,9 +30,9 @@ class PercentageValidator extends ZodType<
         let ctx: undefined | ParseContext = undefined;
         const status = new ParseStatus();
         const parsed = typeof input.data === "string" ? Percentage.tryParse(input.data) : undefined;
-        const svo = parsed instanceof Percentage ? parsed : undefined;
+        const percentage = parsed instanceof Percentage ? parsed : undefined;
 
-        if (svo === undefined) {
+        if (percentage === undefined) {
             ctx = this._getOrReturnCtx(input, ctx);
 
             addIssueToContext(ctx, {
@@ -44,9 +44,9 @@ class PercentageValidator extends ZodType<
             return INVALID;
         }
 
-        input.data = svo;
+        input.data = percentage;
 
-        return { status: status.value, value: svo };
+        return { status: status.value, value: percentage };
     }
 
     _addCheck(check: PercentageCheck) {
