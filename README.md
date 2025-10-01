@@ -41,6 +41,41 @@ if (svo instanceof (Unparsable)) {
 
 ## Types
 
+### Clock
+The clock provides a testable set of functions that return the current time/date.
+
+``` TypeScript
+const now = Clock.now();
+const today = Clock.today();
+
+// updates the generator.
+Clock.generator = () => new Date(2025, 09, 10);
+```
+
+### Date (only)
+Represents a date (only) within the range of 0001-01-01 and 9999-12-31.
+Contrary to JavaScript's `Date`, the month component is 1-based, just like the
+year and the day (of month).
+
+``` TypeScript
+const date = DateOnly.parse('2017-06-11');
+const epoch = date.unixEpoch;     // total seconds since 1970-01-01
+const dayOfMonth = date.day;      // 11
+const dayOfWeek = date.dayOfWeek; // 0, Sunday
+const dayOfYear = date.dayOfYear; // 162
+
+const next = date.addYears(10);   // 2027-06-11
+const next = date.addMonths(-3);  // 2017-03-11
+const next = date.addDays(40);    // 2017-07-21
+
+const leap = DateOnly.isLeapYear(1988);      // true
+const days = DateOnly.daysPerMonth(1988, 2); // 29
+
+const dateTime = date.toDateTime(); // 2017-06-11T:00:00:00Z
+
+const format = date.format('nl', { dateStyle: 'full' }); // zondag 11 juni 2017
+```
+
 ### GUID
 Represents a Globally Unique Identifier (GUID). 
 
@@ -117,13 +152,13 @@ const Model = z.object({
     name: z.string(), // Zod defined type
 	email: q.email(), // Qowaiv-Zod defined type
 });
-````
+```
 
 ### Email Address
 For email validation, the following features are available:
 
 ``` TypeScript
-q.email();             // required email address
+q.email();            // required email address
 q.email().ipBased();  // required email address including IP=based
 q.email().optional(); // optional email address
 ```
