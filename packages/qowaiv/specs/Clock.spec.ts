@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Clock, DateOnly } from '../src';
+import { Clock } from '../src';
+import { create as DateOnly_new } from '../src/DateOnly';
 
 describe("Clock: ", () => {
 
@@ -8,6 +9,6 @@ describe("Clock: ", () => {
         Clock.generator = () => new Date(2017, 6, 11);
         const now = Clock.today();
 
-        expect(now).toStrictEqual(new DateOnly(2017, 6, 11));
+        expect(now).toStrictEqual(DateOnly_new(2017, 6, 11));
     });
 });

@@ -1,4 +1,4 @@
-import { DateOnly } from "../src";
+import { create as DateOnly_new, daysPerMonth, DateOnly } from "../src/DateOnly";
 
 /**
  * (Pseudo) random generator.
@@ -32,8 +32,8 @@ export class Rnd {
         for (let i = 0; i < count; i++) {
             const y = Rnd.nextInt(1, 9999);
             const m = Rnd.nextInt(1, 12);
-            const d = Rnd.nextInt(1, DateOnly.daysPerMonth(y, m));
-            dates.push(new DateOnly(y, m, d));
+            const d = Rnd.nextInt(1, daysPerMonth(y, m));
+            dates.push(DateOnly_new(y, m, d));
         }
         return dates;
     }

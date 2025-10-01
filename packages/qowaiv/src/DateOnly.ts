@@ -1,258 +1,251 @@
 import { Guard, Svo, Unparsable } from '.';
 
-export class DateOnly implements IEquatable, ILocalizable<DateOnlyFormat>, IJsonStringifyable {
-
-    /**
-     * The mimimum value of date-only (0001-01-01).
-     */
-    public static readonly minValue = new DateOnly(1, 1, 1);
-
-    /**
-     * The maximum value of date-only (9999-12-31).
-     */
-    public static readonly maxValue = new DateOnly(9999, 12, 31);
-
-    static readonly #daysTo1970 = 719162;
-    static readonly #secondsPerDay = 86400000;
-        
-    /**
-     * Creates a new date-only.
-     * @param year 1-based (1 - 9999) year
-     * @param month 1-based (1 - 12) month
-     * @param day  1-based (1 - 31) day
-     */
-    constructor(year: number, month: number, day: number) {
-        this.year = Guard.int(year, 1, 9999);
-        this.month = Guard.int(month, 1, 12);
-        this.day = Guard.int(day, 1, DateOnly.daysPerMonth(year, month));
-    }
-
+export interface DateOnly extends IEquatable, ILocalizable<DateOnlyFormat>, IJsonStringifyable {
     /**
      * The year component (1-based).
      */
-    public readonly year: number = 1;
+    readonly year: number;
     /**
      * The month component (1-based).
      */
-    public readonly month: number = 1;
+    readonly month: number;
     /**
      * The day component (1-based).
      */
-    public readonly day: number = 1;
+    readonly day: number;
 
     /**
      * @returns the UNIX epoch for the specified date-only.
      * @remarks the number of seconds since 1970-01-01.
      */
-    public get unixEpoch(): number {
-        return (this.#totalDays - DateOnly.#daysTo1970 - 1) * DateOnly.#secondsPerDay;
-    }
+    unixEpoch(): number;
 
     /**
      * @returns the day of the week (0 – 6) for the specified date-only.
      */
-    public get dayOfWeek(): number {
-        const days = this.unixEpoch / DateOnly.#secondsPerDay + DateOnly.#daysTo1970 + 1;
-        return days % 7;
-    }
+    dayOfWeek(): number;
 
     /**
      * @returns The day of the year (1 - 366) for the specified date-only.
      */
-    public get dayOfYear(): number {
-        return this.day
-            + [0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365][this.month] // days per month
-            + (this.month >= 3 && DateOnly.isLeapYear(this.year) ? 1 : 0);
-    }
+    dayOfYear(): number;
 
     /**
-     * Adds the specified number of years to the specified date-only.
-     * @param years The years to add to the specified date-only.
-     * @returns a new instance of a date-only.
-     */
-    public addYears(years: number): DateOnly {
-        return new DateOnly(this.year + years, this.month, this.day);
-    }
+    * Adds the specified number of years to the specified date-only.
+    * @param years The years to add to the specified date-only.
+    * @returns a new instance of a date-only.
+    */
+    addYears(years: number): DateOnly;
 
     /**
      * Adds the specified number of months to the specified date-only.
      * @param months The months to add to the specified date-only.
      * @returns a new instance of a date-only.
      */
-    public addMonths(months: number): DateOnly {
-        const ms = this.year * 12 + this.month - 1 + Guard.int(months);
-        const year = ~~(ms / 12);
-        const month = (ms % 12) + 1;
-        const day = Math.min(DateOnly.daysPerMonth(year, month), this.day);
-        return new DateOnly(year, month, day);
-    }
+    addMonths(months: number): DateOnly;
 
     /**
      * Adds the specified number of days to the specified date-only.
      * @param days The days to add to the specified date-only.
      * @returns a new instance of a date-only.
      */
-    public addDays(days: number): DateOnly {
-        let day = this.#totalDays + Guard.int(days);
-
-        // Aproximate the number of years.
-        let year = ~~(day / (365.2425)) + 1;
-        day -= (year - 1) * 365 + DateOnly.#getLeapYears(year);
-
-        let month = 0;
-        while (month < 12) {
-            const days = DateOnly.daysPerMonth(year, ++month);
-            if (day < days) break;
-            day -= days;
-        }
-
-        return new DateOnly(year, month, day);
-    }
+    addDays(days: number): DateOnly;
 
     /**
      * @returns the specified date-only as a date-time for dates starting at 1970-01-01.
      */
-    public toDateTime(): Date {
-        return new Date(this.unixEpoch);
+    toDateTime(): Date;
+}
+
+export const minValue = create(1, 1, 1);
+
+export const maxValue = create(9999, 12, 31);
+
+export function create(year: number, month: number, day: number): DateOnly {
+    const daysTo1970 = 719162;
+    const secondsPerDay = 86400000;
+
+    Guard.int(year, 1, 9999);
+    Guard.int(month, 1, 12);
+    Guard.int(day, 1, daysPerMonth(year, month));
+
+    return Object.freeze({
+        year,
+        month,
+        day,
+        unixEpoch,
+        dayOfWeek,
+        dayOfYear,
+        addYears,
+        addMonths,
+        addDays,
+        toDateTime,
+        toString,
+        format,
+        toJSON,
+        equals,
+    } satisfies DateOnly)
+
+    function totalDays(): number {
+        return dayOfYear()
+            + (year - 1) * 365
+            + getLeapYears(year);
     }
 
-    /** 
-     * @returns a string that represents the current date-only.
-     */
-    public toString(): string {
-        return `${DateOnly.#pad(this.year, 4)}-${DateOnly.#pad(this.month)}-${DateOnly.#pad(this.day)}`;
+    function unixEpoch(): number {
+        return (totalDays() - daysTo1970 - 1) * secondsPerDay;
     }
 
-    /**
-     * Returns a formatted string that represents the date.
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
-     * @param options An object that contains one or more properties that specify comparison options.
-     * @returns formatted string.
-     */
-     public format(locales?: string | string[], options?: DateOnlyFormat): string {
-        const date = this.toDateTime();
+    function dayOfWeek(): number {
+        const days = unixEpoch() / secondsPerDay + daysTo1970 + 1;
+        return days % 7;
+    }
+
+    function dayOfYear(): number {
+        return day
+            + [0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365][month] // days per month
+            + (month >= 3 && isLeapYear(year) ? 1 : 0);
+    }
+
+    function addYears(years: number) {
+        return create(year + years, month, day);
+    }
+
+    function addMonths(months: number) {
+        const ms = year * 12 + month - 1 + months;
+        const y = ~~(ms / 12);
+        const m = (ms % 12) + 1;
+        const d = Math.min(daysPerMonth(y, m), day);
+        return create(y, m, d);
+    }
+
+    function addDays(days: number): DateOnly {
+        let d = totalDays() + days;
+
+        // Aproximate the number of years.
+        let y = ~~(d / (365.2425)) + 1;
+        d -= (y - 1) * 365 + getLeapYears(y);
+
+        let m = 0;
+        while (m < 12) {
+            const dpm = daysPerMonth(y, ++m);
+            if (d < dpm) break;
+            d -= dpm;
+        }
+
+        return create(y, m, d);
+    }
+
+    function toDateTime(): Date {
+        return new Date(unixEpoch());
+    }
+
+    function toString(): string {
+        return `${pad(year, 4)}-${pad(month)}-${pad(day)}`;
+    }
+
+    function format(locales?: string | string[], options?: any): string {
+        const date = toDateTime();
         return date.toLocaleDateString(locales, options);
     }
 
-    /** 
-     * @returns a JSON representation of the date-only.
-     */
-    public toJSON(): string {
-        return this.toString();
+    function toJSON(): string {
+        return toString();
     }
 
-    /**
-     * @returns true if other is a date representing the same value.
-     */
-    public equals(other: unknown): boolean {
-        return (other instanceof (DateOnly)
-            && this.year === other.year
-            && this.month === other.month
-            && this.day === other.day)
+    function equals(other: DateOnly): boolean {
+        return (
+            !Svo.isEmpty(other)
+            && year === other.year
+            && month === other.month
+            && day === other.day)
             || (other instanceof (Date)
-                && this.year === other.getUTCFullYear()
-                && this.month === (other.getUTCMonth() + 1)
-                && this.day === other.getUTCDate());
+                && year === other.getUTCFullYear()
+                && month === (other.getUTCMonth() + 1)
+                && day === other.getUTCDate());
     }
+}
 
-    /**
-     * @param year The year to check.
-     * @returns true if the year is a leap year.
-     */
-    public static isLeapYear(year: number): boolean {
-        return !(Guard.int(year, 1, 9999) & 3 || year & 15 && !(year % 25));
+/**
+ * Creates a date-only based on a date-time.
+ * @param {Date} d The date-time to convert.
+ * @returns {DateOnly} represting the (UTC) date part of the date-time.
+ */
+export function fromDate(d: Date): DateOnly {
+    return create(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate());
+}
+
+/**
+ * Parses a date-only string.
+ * @param {string} s A string containing date to convert.
+ * @returns {DateOnly} A GUID if valid, otherwise throws.
+ */
+export function parse(s: string | null | undefined): DateOnly | undefined {
+    const svo = tryParse(s);
+    if (svo instanceof (Unparsable)) {
+        throw svo;
     }
+    return svo;
+}
 
-    /**
-     * @param year The year to check.
-     * @param month The month to check.
-     * @returns the total days for the specified year/month.
-     */
-    public static daysPerMonth(year: number, month: number): number {
-        Guard.int(year, 1, 9999);
-        if (month === 2) {
-            return DateOnly.isLeapYear(year) ? 29 : 28;
+/**
+ * Tries to parse a date-only string.
+ * @param {string} s A string containing GUID to convert.
+ * @returns {DateOnly} A date if valid, otherwise unparsable.
+ */
+export function tryParse(s: string | null | undefined): DateOnly | Unparsable | undefined {
+    if (Svo.isEmpty(s)) {
+        return undefined;
+    }
+    try {
+        const str = s!.trim();
+        const match = str.match(/^(\d{1,4})-(1[0-2]|0?\d)-(3[01]|[0-2]?\d)$/);
+        if (match?.length === 4) {
+            return create(Number.parseInt(match[1]), Number.parseInt(match[2]), Number.parseInt(match[3]));
         }
-        else {
-            return [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][Guard.int(month, 1, 12)];
+
+        const date = new Date(Date.parse(str));
+        if (Number.isFinite(date.getTime())) {
+            return create(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate());
         }
     }
+    catch { /* fall trough */ }
+    return new Unparsable("Not a valid date", s);
+}
 
-    /**
-     * Creates a date-only based on a date-time.
-     * @param {Date} d The date-time to convert.
-     * @returns {DateOnly} represting the (UTC) date part of the date-time.
-     */
-    public static fromDate(d: Date) : DateOnly {
-        return new DateOnly(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate());
+/**
+  * @param year The year to check.
+  * @returns true if the year is a leap year.
+  */
+export function isLeapYear(year: number): boolean {
+    return !(year & 3 || year & 15 && !(year % 25));
+}
+
+/**
+ * @param year The year to check.
+ * @param month The month to check.
+ * @returns the total days for the specified year/month.
+ */
+export function daysPerMonth(year: number, month: number): number {
+    if (month === 2) {
+        return isLeapYear(year) ? 29 : 28;
     }
-
-    /**
-     * Parses a date-only string.
-     * @param {string} s A string containing date to convert.
-     * @returns {DateOnly} A GUID if valid, otherwise throws.
-     */
-    public static parse(s: string | null | undefined): DateOnly | undefined {
-        const svo = DateOnly.tryParse(s);
-
-        if (svo instanceof (Unparsable)) {
-            throw svo;
-        }
-        return svo;
+    else {
+        return [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
     }
+}
 
-    /**
-     * Tries to parse a date-only string.
-     * @param {string} s A string containing GUID to convert.
-     * @returns {DateOnly} A date if valid, otherwise unparsable.
-     */
-    public static tryParse(s: string | null | undefined): DateOnly | Unparsable | undefined {
-        if (Svo.isEmpty(s)) {
-            return undefined;
-        }
-        try {
-            const str = s!.trim();
-            const match = str.match(/^(\d{1,4})-(1[0-2]|0?\d)-(3[01]|[0-2]?\d)$/);
-            if (match?.length === 4) {
-                return new DateOnly(Number.parseInt(match[1]),Number.parseInt(match[2]), Number.parseInt(match[3]));
-            }
+function getLeapYears(year: number) {
+    const y = year - 1;
+    return ~~(y / 4)
+        + ~~(y / 400)
+        - ~~(y / 100);
+}
 
-            const date = new Date(Date.parse(str));
-            if (Number.isFinite(date.getTime())) {
-                return new DateOnly(date.getUTCFullYear(), date.getUTCMonth() +1, date.getUTCDate());
-            }
-        }
-        catch { /* fall trough */}
-        return new Unparsable("Not a valid date", s);
-    }
-
-    /**
-    * @returns the total number of days from 0001-01-01.
-    */
-    get #totalDays(): number {
-        return this.dayOfYear
-            + (this.year - 1) * 365
-            + DateOnly.#getLeapYears(this.year);
-    }
-
-    /**
-     * @returns the total of leap years that occurred before the specified year.
-     */
-    static #getLeapYears(year: number) {
-        const y = year - 1;
-        return ~~(y / 4)
-            + ~~(y / 400)
-            - ~~(y / 100);
-    }
-
-    /**
-     * @remarks String.ProtoType.padStart() is not available.
-     */
-    static #pad(n: number, padding?: number): string {
+function pad(n: number, padding?: number): string {
         let s = n.toString();
         while (s.length < (padding ?? 2)) {
             s = '0' + s;
         }
         return s;
     }
-}

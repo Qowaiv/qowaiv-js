@@ -1,4 +1,4 @@
-import { DateOnly } from "./DateOnly";
+import { create as DateOnly_new, DateOnly } from "./DateOnly";
 
 /**
  * Static (testable) clock.
@@ -20,6 +20,6 @@ export class Clock {
      */
     public static today(): DateOnly {
         var now = Clock.now();
-        return new DateOnly(now.getFullYear(), now.getMonth(), now.getDate());
+        return DateOnly_new(now.getFullYear(), now.getMonth(), now.getDate());
     }
 }
