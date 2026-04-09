@@ -9,7 +9,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable<
      *          you will normally use InternationalBankAccountNumber.parse(string).
      */
     private constructor(value: string) {
-        this.value= value;
+        this.value = value;
     }
 
     /**
