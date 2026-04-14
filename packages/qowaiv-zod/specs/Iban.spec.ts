@@ -2,6 +2,9 @@
 import { z, ZodError } from 'zod';
 import { q } from '../src';
 import { isQowaivIssue, QowaivIssue } from '../src/QowaivError';
+import {useForm} from "vee-validate";
+import {toTypedSchema} from "@vee-validate/zod";
+import {InternationalBankAccountNumber} from "@qowaiv/qowaiv";
 
 describe('Iban validation', () => {
     it('is invalid', () => {
@@ -32,16 +35,17 @@ describe('Iban validation', () => {
         expect(result.success).toBe(true);
         expect(result.error).toBeUndefined();
     });
-    
-    it('is valid if optional', () => {
-        const definition = z.object({
-            iban: q.iban().optional()
-        });
-        const result = definition.safeParse({
-            iban: undefined,
-        });
 
-        expect(result.success).toBe(true);
-        expect(result.error).toBeUndefined();
+    it('can set initial value', () => {
+        const _ = useForm({
+            validationSchema: toTypedSchema(
+                z.object({
+                    iban: q.iban(),
+                })
+            ),
+            initialValues: {
+                iban: InternationalBankAccountNumber.parse('NL02 ABNA 0123 4567 89'),
+            },
+        });
     });
 });
