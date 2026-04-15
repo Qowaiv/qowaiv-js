@@ -60,7 +60,7 @@ export class Guid implements Equatable, Formattable<GuidFormat>, JsonStringifyab
      * Returns the version of the GUID.
      */
     public get version(): number {
-        return parseInt(this.#value.slice(14, 15));
+        return Number.parseInt(this.#value.slice(14, 15));
     }
 
     /**
@@ -156,10 +156,10 @@ export class Guid implements Equatable, Formattable<GuidFormat>, JsonStringifyab
         if (typeof crypto?.randomUUID == "function") {
             return crypto.randomUUID();
         }
-        else if (typeof window?.crypto?.getRandomValues === "function") {
+        else if (typeof globalThis?.crypto?.getRandomValues === "function") {
 
             const bytes = new Uint32Array(4);
-            window.crypto.getRandomValues(bytes);
+            globalThis.crypto.getRandomValues(bytes);
             return Guid.unstrip(
                 bytes[0].toString(16) +
                 bytes[1].toString(16) +

@@ -11,15 +11,14 @@ export class Clock {
      * @returns now as date-time.
      */
     public static now(): Date {
-        var now = Clock.generator();
-        return now;
+        return Clock.generator();
     }
 
     /**
      * @returns today as a date-only.
      */
     public static today(): DateOnly {
-        var now = Clock.now();
+        const now = Clock.now();
         return new DateOnly(now.getFullYear(), now.getMonth(), now.getDate());
     }
 }

@@ -2,13 +2,13 @@ import { Svo, Unparsable } from '.';
 
 class Is {
     public static local(ch: string): boolean {
-        return ch.charCodeAt(0) > 127
-            || "!#$%&'*+-./0123456789=?ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~".indexOf(ch) >= 0;
+        return ch.codePointAt(0)! > 127
+            || "!#$%&'*+-./0123456789=?ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~".includes(ch);
     }
 
     public static domain(ch: string): boolean {
-        return ch.charCodeAt(0) > 127
-            || '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz'.indexOf(ch) >= 0;
+        return ch.codePointAt(0)! > 127
+            || '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz'.includes(ch);
     }
 
     public static whitespace(ch: string): boolean {
@@ -83,16 +83,16 @@ class Parser {
         else if (this.input.endsWith('>')) {
             const lt = this.input.lastIndexOf('<');
             return lt >= 0
-                ? new Parser(this.input.slice(lt + 1, this.input.length - 1))
+                ? new Parser(this.input.slice(lt + 1, -1))
                 : undefined;
         }
 
         else if (this.input.endsWith(')')) {
             const start = this.input.lastIndexOf('(');
             return start !== -1
-                && this.input.slice(start, this.input.length - 1).indexOf(')') === -1
-                ? new Parser(this.input.slice(0, start).trim())
-                : undefined;
+                && this.input.slice(start, -1).includes(')')
+                ? undefined
+                : new Parser(this.input.slice(0, start).trim());
         }
         else {
             return this;
@@ -185,7 +185,7 @@ class Parser {
     private domainIp(): Parser | undefined {
 
         const domain = this.input.startsWith('[') && this.input.endsWith(']')
-            ? this.input.slice(1, this.input.length - 1)
+            ? this.input.slice(1, -1)
             : this.input;
 
         const ip = Is.ipV4(domain) ?? Is.ipV6(domain);
