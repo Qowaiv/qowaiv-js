@@ -2,7 +2,7 @@ import { Svo, Unparsable } from '.';
 
 type InternationalBankAccountNumberFormat = 'm' | 'M' | 'u' | 'U' | 'h' | 'H' | 'f' | 'F';
 
-export class InternationalBankAccountNumber implements IEquatable, IFormattable<InternationalBankAccountNumberFormat>, IJsonStringifyable {
+export class InternationalBankAccountNumber implements Equatable, Formattable<InternationalBankAccountNumberFormat>, JsonStringifyable {
     /**
      * @constructor
      * @remarks It is the default constructor, for creating an actual IBAN

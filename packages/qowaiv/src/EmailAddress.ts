@@ -215,7 +215,7 @@ class Parser {
     }
 }
 
-export class EmailAddress implements IEquatable, IJsonStringifyable {
+export class EmailAddress implements Equatable, JsonStringifyable {
 
     /**
      * @constructor
