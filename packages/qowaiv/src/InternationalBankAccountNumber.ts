@@ -227,7 +227,7 @@ export class InternationalBankAccountNumber implements Equatable, Formattable<In
         ['QA', /^\d{2}[A-Z]{4}[A-Z0-9]{21}$/],
         ['RO', /^\d{2}[A-Z]{4}[A-Z0-9]{16}$/],
         ['RS', /^35\d{18}$/],
-        ['RU', /^\d{11}[A-Z0-9]{20}$/],
+        ['RU', /^\d{16}[A-Z0-9]{15}$/],
         ['SA', /^\d{4}[A-Z0-9]{18}$/],
         ['SC', /^\d{2}[A-Z]{4}\d{20}[A-Z]{3}$/],
         ['SD', /^\d{16}$/],
