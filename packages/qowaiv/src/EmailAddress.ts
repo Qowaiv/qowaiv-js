@@ -89,8 +89,8 @@ class Parser {
 
         else if (this.input.endsWith(')')) {
             const start = this.input.lastIndexOf('(');
-            return start !== -1
-                && this.input.slice(start, -1).includes(')')
+            return start === -1
+                || this.input.slice(start, -1).includes(')')
                 ? undefined
                 : new Parser(this.input.slice(0, start).trim());
         }
