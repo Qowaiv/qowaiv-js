@@ -3,7 +3,7 @@ import { Unparsable } from '.';
 /**
  * Represents a percentage.
  */
-export class Percentage implements IEquatable, ILocalizable<PercentageFormatOptions>, IJsonStringifyable {
+export class Percentage implements Equatable, Localizable<PercentageFormatOptions>, JsonStringifyable {
 
     /**
      * Represents 0 percent.

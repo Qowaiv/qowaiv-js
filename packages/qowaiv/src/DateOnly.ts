@@ -1,6 +1,6 @@
 import { Guard, Svo, Unparsable } from '.';
 
-export class DateOnly implements IEquatable, ILocalizable<DateOnlyFormat>, IJsonStringifyable {
+export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStringifyable {
 
     /**
      * The mimimum value of date-only (0001-01-01).

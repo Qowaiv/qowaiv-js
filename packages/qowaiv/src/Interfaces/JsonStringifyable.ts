@@ -1,7 +1,7 @@
 /**
  * To support JSON.stringify()
  */
-interface IJsonStringifyable {
+interface JsonStringifyable {
 
     /** 
      * @returns a JSON representation of the object.

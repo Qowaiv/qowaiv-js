@@ -25,7 +25,7 @@ class PostalCodeInfo {
 /**
  * Represents a postal code.
  */
-export class PostalCode implements IEquatable, IFormattable<string>, IJsonStringifyable {
+export class PostalCode implements Equatable, Formattable<string>, JsonStringifyable {
 
     /**
     * @constructor

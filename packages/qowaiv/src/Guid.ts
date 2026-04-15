@@ -5,7 +5,7 @@ type GuidFormat = 'B' | 'b' | 'S' | 's' | 'l' | 'U' | 'u';
 /**
  * Represents a Globally unique identifier (GUID).
  */
-export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringifyable {
+export class Guid implements Equatable, Formattable<GuidFormat>, JsonStringifyable {
 
     /**
      * @constructor
