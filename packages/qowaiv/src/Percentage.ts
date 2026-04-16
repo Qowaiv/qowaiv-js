@@ -152,9 +152,9 @@ export class Percentage implements Equatable, Localizable<PercentageFormatOption
                 }
             }
 
-            const n = parseFloat(s.trim()) * factor;
+            const n = Number.parseFloat(s.trim()) * factor;
 
-            if (isFinite(n)) {
+            if (Number.isFinite(n)) {
                 return new Percentage(n)
             }
         }
