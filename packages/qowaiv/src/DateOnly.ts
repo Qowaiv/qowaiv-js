@@ -142,6 +142,15 @@ export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStr
     }
 
     /**
+     * Creates a date from a JSON token.
+     * @param {string | null | undefined} token A JSON token representing the date.
+     * @returns {DateOnly} A date if valid, undefined if empty.
+     */
+    public static fromJSON(token: string | null | undefined): DateOnly | undefined {
+        return DateOnly.parse(token);
+    }
+
+    /**
      * @returns true if other is a date representing the same value.
      */
     public equals(other: unknown): boolean {
