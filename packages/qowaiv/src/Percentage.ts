@@ -95,12 +95,12 @@ export class Percentage implements Equatable, Localizable<PercentageFormatOption
     }
 
     /**
-     * Creates a percentage from a JSON string.
-     * @param {string} s A JSON string representing the percentage.
-     * @returns {Percentage} A percentage if valid, otherwise undefined.
+     * Creates a percentage from a JSON token.
+     * @param {string | null | undefined} token A JSON token representing the percentage.
+     * @returns {Percentage | undefined} A percentage if valid, undefined if empty.
      */
-    public static fromJSON(s: string | null | undefined): Percentage {
-        return Percentage.parse(s);
+    public static fromJSON(token: string | null | undefined): Percentage {
+        return Percentage.parse(token);
     }
 
     /**

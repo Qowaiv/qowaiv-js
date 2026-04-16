@@ -269,12 +269,12 @@ export class EmailAddress implements Equatable, JsonStringifyable {
     }
 
     /**
-     * Creates an email address from a JSON string.
-     * @param {string} s A JSON string representing the email address.
-     * @returns {EmailAddress} A email address if valid, otherwise undefined.
+     * Creates an email address from a JSON token.
+     * @param {string | null | undefined} token A JSON token representing the email address.
+     * @returns {EmailAddress} A email address if valid, undefined if empty.
      */
-    public static fromJSON(s: string): EmailAddress | undefined {
-        return EmailAddress.parse(s);
+    public static fromJSON(token: string | null | undefined): EmailAddress | undefined {
+        return EmailAddress.parse(token);
     }
 
     /**

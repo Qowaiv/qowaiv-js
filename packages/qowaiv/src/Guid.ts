@@ -73,12 +73,12 @@ export class Guid implements Equatable, Formattable<GuidFormat>, JsonStringifyab
     }
 
     /**
-      * Creates a GUID from a JSON string.
-      * @param {string} s A JSON string representing the GUID.
-      * @returns {Guid} A GUID if valid, otherwise undefined.
+      * Creates a GUID from a JSON token.
+      * @param {string | null | undefined} token A JSON string representing the GUID.
+      * @returns {Guid|undefined} A GUID if valid, undefined if empty.
       */
-    public static fromJSON(s: string): Guid | undefined {
-        return Guid.parse(s);
+    public static fromJSON(token: string | null | undefined): Guid | undefined {
+        return Guid.parse(token);
     }
 
     /**
