@@ -83,7 +83,7 @@ export class InternationalBankAccountNumber implements Equatable, Formattable<In
     }
 
     /**
-     * Creates a IBAN from a JSON token.
+     * Creates an IBAN from a JSON token.
      * @param {string} token A JSON token representing the IBAN.
      * @returns {InternationalBankAccountNumber|undefined} A IBAN if valid, undefined if empty.
      */
@@ -92,7 +92,7 @@ export class InternationalBankAccountNumber implements Equatable, Formattable<In
     }
 
     /**
-     * Parses a IBAN string.
+     * Parses an IBAN string.
      * @param {string} s A string containing IBAN to convert.
      * @returns {InternationalBankAccountNumber} IBAN if valid, otherwise throws.
      */
@@ -106,7 +106,7 @@ export class InternationalBankAccountNumber implements Equatable, Formattable<In
     }
 
     /**
-     * Tries to parse a IBAN string.
+     * Tries to parse an IBAN string.
      * @param {string} s A string containing IBAN to convert.
      * @returns {InternationalBankAccountNumber} A IBAN if valid, otherwise undefined.
      */

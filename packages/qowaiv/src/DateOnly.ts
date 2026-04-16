@@ -142,7 +142,7 @@ export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStr
     }
 
     /**
-     * Creates an date from a JSON token.
+     * Creates a date from a JSON token.
      * @param {string | null | undefined} token A JSON token representing the date.
      * @returns {DateOnly} A date if valid, undefined if empty.
      */
