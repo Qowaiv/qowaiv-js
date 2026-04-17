@@ -44,7 +44,7 @@ export class Unknown implements Equatable, Formattable<any>, JsonStringifyable {
     /**
       * Creates unknown from a JSON token.
       * @param {any} token A JSON token representing unknown.
-      * @returns {Unknown | undefined} A GUID if valid, undefined if empty.
+      * @returns {Unknown | undefined} An unknown if valid, undefined if empty.
       */
     public static fromJSON(token: any): Unknown | undefined {
         return token === '?'
