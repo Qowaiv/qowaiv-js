@@ -2,7 +2,7 @@ import { Svo, Unparsable } from '.';
 
 type InternationalBankAccountNumberFormat = 'm' | 'M' | 'u' | 'U' | 'h' | 'H' | 'f' | 'F';
 
-export class InternationalBankAccountNumber implements IEquatable, IFormattable<InternationalBankAccountNumberFormat>, IJsonStringifyable {
+export class InternationalBankAccountNumber implements Equatable, Formattable<InternationalBankAccountNumberFormat>, JsonStringifyable {
     /**
      * @constructor
      * @remarks It is the default constructor, for creating an actual IBAN
@@ -84,16 +84,16 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable<
     }
 
     /**
-     * Creates a IBAN from a JSON string.
-     * @param {string} s A JSON string representing the IBAN.
-     * @returns {InternationalBankAccountNumber} A IBAN if valid, otherwise undefined.
+     * Creates an IBAN from a JSON token.
+     * @param {string} token A JSON token representing the IBAN.
+     * @returns {InternationalBankAccountNumber|undefined} A IBAN if valid, undefined if empty.
      */
-    public static fromJSON(s: string): InternationalBankAccountNumber | undefined {
-        return InternationalBankAccountNumber.parse(s);
+    public static fromJSON(token: string | null | undefined): InternationalBankAccountNumber | undefined {
+        return InternationalBankAccountNumber.parse(token);
     }
 
     /**
-     * Parses a IBAN string.
+     * Parses an IBAN string.
      * @param {string} s A string containing IBAN to convert.
      * @returns {InternationalBankAccountNumber} IBAN if valid, otherwise throws.
      */
@@ -107,7 +107,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable<
     }
 
     /**
-     * Tries to parse a IBAN string.
+     * Tries to parse an IBAN string.
      * @param {string} s A string containing IBAN to convert.
      * @returns {InternationalBankAccountNumber} A IBAN if valid, otherwise undefined.
      */
@@ -228,7 +228,7 @@ export class InternationalBankAccountNumber implements IEquatable, IFormattable<
         ['QA', /^\d{2}[A-Z]{4}[A-Z0-9]{21}$/],
         ['RO', /^\d{2}[A-Z]{4}[A-Z0-9]{16}$/],
         ['RS', /^35\d{18}$/],
-        ['RU', /^\d{11}[A-Z0-9]{20}$/],
+        ['RU', /^\d{16}[A-Z0-9]{15}$/],
         ['SA', /^\d{4}[A-Z0-9]{18}$/],
         ['SC', /^\d{2}[A-Z]{4}\d{20}[A-Z]{3}$/],
         ['SD', /^\d{16}$/],

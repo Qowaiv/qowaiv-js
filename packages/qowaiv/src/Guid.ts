@@ -5,7 +5,7 @@ type GuidFormat = 'B' | 'b' | 'S' | 's' | 'l' | 'U' | 'u';
 /**
  * Represents a Globally unique identifier (GUID).
  */
-export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringifyable {
+export class Guid implements Equatable, Formattable<GuidFormat>, JsonStringifyable {
 
     /**
      * @constructor
@@ -60,7 +60,7 @@ export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringif
      * Returns the version of the GUID.
      */
     public get version(): number {
-        return parseInt(this.#value.slice(14, 15));
+        return Number.parseInt(this.#value.slice(14, 15));
     }
 
     /**
@@ -73,12 +73,12 @@ export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringif
     }
 
     /**
-      * Creates a GUID from a JSON string.
-      * @param {string} s A JSON string representing the GUID.
-      * @returns {Guid} A GUID if valid, otherwise undefined.
+      * Creates a GUID from a JSON token.
+      * @param {string | null | undefined} token A JSON string representing the GUID.
+      * @returns {Guid|undefined} A GUID if valid, undefined if empty.
       */
-    public static fromJSON(s: string): Guid | undefined {
-        return Guid.parse(s);
+    public static fromJSON(token: string | null | undefined): Guid | undefined {
+        return Guid.parse(token);
     }
 
     /**
@@ -156,10 +156,10 @@ export class Guid implements IEquatable, IFormattable<GuidFormat>, IJsonStringif
         if (typeof crypto?.randomUUID == "function") {
             return crypto.randomUUID();
         }
-        else if (typeof window?.crypto?.getRandomValues === "function") {
+        else if (typeof globalThis?.crypto?.getRandomValues === "function") {
 
             const bytes = new Uint32Array(4);
-            window.crypto.getRandomValues(bytes);
+            globalThis.crypto.getRandomValues(bytes);
             return Guid.unstrip(
                 bytes[0].toString(16) +
                 bytes[1].toString(16) +

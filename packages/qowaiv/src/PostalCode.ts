@@ -25,7 +25,7 @@ class PostalCodeInfo {
 /**
  * Represents a postal code.
  */
-export class PostalCode implements IEquatable, IFormattable<string>, IJsonStringifyable {
+export class PostalCode implements Equatable, Formattable<string>, JsonStringifyable {
 
     /**
     * @constructor
@@ -93,12 +93,12 @@ export class PostalCode implements IEquatable, IFormattable<string>, IJsonString
     }
 
     /**
-     * Creates a postal code from a JSON string.
-     * @param {string} s A JSON string representing the postal code.
-     * @returns {PostalCode} A postal code if valid, otherwise undefined.
+     * Creates a postal code from a JSON token.
+     * @param {string | null | undefined} token A JSON token representing the postal code.
+     * @returns {PostalCode | undefined} A postal code if valid, undefined if empty.
      */
-    public static fromJSON(s: string | null | undefined): PostalCode | undefined {
-        return PostalCode.parse(s);
+    public static fromJSON(token: string | null | undefined): PostalCode | undefined {
+        return PostalCode.parse(token);
     }
 
     /**

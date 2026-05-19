@@ -1,6 +1,6 @@
 import { Guard, Svo, Unparsable } from '.';
 
-export class DateOnly implements IEquatable, ILocalizable<DateOnlyFormat>, IJsonStringifyable {
+export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStringifyable {
 
     /**
      * The mimimum value of date-only (0001-01-01).
@@ -81,7 +81,7 @@ export class DateOnly implements IEquatable, ILocalizable<DateOnlyFormat>, IJson
      */
     public addMonths(months: number): DateOnly {
         const ms = this.year * 12 + this.month - 1 + Guard.int(months);
-        const year = ~~(ms / 12);
+        const year = Math.trunc(ms / 12);
         const month = (ms % 12) + 1;
         const day = Math.min(DateOnly.daysPerMonth(year, month), this.day);
         return new DateOnly(year, month, day);
@@ -96,7 +96,7 @@ export class DateOnly implements IEquatable, ILocalizable<DateOnlyFormat>, IJson
         let day = this.#totalDays + Guard.int(days);
 
         // Aproximate the number of years.
-        let year = ~~(day / (365.2425)) + 1;
+        let year = Math.trunc(day / (365.2425)) + 1;
         day -= (year - 1) * 365 + DateOnly.#getLeapYears(year);
 
         let month = 0;
@@ -139,6 +139,15 @@ export class DateOnly implements IEquatable, ILocalizable<DateOnlyFormat>, IJson
      */
     public toJSON(): string {
         return this.toString();
+    }
+
+    /**
+     * Creates a date from a JSON token.
+     * @param {string | null | undefined} token A JSON token representing the date.
+     * @returns {DateOnly} A date if valid, undefined if empty.
+     */
+    public static fromJSON(token: string | null | undefined): DateOnly | undefined {
+        return DateOnly.parse(token);
     }
 
     /**
@@ -240,9 +249,9 @@ export class DateOnly implements IEquatable, ILocalizable<DateOnlyFormat>, IJson
      */
     static #getLeapYears(year: number) {
         const y = year - 1;
-        return ~~(y / 4)
-            + ~~(y / 400)
-            - ~~(y / 100);
+        return Math.trunc(y / 4)
+            + Math.trunc(y / 400)
+            - Math.trunc(y / 100);
     }
 
     /**

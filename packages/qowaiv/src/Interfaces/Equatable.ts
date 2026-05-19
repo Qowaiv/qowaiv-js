@@ -1,7 +1,7 @@
 /**
  * Defines a generalized method that for determining equality of instances.
  */
-interface IEquatable {
+interface Equatable {
     
     /**
      * @param other the object to compare with.

@@ -8,7 +8,7 @@ import {
   ParseStatus,
   ZodType,
   type ZodTypeDef,
-} from "zod";
+} from "zod/v3";
 import { InternationalBankAccountNumber } from "@qowaiv/qowaiv";
 import { QowaivIssueCode } from "./QowaivError";
 

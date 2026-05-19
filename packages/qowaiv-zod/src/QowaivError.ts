@@ -1,6 +1,4 @@
-import { util } from 'zod';
-import { ErrorMapCtx, ZodIssueBase, ZodIssueOptionalMessage } from 'zod';
-import { defaultErrorMap } from 'zod';
+import { util, defaultErrorMap, ErrorMapCtx, ZodIssueBase, ZodIssueOptionalMessage } from 'zod/v3';
 
 export const QowaivIssueCode = util.arrayToEnum([
     'invalid_email_address',

@@ -3,7 +3,7 @@ import { Unparsable } from '.';
 /**
  * Represents a percentage.
  */
-export class Percentage implements IEquatable, ILocalizable<PercentageFormatOptions>, IJsonStringifyable {
+export class Percentage implements Equatable, Localizable<PercentageFormatOptions>, JsonStringifyable {
 
     /**
      * Represents 0 percent.
@@ -95,12 +95,12 @@ export class Percentage implements IEquatable, ILocalizable<PercentageFormatOpti
     }
 
     /**
-     * Creates a percentage from a JSON string.
-     * @param {string} s A JSON string representing the percentage.
-     * @returns {Percentage} A percentage if valid, otherwise undefined.
+     * Creates a percentage from a JSON token.
+     * @param {string | null | undefined} token A JSON token representing the percentage.
+     * @returns {Percentage | undefined} A percentage if valid, undefined if empty.
      */
-    public static fromJSON(s: string | null | undefined): Percentage {
-        return Percentage.parse(s);
+    public static fromJSON(token: string | null | undefined): Percentage {
+        return Percentage.parse(token);
     }
 
     /**
@@ -152,9 +152,9 @@ export class Percentage implements IEquatable, ILocalizable<PercentageFormatOpti
                 }
             }
 
-            const n = parseFloat(s.trim()) * factor;
+            const n = Number.parseFloat(s.trim()) * factor;
 
-            if (isFinite(n)) {
+            if (Number.isFinite(n)) {
                 return new Percentage(n)
             }
         }
