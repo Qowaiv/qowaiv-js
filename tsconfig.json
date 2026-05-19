@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "target": "es2020",
-    "module": "CommonJS",
+    "module": "es2020",
     "declaration": true,
     "composite": true,
     "strict": true,
