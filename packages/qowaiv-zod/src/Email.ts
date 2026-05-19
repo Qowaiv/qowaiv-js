@@ -9,7 +9,7 @@ import {
     ZodIssueCode,
     ZodType,
     type ZodTypeDef,
-} from 'zod';
+} from 'zod/v3';
 import { EmailAddress } from '@qowaiv/qowaiv';
 import { QowaivIssueCode } from './QowaivError';
 
