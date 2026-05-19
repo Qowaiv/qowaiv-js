@@ -1,5 +1,5 @@
 ﻿import { describe, expect, it } from "vitest";
-import { z, ZodError } from 'zod';
+import { z, ZodError } from 'zod/v3';
 import { q } from '../src';
 import { isQowaivIssue, QowaivIssue } from '../src/QowaivError';
 

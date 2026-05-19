@@ -19,8 +19,10 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@qowaiv/qowaiv": "^0.0.4",
-    "zod": "^3.24.2"
+    "@qowaiv/qowaiv": "^0.0.5"
+  },
+  "peerDependencies": {
+    "zod": "^3.25.0 || ^4.0.0"
   },
   "devDependencies": {
     "eslint": "^9.18.0",
