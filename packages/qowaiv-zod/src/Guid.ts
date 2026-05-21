@@ -1,0 +1,73 @@
+/* eslint-disable no-underscore-dangle */
+import {
+    addIssueToContext,
+    INVALID,
+    type ParseContext,
+    type ParseInput,
+    type ParseReturnType,
+    ParseStatus,
+    ZodType,
+    type ZodTypeDef,
+} from "zod/v3";
+import { Guid } from "@qowaiv/qowaiv";
+import { QowaivIssueCode } from "./QowaivError";
+
+export type GuidCheck = { kind: "invalid_guid" };
+
+export interface GuidDef extends ZodTypeDef {
+    checks: GuidCheck[];
+}
+
+class GuidValidator extends ZodType<Guid | undefined, GuidDef, unknown> {
+    _parse(input: ParseInput): ParseReturnType<Guid | undefined> {
+        let ctx: undefined | ParseContext = undefined;
+
+        const status = new ParseStatus();
+
+        const parsed = typeof input.data === "string"
+            ? Guid.tryParse(input.data)
+            : undefined;
+
+        const guid = parsed instanceof Guid
+            ? parsed
+            : undefined;
+
+        if (guid === undefined) {
+            ctx = this._getOrReturnCtx(input, ctx);
+
+            addIssueToContext(ctx, {
+                code: "custom",
+                params: {
+                    qowaiv: QowaivIssueCode.invalid_guid,
+                },
+            });
+
+            status.dirty();
+
+            return INVALID;
+        }
+
+        input.data = guid;
+
+        return { status: status.value, value: guid };
+    }
+
+    _addCheck(check: GuidCheck) {
+        return new GuidValidator({
+            ...this._def,
+            checks: [...this._def.checks, check],
+        });
+    }
+
+    _removeCheck(check: GuidCheck) {
+        return new GuidValidator({
+            ...this._def,
+            checks: this._def.checks.filter(
+                (current) => current.kind !== check.kind
+            ),
+        });
+    }
+}
+
+export const guid = (): GuidValidator =>
+    new GuidValidator({ checks: [{ kind: "invalid_guid" }] });
