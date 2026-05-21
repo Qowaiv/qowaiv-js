@@ -19,21 +19,18 @@ export interface GuidDef extends ZodTypeDef {
 }
 
 class GuidValidator extends ZodType<Guid | undefined, GuidDef, unknown> {
-    _parse(
-        input: ParseInput
-    ): ParseReturnType<Guid | undefined> {
+    _parse(input: ParseInput): ParseReturnType<Guid | undefined> {
         let ctx: undefined | ParseContext = undefined;
 
         const status = new ParseStatus();
 
-        const parsed =
-            typeof input.data === "string"
-                ? Guid.tryParse(input.data)
-                : undefined;
-        const guid =
-            parsed instanceof Guid
-                ? parsed
-                : undefined;
+        const parsed = typeof input.data === "string"
+            ? Guid.tryParse(input.data)
+            : undefined;
+
+        const guid = parsed instanceof Guid
+            ? parsed
+            : undefined;
 
         if (guid === undefined) {
             ctx = this._getOrReturnCtx(input, ctx);
