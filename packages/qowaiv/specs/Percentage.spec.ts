@@ -28,12 +28,12 @@ describe('Percentage', () => {
 
     it('equals same value is true', () => {
 
-        expect(percent(12.0).equals(percent(12.0))).toBe(true);
+        expect(percent(12.1).equals(percent(12.1))).toBe(true);
     });
 
     it('equals different values is false', () => {
 
-        expect(percent(12.0).equals(percent(13.0))).toBe(false);
+        expect(percent(12.1).equals(percent(13.1))).toBe(false);
     });
 
     it('rounds based on the number of digts', () => {
