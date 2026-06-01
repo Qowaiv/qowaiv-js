@@ -5,10 +5,7 @@ import { iban } from './Iban';
 
 z.setErrorMap(qowaivErrorMap);
 
-export const q: {
-    email: typeof email;
-    iban: typeof iban;
-} = {
+export const q = {
     email,
     iban,
 };

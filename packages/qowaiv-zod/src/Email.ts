@@ -19,7 +19,7 @@ export interface EmailAddressDef extends ZodTypeDef {
     checks: EmailAddressCheck[];
 }
 
-class EmailAddressValidator extends ZodType<EmailAddress | undefined, EmailAddressDef, unknown> {
+export class EmailAddressValidator extends ZodType<EmailAddress | undefined, EmailAddressDef, unknown> {
     _parse(input: ParseInput): ParseReturnType<EmailAddress | undefined> {
         let ctx: undefined | ParseContext = undefined;
 
