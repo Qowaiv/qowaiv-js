@@ -1,6 +1,7 @@
 {
   "name": "@qowaiv/qowaiv-zod",
   "description": "Zod integration for @qowaiv/qowaiv",
+  "type": "module",
   "version": "0.0.3",
   "keywords": [
     "typescript",

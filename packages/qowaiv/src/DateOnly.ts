@@ -5,12 +5,12 @@ export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStr
     /**
      * The mimimum value of date-only (0001-01-01).
      */
-    public static readonly minValue = new DateOnly(1, 1, 1);
+    public static readonly minValue: DateOnly;
 
     /**
      * The maximum value of date-only (9999-12-31).
      */
-    public static readonly maxValue = new DateOnly(9999, 12, 31);
+    public static readonly maxValue: DateOnly;
 
     static readonly #daysTo1970 = 719162;
     static readonly #secondsPerDay = 86400000;
@@ -265,3 +265,6 @@ export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStr
         return s;
     }
 }
+
+(DateOnly as any).minValue = new DateOnly(1, 1, 1);
+(DateOnly as any).maxValue = new DateOnly(9999, 12, 31);

@@ -4,6 +4,7 @@ launchSettings.json
 
 node_modules
 dist
+*.tsbuildinfo
 .env
 .npmrc
 .idea
