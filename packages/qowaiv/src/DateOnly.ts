@@ -266,5 +266,8 @@ export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStr
     }
 }
 
+// Init outside the class body to avoid TypeScript aliasing
+// DateOnly → _a inside static {} blocks (ES2022+ target),
+// which would cause "_a is not a constructor" at module load.
 (DateOnly as any).minValue = new DateOnly(1, 1, 1);
 (DateOnly as any).maxValue = new DateOnly(9999, 12, 31);
