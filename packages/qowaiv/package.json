@@ -1,6 +1,7 @@
 {
   "name": "@qowaiv/qowaiv",
   "description": "Qowaiv implements common, universal domain objects. These types form the base of your domain model.",
+  "type": "module",
   "version": "0.0.3",
   "keywords": [
     "typescript",

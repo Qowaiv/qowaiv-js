@@ -12,8 +12,8 @@ export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStr
      */
     public static readonly maxValue = new DateOnly(9999, 12, 31);
 
-    static readonly #daysTo1970 = 719162;
-    static readonly #secondsPerDay = 86400000;
+    private static readonly daysTo1970 = 719162;
+    private static readonly secondsPerDay = 86400000;
         
     /**
      * Creates a new date-only.
@@ -45,14 +45,14 @@ export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStr
      * @remarks the number of seconds since 1970-01-01.
      */
     public get unixEpoch(): number {
-        return (this.#totalDays - DateOnly.#daysTo1970 - 1) * DateOnly.#secondsPerDay;
+        return (this.totalDays - DateOnly.daysTo1970 - 1) * DateOnly.secondsPerDay;
     }
 
     /**
      * @returns the day of the week (0 – 6) for the specified date-only.
      */
     public get dayOfWeek(): number {
-        const days = this.unixEpoch / DateOnly.#secondsPerDay + DateOnly.#daysTo1970 + 1;
+        const days = this.unixEpoch / DateOnly.secondsPerDay + DateOnly.daysTo1970 + 1;
         return days % 7;
     }
 
@@ -93,11 +93,11 @@ export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStr
      * @returns a new instance of a date-only.
      */
     public addDays(days: number): DateOnly {
-        let day = this.#totalDays + Guard.int(days);
+        let day = this.totalDays + Guard.int(days);
 
         // Aproximate the number of years.
         let year = Math.trunc(day / (365.2425)) + 1;
-        day -= (year - 1) * 365 + DateOnly.#getLeapYears(year);
+        day -= (year - 1) * 365 + DateOnly.getLeapYears(year);
 
         let month = 0;
         while (month < 12) {
@@ -120,7 +120,7 @@ export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStr
      * @returns a string that represents the current date-only.
      */
     public toString(): string {
-        return `${DateOnly.#pad(this.year, 4)}-${DateOnly.#pad(this.month)}-${DateOnly.#pad(this.day)}`;
+        return `${DateOnly.pad(this.year, 4)}-${DateOnly.pad(this.month)}-${DateOnly.pad(this.day)}`;
     }
 
     /**
@@ -238,16 +238,16 @@ export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStr
     /**
     * @returns the total number of days from 0001-01-01.
     */
-    get #totalDays(): number {
+    private get totalDays(): number {
         return this.dayOfYear
             + (this.year - 1) * 365
-            + DateOnly.#getLeapYears(this.year);
+            + DateOnly.getLeapYears(this.year);
     }
 
     /**
      * @returns the total of leap years that occurred before the specified year.
      */
-    static #getLeapYears(year: number) {
+    private static getLeapYears(year: number) {
         const y = year - 1;
         return Math.trunc(y / 4)
             + Math.trunc(y / 400)
@@ -257,7 +257,7 @@ export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStr
     /**
      * @remarks String.ProtoType.padStart() is not available.
      */
-    static #pad(n: number, padding?: number): string {
+    private static pad(n: number, padding?: number): string {
         let s = n.toString();
         while (s.length < (padding ?? 2)) {
             s = '0' + s;

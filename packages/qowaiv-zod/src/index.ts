@@ -6,8 +6,4 @@ import { iban } from './Iban';
 
 z.setErrorMap(qowaivErrorMap);
 
-export const q = {
-    email,
-    guid,
-    iban,
-};
+export const q = { email, guid, iban };

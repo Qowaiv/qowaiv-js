@@ -18,7 +18,7 @@ export interface GuidDef extends ZodTypeDef {
     checks: GuidCheck[];
 }
 
-class GuidValidator extends ZodType<Guid | undefined, GuidDef, unknown> {
+export class GuidValidator extends ZodType<Guid | undefined, GuidDef, unknown> {
     _parse(input: ParseInput): ParseReturnType<Guid | undefined> {
         let ctx: undefined | ParseContext = undefined;
 
