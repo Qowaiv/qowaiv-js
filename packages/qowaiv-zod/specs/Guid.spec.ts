@@ -3,13 +3,13 @@ import { z, ZodError } from 'zod/v3';
 import { q } from '../src';
 import { isQowaivIssue, QowaivIssue } from '../src/QowaivError';
 
-describe('Iban validation', () => {
+describe('GUID validation', () => {
     it('is invalid', () => {
         const definition = z.object({
-            iban: q.iban()
+            guid: q.guid()
         });
         const result = definition.safeParse({
-            iban: 'invalid',
+            guid: 'invalid',
         });
 
         expect(result.success).toBe(false);
@@ -18,15 +18,15 @@ describe('Iban validation', () => {
 
         const issue = result.error?.issues[0]! as QowaivIssue;
         expect(isQowaivIssue(issue)).toBe(true);
-        expect(issue.params.qowaiv).toBe('invalid_iban');
+        expect(issue.params.qowaiv).toBe('invalid_guid');
     });
 
     it('is valid', () => {
         const definition = z.object({
-            iban: q.iban()
+            guid: q.guid()
         });
         const result = definition.safeParse({
-            iban: 'NL02ABNA0123456789',
+            guid: '85ef8f9c-cdf4-48c8-9512-a4a30e38b1fa',
         });
 
         expect(result.success).toBe(true);
@@ -35,10 +35,10 @@ describe('Iban validation', () => {
     
     it('is valid if optional', () => {
         const definition = z.object({
-            iban: q.iban().optional()
+            guid: q.guid().optional()
         });
         const result = definition.safeParse({
-            iban: undefined,
+            guid: undefined,
         });
 
         expect(result.success).toBe(true);

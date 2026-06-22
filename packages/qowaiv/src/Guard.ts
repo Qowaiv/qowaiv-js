@@ -9,16 +9,16 @@ export class Guard {
      */
     public static int(value: unknown, min?: number, max?: number): number {
         if (typeof (value) !== "number") {
-            throw new Error(`'${value}' is not a number`);
+            throw new TypeError(`'${value}' is not a number`);
         }
         if (!Number.isInteger(value)) {
-            throw new Error(`${value} is not an integer`);
+            throw new TypeError(`${value} is not an integer`);
         }
         if (min !== undefined && value < min) {
-            throw new Error(`${value} is smaller then ${min}`);
+            throw new TypeError(`${value} is smaller then ${min}`);
         }
         if (max !== undefined && value > max) {
-            throw new Error(`${value} is larger then ${max}`);
+            throw new TypeError(`${value} is larger then ${max}`);
         }
         return value;
     }
