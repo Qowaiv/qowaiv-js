@@ -18,7 +18,7 @@ export interface InternationalBankAccountNumberDef extends ZodTypeDef {
     checks: InternationalBankAccountNumberCheck[];
 }
 
-class InternationalBankAccountNumberValidator extends ZodType<
+export class InternationalBankAccountNumberValidator extends ZodType<
     InternationalBankAccountNumber | undefined,
     InternationalBankAccountNumberDef,
     unknown

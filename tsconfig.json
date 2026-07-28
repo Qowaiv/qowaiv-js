@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "target": "es2020",
-    "module": "es2020",
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
     "declaration": true,
     "composite": true,
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "useDefineForClassFields": false
   },
-  "exclude": ["node_modules", "dist", "**/*.test.ts"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts"],
   "references": [
     { "path": "packages/qowaiv" },
     { "path": "packages/qowaiv-zod" }
