@@ -16,8 +16,9 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "vitest run",
+    "type-check": "tsc --noEmit",
     "lint": "eslint ./src",
+    "test": "vitest run",
     "lint:fix": "eslint ./src --fix"
   },
   "devDependencies": {
