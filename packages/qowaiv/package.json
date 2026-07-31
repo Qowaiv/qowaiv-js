@@ -22,7 +22,10 @@
     "lint:fix": "eslint ./src --fix"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "eslint": "^10.8.0",
     "typescript": "^5.8.3",
+    "typescript-eslint": "^8.65.0",
     "vitest": "^4.1.8"
   },
   "publishConfig": {
