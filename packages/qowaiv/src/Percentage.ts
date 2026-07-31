@@ -1,4 +1,8 @@
 import { Unparsable } from '.';
+import { Equatable } from './Interfaces/Equatable';
+import { JsonStringifyable } from './Interfaces/JsonStringifyable';
+import { Localizable } from './Interfaces/Localizable';
+import { PercentageFormatOptions } from './Interfaces/PercentageFormat';
 
 /**
  * Represents a percentage.

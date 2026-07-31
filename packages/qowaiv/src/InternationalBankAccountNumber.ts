@@ -1,4 +1,7 @@
 import { Svo, Unparsable } from '.';
+import { Equatable } from './Interfaces/Equatable';
+import { Formattable } from './Interfaces/Formattable';
+import { JsonStringifyable } from './Interfaces/JsonStringifyable';
 
 type InternationalBankAccountNumberFormat = 'm' | 'M' | 'u' | 'U' | 'h' | 'H' | 'f' | 'F';
 

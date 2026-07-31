@@ -1,4 +1,8 @@
 import { Guard, Svo, Unparsable } from '.';
+import { DateOnlyFormat } from './Interfaces/DateOnlyFormat';
+import { Equatable } from './Interfaces/Equatable';
+import { JsonStringifyable } from './Interfaces/JsonStringifyable';
+import { Localizable } from './Interfaces/Localizable';
 
 export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStringifyable {
 
