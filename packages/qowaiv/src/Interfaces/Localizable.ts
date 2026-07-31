@@ -1,7 +1,7 @@
 /**
  * Provides functionality to format the value of an object into a string representation.
  */
-interface Localizable<TOptions> {
+export interface Localizable<TOptions> {
     /**
      * Returns a string that represents the object.
      * @returns string.
