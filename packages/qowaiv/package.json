@@ -19,7 +19,8 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint ./src",
     "test": "vitest run",
-    "lint:fix": "eslint ./src --fix"
+    "lint:fix": "eslint ./src --fix",
+    "format": "prettier"
   },
   "devDependencies": {
     "typescript": "^5.8.3",
