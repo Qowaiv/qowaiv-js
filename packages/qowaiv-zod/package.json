@@ -20,7 +20,8 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
-    "test": "vitest run"
+    "test": "vitest run",
+    "format": "prettier"
   },
   "dependencies": {
     "@qowaiv/qowaiv": "^0.0.5"
