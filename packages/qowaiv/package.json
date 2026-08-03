@@ -20,7 +20,8 @@
     "lint": "eslint ./src",
     "test": "vitest run",
     "lint:fix": "eslint ./src --fix",
-    "format": "prettier"
+    "format": "prettier ./src --write",
+    "format:check": "prettier ./src --check"
   },
   "devDependencies": {
     "typescript": "^5.8.3",

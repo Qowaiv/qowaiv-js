@@ -21,7 +21,8 @@
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "test": "vitest run",
-    "format": "prettier"
+    "format": "prettier ./src --write",
+    "format:check": "prettier ./src --check"
   },
   "dependencies": {
     "@qowaiv/qowaiv": "^0.0.5"
