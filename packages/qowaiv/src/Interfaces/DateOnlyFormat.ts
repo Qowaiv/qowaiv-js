@@ -1,4 +1,4 @@
-interface DateOnlyFormat {
+export interface DateOnlyFormat {
     locale: string | undefined;
     localeMatcher: "lookup" | "best fit" | undefined;
     dateStyle:  "full" | "long" | "medium" | "short" | undefined;

@@ -1,4 +1,8 @@
 import { Guard, Svo, Unparsable } from '.';
+import { DateOnlyFormat } from './Interfaces/DateOnlyFormat';
+import { Equatable } from './Interfaces/Equatable';
+import { JsonStringifyable } from './Interfaces/JsonStringifyable';
+import { Localizable } from './Interfaces/Localizable';
 
 export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStringifyable {
 
@@ -96,7 +100,7 @@ export class DateOnly implements Equatable, Localizable<DateOnlyFormat>, JsonStr
         let day = this.totalDays + Guard.int(days);
 
         // Aproximate the number of years.
-        let year = Math.trunc(day / (365.2425)) + 1;
+        const year = Math.trunc(day / (365.2425)) + 1;
         day -= (year - 1) * 365 + DateOnly.getLeapYears(year);
 
         let month = 0;

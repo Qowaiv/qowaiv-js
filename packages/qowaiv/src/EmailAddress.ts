@@ -1,4 +1,6 @@
 import { Svo, Unparsable } from '.';
+import { Equatable } from './Interfaces/Equatable';
+import { JsonStringifyable } from './Interfaces/JsonStringifyable';
 
 class Is {
     public static local(ch: string): boolean {

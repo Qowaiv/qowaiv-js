@@ -1,6 +1,22 @@
 {
+  "type": "module",
   "workspaces": [
     "packages/qowaiv",
     "packages/qowaiv-zod"
-  ]
+  ],
+  "scripts": {
+    "lint": "npm run lint --workspaces",
+    "lint:fix": "npm run lint:fix --workspaces",
+    "type-check": "npm run type-check --workspaces",
+    "format": "npm run format --workspaces",
+    "format:check": "npm run format:check --workspaces"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@types/node": "^24.13.3",
+    "eslint": "^10.8.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.6",
+    "typescript-eslint": "^8.65.0"
+  }
 }

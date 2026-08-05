@@ -2,11 +2,11 @@ export class Unparsable extends Error {
 
     constructor(
         message: string,
-        attemptedValue: any) {
+        attemptedValue: unknown) {
 
         super(message);
         this.attemptedValue = attemptedValue;
     }
 
-    public readonly attemptedValue: any;
+    public readonly attemptedValue: unknown;
 }

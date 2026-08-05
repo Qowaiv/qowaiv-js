@@ -1,4 +1,7 @@
 import { Svo, Unparsable } from '.';
+import { Equatable } from './Interfaces/Equatable';
+import { Formattable } from './Interfaces/Formattable';
+import { JsonStringifyable } from './Interfaces/JsonStringifyable';
 
 class PostalCodeInfo {
     public constructor(pattern: RegExp, search?: RegExp | undefined, replace?: string | undefined) {

@@ -1,4 +1,4 @@
-interface PercentageFormatOptions {
+export interface PercentageFormatOptions {
     locale?: string;
     localeMatcher?: "lookup" | "best fit";
     symbol?: string;
