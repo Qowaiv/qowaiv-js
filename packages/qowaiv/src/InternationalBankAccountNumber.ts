@@ -12,7 +12,7 @@ export class InternationalBankAccountNumber implements Equatable, Formattable<In
      *          you will normally use InternationalBankAccountNumber.parse(string).
      */
     private constructor(value: string) {
-        this.#value= value;
+        this.#value = value;
     }
 
     /**
@@ -176,6 +176,7 @@ export class InternationalBankAccountNumber implements Equatable, Formattable<In
         ['EG', /^\d{27}$/],
         ['ES', /^\d{22}$/],
         ['FI', /^\d{16}$/],
+        ['FK', /^\d{2}[A-Z]{2}\d{12}$/],
         ['FO', /^\d{16}$/],
         ['FR', /^\d{12}[A-Z0-9]{11}\d{2}$/],
         ['GA', /^\d{25}$/],
@@ -214,6 +215,7 @@ export class InternationalBankAccountNumber implements Equatable, Formattable<In
         ['MG', /^\d{25}$/],
         ['MK', /^07\d{3}[A-Z0-9]{10}\d{2}$/],
         ['ML', /^\d{2}[A-Z0-9]{2}\d{22}$/],
+        ['MN', /^\d{6}\d{12}$/],
         ['MR', /^13\d{23}$/],
         ['MT', /^\d{2}[A-Z]{4}\d{5}[A-Z0-9]{18}$/],
         ['MU', /^\d{2}[A-Z]{4}\d{16}000[A-Z]{3}$/],
