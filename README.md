@@ -39,6 +39,24 @@ if (svo instanceof (Unparsable)) {
 }
 ```
 
+### Unknown state
+The `unknown` (singleton) allows to have an explicit unknown state. This allows
+union types that combine an SVO type with `Unknown`:
+
+``` TypeScript
+inteface contract {
+    email: EmailAddress | undefined | Unknown,
+}
+```
+
+The `.tryParse()`, and `.fromJSON()` methods are designed in such a way that
+ they can be chained with other types that might be extended with SVO's:
+
+``` TypeScript
+const s = ...
+const email = Unknown.tryParse(s) ?? EmailAddress.parse(s);
+```
+
 ## Types
 
 ### Clock
@@ -173,24 +191,24 @@ q.iban().optional(); // optional IBAN
 
 ## Interfaces
 
-### IFormattable
+### Formattable
 As JavaScript does not support method overloading, this interface makes explicit
 by including `toString()` and `format(f?: TOption)` that the `format` method
 should be the overloaded version of `toString`.
 
 ``` TypeScript
-interface IFormattable<string> {
+interface Formattable<TOption> {
     toString(): string;
-    format(f?: string): string;
+    format(f?: TOption): string;
 }
 ```
 
-### IEquatable
+### Equatable
 As JavaScript does not have a way to support equals overloading as a lot of 
 other languages do, but it gives something.
 
 ``` TypeScript
-interface IEquatable {
+interface Equatable {
     equals(other: any): boolean;
 }
 ```
@@ -211,11 +229,11 @@ function eq(l, r) {
 } 
 ```
 
-### IJsonStringifyable
+### JsonStringifyable
 To support `JSON.stringify()` this interface was introduced.
 
 ``` TypeScript
-interface IJsonStringifyable {
+interface JsonStringifyable {
     toJSON(): any;
 }
 ```

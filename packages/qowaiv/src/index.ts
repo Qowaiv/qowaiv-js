@@ -1,3 +1,7 @@
+// Unknown
+import { Unknown } from "./Unknown";
+export const unknown = Unknown.instance;
+
 // Helpers
 export { Guard } from "./Guard";
 export { Svo } from "./Svo";
