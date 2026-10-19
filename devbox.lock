@@ -49,6 +49,10 @@
         }
       }
     },
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "last_modified": "2026-10-16T02:15:57Z",
+      "resolved": "github:NixOS/nixpkgs/f20cd90e28fe0403873f473b29e42662cd86e8c4?lastModified=1792116957&narHash=sha256-EjZqHKObBfIOeHZnMRVV87HB3pPq%2FWBkmRJWyFxmZu8%3D"
+    },
     "nodePackages.ts-node@10.9.2": {
       "last_modified": "2025-01-19T08:16:51Z",
       "resolved": "github:NixOS/nixpkgs/50165c4f7eb48ce82bd063e1fb8047a0f515f8ce#nodePackages.ts-node",
@@ -99,7 +103,7 @@
     },
     "nodejs@23.5.0": {
       "last_modified": "2025-01-19T08:16:51Z",
-      "plugin_version": "0.0.2",
+      "plugin_version": "0.0.5",
       "resolved": "github:NixOS/nixpkgs/50165c4f7eb48ce82bd063e1fb8047a0f515f8ce#nodejs_23",
       "source": "devbox-search",
       "version": "23.5.0",
